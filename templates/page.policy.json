@@ -19,14 +19,14 @@
           "type": "content_block",
           "settings": {
             "heading": "02. INFORMATION WE COLLECT",
-            "content": "<p>We collect information that allows us to provide a bespoke experience:</p><ul class='policy-list'><li><b>Identity Data:</b> Name, username, or similar identifier.</li><li><b>Contact Data:</b> Billing address, delivery address, email, and phone numbers.</li><li><b>Financial Data:</b> Encrypted payment card details processed by our secure partners.</li><li><b>Technical Data:</b> IP address, browser type, and time zone settings.</li></ul>"
+            "content": "<p>We collect information that allows us to provide a bespoke experience:</p><ul><li><b>Identity Data:</b> Name, username, or similar identifier.</li><li><b>Contact Data:</b> Billing address, delivery address, email, and phone numbers.</li><li><b>Financial Data:</b> Encrypted payment card details processed by our secure partners.</li><li><b>Technical Data:</b> IP address, browser type, and time zone settings.</li></ul>"
           }
         },
         "block_3": {
           "type": "content_block",
           "settings": {
             "heading": "03. HOW WE USE YOUR DATA",
-            "content": "<p>Your data is used strictly to enhance your journey with us:</p><ul class='policy-list'><li>To process and deliver your orders.</li><li>To manage our relationship with you, including notifying you about changes to our terms.</li><li>To use data analytics to improve our website, products, and marketing.</li></ul>"
+            "content": "<p>Your data is used strictly to enhance your journey with us:</p><ul><li>To process and deliver your orders.</li><li>To manage our relationship with you, including notifying you about changes to our terms.</li><li>To use data analytics to improve our website, products, and marketing.</li></ul>"
           }
         },
         "block_4": {
@@ -51,14 +51,9 @@
         "block_4",
         "block_5"
       ]
-    },
-    "footer": {
-      "type": "footer-custom",
-      "settings": {}
     }
   },
   "order": [
-    "main",
-    "footer"
+    "main"
   ]
 }

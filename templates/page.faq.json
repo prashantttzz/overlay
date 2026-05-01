@@ -52,14 +52,8 @@
         "faq_5"
       ]
     }
-  ,
-    "footer": {
-      "type": "footer-custom",
-      "settings": {}
-    }
   },
   "order": [
-    "main",
-    "footer"
+    "main"
   ]
 }

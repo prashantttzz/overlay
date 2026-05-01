@@ -66,74 +66,59 @@
   <!-- 1. Small Hero Banner -->
   <div class="collection-small-banner" data-home-hero>
     <div class="small-banner__bg">
-      <img src="https://cdn.shopify.com/s/files/1/0774/2894/9215/files/h.jpg?v=1777629694" alt="Collection Banner">
+      <img src="https://cdn.shopify.com/s/files/1/0774/2894/9215/files/dds.jpg?v=1777634713" alt="Collection Banner">
     </div>
     <div class="small-banner__content">
-      <span class="banner-eyebrow">- Collections</span>
       <h2 class="small-banner__title">smell like temptation</h2>
-      <p class="small-banner__text">Collect The Archival Series</p>
     </div>
   </div>
 
-  <!-- 2. Top Navigation & Search Bar -->
-  <div class="collection-top-nav-bar">
-    <div class="top-nav-wrapper">
-      <div class="nav-pills-left desktop-only">
-        <div class="nav-pill dropdown">
-          <span>Categories</span>
-          <svg width="10" height="10" viewBox="0 0 10 10"><path d="M1 3L5 7L9 3" stroke="currentColor" fill="none"/></svg>
-        </div>
-        <a href="#" class="nav-pill">New Arrivals</a>
-        <a href="#" class="nav-pill">Sale</a>
-      </div>
-
-      <div class="top-bar-search">
-        <form action="{{ routes.search_url }}" method="get" role="search" class="pill-search-form">
-          <input 
-            type="text" 
-            name="q" 
-            placeholder="Search..." 
-            class="pill-search-input"
-            value="{{ search.terms | escape }}"
-          >
-          <button type="submit" class="pill-search-submit">
-            <svg width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M14.5 14.5L10.5 10.5M6.5 12.5C3.18629 12.5 0.5 9.81371 0.5 6.5C0.5 3.18629 3.18629 0.5 6.5 0.5C9.81371 0.5 12.5 3.18629 12.5 6.5C12.5 9.81371 9.81371 12.5 6.5 12.5Z" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          </button>
-        </form>
-      </div>
-
-      <div class="nav-pills-right desktop-only">
-        <a href="#" class="nav-pill">Men</a>
-        <a href="#" class="nav-pill">Women</a>
-        <a href="#" class="nav-pill">Children</a>
-      </div>
-    </div>
-  </div>
-
-  <!-- 3. Collection Title Header -->
+  <!-- 2. Collection Title & Integrated Utilities Row -->
   <div class="collection-title-header">
     <div class="title-left-side">
       <div class="breadcrumb-nav">Home • {{ collection.title }}</div>
       <h1 class="collection-main-title">{{ collection.title | default: "Archival Collection" }}</h1>
     </div>
-    <div class="title-right-side">
-      <div class="custom-sort-dropdown" id="SortDropdown">
-        <div class="sort-dropdown__trigger">
-          <span class="current-sort">
+
+    <div class="title-center-utility">
+      <div class="top-bar-search">
+        <form action="{{ routes.search_url }}" method="get" role="search" class="pill-search-form">
+          <div class="search-icon-cute">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+          </div>
+          <input 
+            type="text" 
+            name="q" 
+            placeholder="SEARCH" 
+            class="pill-search-input"
+            value="{{ search.terms | escape }}"
+          >
+          <button type="submit" class="pill-search-submit-hidden"></button>
+        </form>
+      </div>
+    </div>
+
+    <div class="title-right-side-utility">
+      <div class="top-bar-sort">
+        <div class="custom-sort-dropdown" id="SortDropdown">
+          <div class="sort-dropdown__trigger">
+            <span class="current-sort">
+              SORT: 
+              {%- for option in collection.sort_options -%}
+                {%- if option.value == collection.sort_by -%}{{ option.name }}{%- endif -%}
+              {%- endfor -%}
+              {%- if collection.sort_by == blank -%}Featured{%- endif -%}
+            </span>
+            <svg width="10" height="10" viewBox="0 0 10 10"><path d="M1 3L5 7L9 3" stroke="currentColor" fill="none"/></svg>
+          </div>
+          <div class="sort-dropdown__options">
             {%- for option in collection.sort_options -%}
-              {%- if option.value == collection.sort_by -%}{{ option.name }}{%- endif -%}
+              <div class="sort-dropdown__option {% if option.value == collection.sort_by %}is-selected{% endif %}" 
+                   onclick="window.location.href = window.location.pathname + '?sort_by={{ option.value }}'">
+                {{ option.name }}
+              </div>
             {%- endfor -%}
-            {%- if collection.sort_by == blank -%}Featured{%- endif -%}
-          </span>
-          <svg width="10" height="10" viewBox="0 0 10 10"><path d="M1 3L5 7L9 3" stroke="currentColor" fill="none"/></svg>
-        </div>
-        <div class="sort-dropdown__options">
-          {%- for option in collection.sort_options -%}
-            <div class="sort-dropdown__option {% if option.value == collection.sort_by %}is-selected{% endif %}" 
-                 onclick="window.location.href = window.location.pathname + '?sort_by={{ option.value }}'">
-              {{ option.name }}
-            </div>
-          {%- endfor -%}
+          </div>
         </div>
       </div>
     </div>
@@ -360,6 +345,22 @@
     document.querySelectorAll('.reveal-item').forEach(item => {
       observer.observe(item);
     });
+
+    // Sort Dropdown Click Toggle
+    const sortDropdown = document.getElementById('SortDropdown');
+    if (sortDropdown) {
+      const trigger = sortDropdown.querySelector('.sort-dropdown__trigger');
+      trigger.addEventListener('click', (e) => {
+        e.stopPropagation();
+        sortDropdown.classList.toggle('is-active');
+      });
+
+      document.addEventListener('click', (e) => {
+        if (!sortDropdown.contains(e.target)) {
+          sortDropdown.classList.remove('is-active');
+        }
+      });
+    }
   });
 
   // Robust Parallax Effect

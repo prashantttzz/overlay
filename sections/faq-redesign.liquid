@@ -6,7 +6,7 @@
     z-index: 1;
   }
   
-  /* Force Global Header to White for this page */
+  /* Reset Header for Light Page */
   .header, 
   .menu-list__link, 
   .header-actions__action svg,
@@ -14,24 +14,24 @@
   .header__heading-link,
   .header__active-menu-item,
   .header__heading {
-    color: #fff !important;
+    color: #000 !important;
   }
   
   .header-logo__image,
   .header__heading-logo,
   .header__heading-link img {
-    filter: none !important;
+    filter: invert(1) !important;
   }
   
   .header-actions__action svg,
   .header__icon--menu svg {
-    color: #fff !important;
-    stroke: #fff !important;
+    color: #000 !important;
+    stroke: #000 !important;
     fill: none !important;
   }
 {%- endstyle -%}
 
-<section id="faq-{{ section.id }}" class="noir-utility-section">
+<section id="faq-{{ section.id }}" class="noir-utility-section noir-utility-section--light">
   <div class="noir-utility-bg-text">SUPPORT</div>
   
   <div class="noir-utility-container">
@@ -57,8 +57,8 @@
     </div>
     
     <div class="noir-utility-footer" style="margin-top: 100px; text-align: center;">
-      <p style="color: rgba(255,255,255,0.4); font-size: 0.9rem; letter-spacing: 0.1em;">
-        STILL NEED ASSISTANCE? <a href="/pages/contact" style="color: #fff; text-decoration: underline;">CONTACT OUR STUDIO</a>
+      <p style="color: rgba(0,0,0,0.4); font-size: 0.9rem; letter-spacing: 0.1em;">
+        STILL NEED ASSISTANCE? <a href="/pages/contact" style="color: #000; text-decoration: underline;">CONTACT OUR STUDIO</a>
       </p>
     </div>
   </div>

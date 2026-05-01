@@ -16,15 +16,13 @@
 .product-information--redesign,
 .product-information.section {
   padding-top: 0 !important;
-  margin-top: 35px !important; /* Offset for fixed header */
-  min-height: 100vh !important; /* Occupy remaining screen height */
+  min-height: 100vh !important;
   display: flex !important;
   flex-direction: column;
 }
 
 @media screen and (max-width: 749px) {
   .product-information.section {
-    margin-top: 75px !important; /* Proper offset for mobile fixed header */
     min-height: auto !important;
   }
 }
