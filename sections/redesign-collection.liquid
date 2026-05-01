@@ -18,8 +18,6 @@
     </div>
   </div>
 
-  <div class="collection-watermark">COLLECTION</div>
-
   <results-list
     class="collection-container-full"
     section-id="{{ section.id }}"
@@ -29,7 +27,7 @@
       {% paginate collection.products by section.settings.products_per_page %}
         <div class="product-grid-new full-width-grid" id="product-grid">
           {% for product in collection.products %}
-            <div class="grid__item">
+            <div class="grid__item reveal-item">
               <a href="{{ product.url }}" class="product-card-ui">
                 <div class="product-card-ui__image">
                   <img
@@ -88,10 +86,46 @@
   </results-list>
 </section>
 
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const observerOptions = {
+      threshold: 0.1,
+      rootMargin: '0px 0px -50px 0px'
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry, index) => {
+        if (entry.isIntersecting) {
+          // Add a slight stagger delay based on position in viewport
+          setTimeout(() => {
+            entry.target.classList.add('is-visible');
+          }, index % 4 * 100); 
+          observer.unobserve(entry.target);
+        }
+      });
+    }, observerOptions);
+
+    document.querySelectorAll('.reveal-item').forEach(item => {
+      observer.observe(item);
+    });
+  });
+</script>
+
 {% schema %}
 {
   "name": "Collection Redesign",
   "settings": [
+    {
+      "type": "image_picker",
+      "id": "hero_image",
+      "label": "Hero Image"
+    },
+    {
+      "type": "text",
+      "id": "hero_heading",
+      "label": "Hero Heading",
+      "default": "ALL CREATIONS"
+    },
     {
       "type": "range",
       "id": "products_per_page",
