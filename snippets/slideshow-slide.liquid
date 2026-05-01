@@ -1,0 +1,22 @@
+
+{%- doc -%}
+  Renders a slide for a slideshow.
+
+  @param {string} children - The content of the slide.
+  @param {string} class - Additional classes for the slide.
+  @param {string} style - Additional styles for the slide.
+  @param {string} attributes - Additional attributes for the slide.
+  @param {number} index - The index of the slide.
+{%- enddoc -%}
+
+<div
+  class="slideshow__slide {{ class }}"
+  style="{{ style }}"
+  data-index="{{ index }}"
+  {{ attributes }}
+  role="group"
+  aria-roledescription="slide"
+  aria-label="{{ index | plus: 1 }} of {{ slide_count }}"
+>
+  {{ children }}
+</div>

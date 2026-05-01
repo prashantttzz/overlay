@@ -1,0 +1,729 @@
+{%- style -%}
+  #scent-layering-{{ section.id }} {
+    position: relative;
+    background-color: #fff; /* Initial White */
+    color: #000;
+    overflow: clip;
+    transition: background-color 0.8s cubic-bezier(0.4, 0, 0.2, 1), color 0.8s ease;
+  }
+
+  #scent-layering-{{ section.id }}.is-dark {
+    background-color: #000;
+    color: #fff;
+  }
+
+  .sl-monolith__scroll-container {
+    height: 800vh; /* Extended scroll for cinematic pacing */
+    position: relative;
+  }
+
+  .sl-monolith__sticky {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    width: 100%;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* Centered Text Overlay */
+  .sl-monolith__overlay {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 20;
+    pointer-events: none;
+  }
+
+  /* Drifting Background Notes */
+  .sl-monolith__notes-layer {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 1;
+    overflow: hidden;
+  }
+
+  .sl-monolith__note {
+    position: absolute;
+    font-size: 10px;
+    letter-spacing: 0.8em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.15); /* Increased visibility */
+    white-space: nowrap;
+    will-change: transform;
+  }
+
+  /* Large Background Quote */
+  .sl-monolith__slogan {
+    position: absolute;
+    top: 50%;
+    left: 10vw;
+    transform: translateY(-50%);
+    font-family: var(--font-heading--family), serif;
+    font-size: clamp(4rem, 10vw, 8rem);
+    line-height: 0.85;
+    font-weight: 800;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.08); /* Increased visibility */
+    width: 600px;
+    z-index: 0;
+    pointer-events: none;
+  }
+
+  /* Background Watermark */
+  .sl-monolith__watermark {
+    position: absolute;
+    top: 50%;
+    left: 3vw;
+    transform: translateY(-50%);
+    font-family: var(--font-heading--family), serif;
+    font-size: clamp(8rem, 15vw, 12rem);
+    line-height: 1;
+    font-weight: 900;
+    text-transform: uppercase;
+    color: transparent;
+    -webkit-text-stroke: 1px rgba(255, 255, 255, 0.2); /* Increased visibility */
+    pointer-events: none;
+    z-index: 1;
+    white-space: nowrap;
+    writing-mode: vertical-lr;
+    transform: translateY(-50%) rotate(180deg);
+  }
+
+  /* Progress Line */
+  .sl-monolith__progress-track {
+    position: absolute;
+    top: 50%;
+    left: 4vw;
+    transform: translateY(-50%);
+    height: 300px;
+    width: 1px;
+    background: rgba(255, 255, 255, 0.1);
+    z-index: 15;
+  }
+
+  .sl-monolith__progress-bar {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 0%;
+    background: #fff;
+    transition: height 0.3s ease;
+  }
+
+  .sl-monolith__feature {
+    position: absolute;
+    text-align: left;
+    left: 10vw;
+    width: min(450px, 80vw);
+    opacity: 0;
+    z-index: 10;
+    will-change: transform, opacity, filter;
+    pointer-events: none;
+  }
+
+  .sl-monolith__feature.is-active {
+    pointer-events: auto;
+  }
+
+  .sl-monolith__label {
+    font-size: 10px;
+    letter-spacing: 0.4em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.4);
+    margin-bottom: 1.5rem;
+    display: block;
+  }
+
+  .sl-monolith__title {
+    font-family: var(--font-heading--family), serif;
+    font-size: clamp(1.8rem, 3.5vw, 3rem);
+    line-height: 1.1;
+    text-transform: uppercase;
+    font-weight: 700;
+    margin: 0;
+    letter-spacing: 0.05em;
+  }
+
+  .sl-monolith__text {
+    font-size: clamp(0.9rem, 1.1vw, 1.05rem);
+    line-height: 1.6;
+    color: rgba(255, 255, 255, 0.5);
+    max-width: 400px;
+    margin: 1.5rem 0 0;
+    text-wrap: balance;
+  }
+
+  /* 3D Bottle Visual */
+  .sl-monolith__visual {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 40vw;
+    height: 65vh;
+    transform: translate3d(-50%, -50%, 0);
+    z-index: 10;
+    pointer-events: none;
+    will-change: transform, left, opacity;
+  }
+
+  #sl-monolith-viewer-{{ section.id }} {
+    width: 100%;
+    height: 100%;
+    --poster-color: transparent;
+    outline: none;
+  }
+
+  /* Callout Labels */
+  .sl-monolith__callouts {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 20;
+    opacity: 0;
+    will-change: opacity;
+  }
+
+  .sl-monolith__callout {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    opacity: 0;
+    will-change: transform, opacity, filter;
+  }
+
+  /* Entrance directions - deeper offset for "coming from side" */
+  .callout--top, .callout--bottom { transform: translateX(40px); }
+  .callout--mid { transform: translateX(-40px); }
+
+  .sl-monolith__callout-line {
+    height: 1px;
+    background: rgba(255, 255, 255, 0.4);
+    width: 0;
+    will-change: width;
+  }
+
+  .sl-monolith__callout-text {
+    font-size: 8px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: #fff;
+    white-space: nowrap;
+    font-weight: 600;
+    background: rgba(0,0,0,0.2);
+    padding: 2px 4px;
+    border-radius: 2px;
+    will-change: transform, opacity;
+  }
+
+  /* Specific Label Positions */
+  .callout--top { top: 15%; right: 15%; flex-direction: row; }
+  .callout--mid { top: 50%; left: 5%; flex-direction: row-reverse; }
+  .callout--bottom { bottom: 20%; right: 10%; flex-direction: row; }
+
+  @media (max-width: 768px) {
+    .sl-monolith__callouts { display: none; }
+    
+    .sl-monolith__title {
+      font-size: clamp(1.5rem, 7vw, 2.2rem);
+      text-align: center;
+      letter-spacing: 0.02em;
+    }
+
+    .sl-monolith__visual {
+      width: 65vw;
+      height: 35vh;
+      top: 38% !important; /* Shifted lower to be closer to text */
+    }
+
+    .sl-monolith__feature {
+      left: 50% !important;
+      width: 88vw;
+      bottom: 18%; /* Shifted higher to close the gap */
+      top: auto !important;
+      text-align: center;
+      padding: 1.25rem 1.5rem;
+      background: rgba(255, 255, 255, 0.04);
+      backdrop-filter: blur(25px);
+      -webkit-backdrop-filter: blur(25px);
+      border-radius: 20px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      transform: translate3d(-50%, 20px, 0);
+      box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+    }
+
+    .sl-monolith__text {
+      font-size: 0.8rem;
+      text-align: center;
+      margin: 0.8rem auto 0;
+      max-width: 100%;
+      opacity: 0.7;
+    }
+
+    .sl-monolith__label {
+      text-align: center;
+      margin-bottom: 0.35rem;
+      font-size: 8px;
+      letter-spacing: 0.3em;
+    }
+
+    .sl-monolith__slogan {
+      font-size: 2.5rem;
+      width: 90vw;
+      left: 5vw;
+      opacity: 0.03 !important;
+    }
+
+    .sl-monolith__watermark {
+      display: none; 
+    }
+
+    .sl-monolith__progress-track {
+      left: auto;
+      right: 5vw;
+      height: 150px;
+      top: 32%;
+    }
+  }
+{%- endstyle -%}
+
+<link rel="modulepreload" href="https://ajax.googleapis.com/ajax/libs/model-viewer/3.5.0/model-viewer.min.js">
+<script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.5.0/model-viewer.min.js"></script>
+
+<div id="scent-layering-{{ section.id }}">
+  <div class="sl-monolith__scroll-container">
+    <div class="sl-monolith__sticky">
+      
+      <!-- Rich Background Textures -->
+      <div class="sl-monolith__notes-layer">
+        <div class="sl-monolith__note" style="top: 15%; left: 10%;">MUSK</div>
+        <div class="sl-monolith__note" style="top: 65%; left: 15%;">AMBER</div>
+        <div class="sl-monolith__note" style="top: 35%; left: 5%;">CITRUS</div>
+        <div class="sl-monolith__note" style="top: 80%; left: 8%;">SANDALWOOD</div>
+      </div>
+      <div class="sl-monolith__slogan">THE ART OF THE BLEND</div>
+      <div class="sl-monolith__watermark">METHODOLOGY</div>
+      
+      <div class="sl-monolith__progress-track">
+        <div class="sl-monolith__progress-bar"></div>
+      </div>
+
+      <!-- Feature Callouts -->
+      <div class="sl-monolith__overlay">
+        <div class="sl-monolith__feature" data-index="0">
+          <span class="sl-monolith__label">CHAPTER I</span>
+          <h2 class="sl-monolith__title">{{ section.settings.feature_1_title }}</h2>
+          <p class="sl-monolith__text">{{ section.settings.feature_1_text }}</p>
+        </div>
+        <div class="sl-monolith__feature" data-index="1">
+          <span class="sl-monolith__label">CHAPTER II</span>
+          <h2 class="sl-monolith__title">{{ section.settings.feature_2_title }}</h2>
+          <p class="sl-monolith__text">{{ section.settings.feature_2_text }}</p>
+        </div>
+        <div class="sl-monolith__feature" data-index="2">
+          <span class="sl-monolith__label">CHAPTER III</span>
+          <h2 class="sl-monolith__title">{{ section.settings.feature_3_title }}</h2>
+          <p class="sl-monolith__text">{{ section.settings.feature_3_text }}</p>
+        </div>
+        <div class="sl-monolith__feature" data-index="3">
+          <span class="sl-monolith__label">CHAPTER IV</span>
+          <h2 class="sl-monolith__title">{{ section.settings.feature_4_title }}</h2>
+          <p class="sl-monolith__text">{{ section.settings.feature_4_text }}</p>
+        </div>
+      </div>
+
+      <!-- Dynamic Visual -->
+      <div class="sl-monolith__visual" style="pointer-events: auto;">
+        <!-- Preload model for faster interaction -->
+        <link rel="preload" href="https://cdn.shopify.com/3d/models/82bec4c659256fd0/Meshy_AI_Missing_Person_All_Bo_0429050554_texture.glb" as="fetch" crossorigin>
+        
+        <!-- Technical Callouts -->
+        <div class="sl-monolith__callouts">
+          <div class="sl-monolith__callout callout--top">
+            <div class="sl-monolith__callout-line"></div>
+            <span class="sl-monolith__callout-text">MAGNETIC CLOSURE</span>
+          </div>
+          <div class="sl-monolith__callout callout--mid">
+            <div class="sl-monolith__callout-line"></div>
+            <span class="sl-monolith__callout-text">ARTISAN GLASS</span>
+          </div>
+          <div class="sl-monolith__callout callout--bottom">
+            <div class="sl-monolith__callout-line"></div>
+            <span class="sl-monolith__callout-text">WEIGHTED FOUNDATION</span>
+          </div>
+        </div>
+
+        <model-viewer
+          id="sl-monolith-viewer-{{ section.id }}"
+          src="https://cdn.shopify.com/3d/models/82bec4c659256fd0/Meshy_AI_Missing_Person_All_Bo_0429050554_texture.glb"
+          poster="{{ 'scent-model-poster.png' | asset_url }}"
+          loading="eager"
+          reveal="auto"
+          seamless-poster
+          interpolation-decay="200"
+          camera-controls
+          disable-zoom
+          touch-action="pan-y"
+          interaction-prompt="none"
+          shadow-intensity="1"
+          exposure="1"
+          camera-orbit="0deg 90deg 105%"
+          min-camera-orbit="auto auto auto"
+          max-camera-orbit="auto auto auto"
+          auto-rotate-delay="0"
+          alt="3D Scent Model"
+        ></model-viewer>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script>
+  (function() {
+    const section = document.querySelector('#scent-layering-{{ section.id }}');
+    if (!section) return;
+
+    const scrollContainer = section.querySelector('.sl-monolith__scroll-container');
+    const visual = section.querySelector('.sl-monolith__visual');
+    const features = section.querySelectorAll('.sl-monolith__feature');
+    const progressBar = section.querySelector('.sl-monolith__progress-bar');
+    const notes = section.querySelectorAll('.sl-monolith__note');
+    const calloutContainer = section.querySelector('.sl-monolith__callouts');
+    const callouts = section.querySelectorAll('.sl-monolith__callout');
+    const model = section.querySelector('#sl-monolith-viewer-{{ section.id }}');
+
+    let targetProgress = 0;
+    let currentProgress = 0;
+    let lastProgress = 0; 
+    let currentActiveIndex = -1;
+    let isUserInteracting = false;
+    const lerpFactor = 0.3; // Responsive but controlled
+
+    const labelSets = [
+      ["MAGNETIC CLOSURE", "ARTISAN GLASS", "WEIGHTED FOUNDATION"],
+      ["MOLECULAR BONDING", "LAYERED HARMONY", "SEAMLESS BLEND"],
+      ["DYNAMIC REACTION", "LIQUID TOUCH", "INSTANT ABSORPTION"],
+      ["ENDURING SILLAGE", "SCENT EVOLUTION", "LASTING PRESENCE"]
+    ];
+
+    // Detect user interaction with 3D model
+    model?.addEventListener('pointerdown', () => isUserInteracting = true);
+    window.addEventListener('pointerup', () => isUserInteracting = false);
+
+    // Narrative Snapping: Aggressive state completion
+    let snapTimer;
+    window.addEventListener('scroll', () => {
+      clearTimeout(snapTimer);
+      snapTimer = setTimeout(() => {
+        const isSettled = targetProgress > 0.38 && targetProgress < 0.82;
+        if (isSettled) {
+          const fRange = 0.8 - 0.4;
+          const fProgress = (targetProgress - 0.4) / fRange;
+          
+          const numFeatures = features.length;
+          // Forced rounding to nearest state center
+          const nearestIdx = Math.round(fProgress * numFeatures - 0.5);
+          const snapIdx = Math.max(0, Math.min(numFeatures - 1, nearestIdx));
+          const snapF = (snapIdx + 0.5) / numFeatures;
+          
+          targetProgress = 0.4 + (snapF * fRange);
+        }
+      }, 50); // High-frequency snap
+    }, { passive: true });
+
+    function updateMonolith() {
+      const rect = scrollContainer.getBoundingClientRect();
+      const scrollRange = rect.height - window.innerHeight;
+      if (scrollRange <= 0) return;
+
+      const newTarget = Math.max(0, Math.min(1, -rect.top / scrollRange));
+      
+      // If actively scrolling, follow perfectly. If stopped, snapTimer takes over.
+      if (Math.abs(newTarget - targetProgress) > 0.005) {
+        targetProgress = newTarget;
+      }
+
+      currentProgress += (targetProgress - currentProgress) * lerpFactor;
+
+      const delta = currentProgress - lastProgress;
+      lastProgress = currentProgress;
+
+      const isMobile = window.innerWidth <= 768;
+
+      if (currentProgress > 0.02) section.classList.add('is-dark');
+      else section.classList.remove('is-dark');
+
+      let leftPos = 50;
+      let opacity = 1;
+      let scale = 1;
+      let exposure = 1;
+      let orbitX = 0;
+      let pitch = 90; 
+      
+      if (currentProgress < 0.15) {
+        leftPos = 50;
+        scale = 1.4 + (currentProgress * 0.5); 
+        exposure = 0.6 + (currentProgress * 2);
+        orbitX = 0;
+      } else if (currentProgress < 0.4) {
+        const sweepProgress = (currentProgress - 0.15) / 0.25;
+        leftPos = 50 + (sweepProgress * (isMobile ? 0 : 25));
+        scale = 1.9 - (sweepProgress * 0.9);
+        orbitX = sweepProgress * 360; 
+        exposure = 0.9 + (sweepProgress * 0.3);
+      } else if (currentProgress < 0.8) {
+        leftPos = isMobile ? 50 : 75;
+        scale = 1;
+        exposure = 1.2;
+        
+        const fRange = 0.8 - 0.4;
+        const fProgress = (currentProgress - 0.4) / fRange;
+        
+        orbitX = 360 + (fProgress * 720); 
+        pitch = 90 + Math.sin(fProgress * Math.PI * 2) * 10;
+      } else {
+        const returnProgress = (currentProgress - 0.8) / 0.2;
+        leftPos = (isMobile ? 50 : 75) - (returnProgress * (isMobile ? 0 : 25));
+        scale = 1 + (returnProgress * 0.4);
+        orbitX = 1080 - (returnProgress * 360); 
+        exposure = 1.2 - (returnProgress * 0.2);
+      }
+
+      if (currentProgress < 0.05) opacity = opacity;
+
+      visual.style.left = `${leftPos}%`;
+      visual.style.opacity = opacity.toFixed(3);
+      visual.style.transform = `translate3d(-50%, -50%, 0) scale(${scale.toFixed(3)})`;
+      
+      const isSettled = currentProgress >= 0.4 && currentProgress <= 0.8;
+
+      if (isSettled) {
+        const fRange = 0.8 - 0.4;
+        const fProgress = (currentProgress - 0.4) / fRange;
+        
+        if (progressBar) progressBar.style.height = `${fProgress * 100}%`;
+
+        // 1. Feature Text Sliding
+        features.forEach((f, i) => {
+          const featureTarget = (i + 0.5) / features.length;
+          const dist = fProgress - featureTarget;
+          const absDist = Math.abs(dist);
+          // Aggressive curve for "binary" visibility (no in-between)
+          const threshold = 1.0 / features.length; 
+          let fOpacity = 0;
+          let translateY = 0;
+          let blur = 10;
+
+          if (absDist < threshold) {
+            // Power of 4 creates a very steep transition that snaps to 100% focus
+            fOpacity = Math.max(0, 1 - Math.pow(absDist / (threshold * 0.5), 4));
+            translateY = dist * 100; 
+            blur = absDist * 15;
+          }
+
+          const baseTranslateX = isMobile ? '-50%' : '0';
+          f.style.opacity = fOpacity.toFixed(3);
+          f.style.transform = `translate3d(${baseTranslateX}, ${translateY.toFixed(2)}px, 0)`;
+          f.style.filter = `blur(${blur.toFixed(2)}px)`;
+          f.style.color = '#ffffff';
+          f.style.zIndex = "40"; 
+          
+          if (fOpacity > 0.1) {
+            f.classList.add('is-active');
+            f.style.pointerEvents = 'auto';
+          } else {
+            f.classList.remove('is-active');
+            f.style.pointerEvents = 'none';
+          }
+        });
+
+        // 2. Technical Callouts Sliding & Line Expansion
+        if (calloutContainer) {
+          const activeIndex = Math.floor(fProgress * features.length);
+          const chapterProgress = (fProgress * features.length) % 1;
+          const chapterDist = Math.abs(chapterProgress - 0.5);
+          
+          const slideThreshold = 0.45; 
+          let labelOpacity = 1;
+          let labelSlide = 0;
+
+          if (chapterDist > slideThreshold) {
+            labelOpacity = Math.max(0, 1 - ((chapterDist - slideThreshold) / (0.5 - slideThreshold)));
+            labelSlide = (chapterDist - slideThreshold) * 30; 
+          }
+
+          // Swap text when faded or at index change
+          if (activeIndex !== currentActiveIndex && labelOpacity < 0.5) {
+            currentActiveIndex = activeIndex;
+            const set = labelSets[activeIndex];
+            callouts.forEach((c, i) => {
+              const textSpan = c.querySelector('.sl-monolith__callout-text');
+              if (textSpan && set[i]) textSpan.textContent = set[i];
+            });
+          }
+
+          const enterStart = 0.35;
+          const enterEnd = 0.45;
+          const enterProgress = Math.max(0, Math.min(1, (currentProgress - enterStart) / (enterEnd - enterStart)));
+          
+          calloutContainer.style.opacity = enterProgress.toFixed(3);
+          calloutContainer.style.zIndex = "50"; 
+          
+          callouts.forEach((c, i) => {
+            const sideFactor = c.classList.contains('callout--mid') ? -1 : 1;
+            const slide = (labelSlide * sideFactor);
+            
+            c.style.opacity = labelOpacity.toFixed(3);
+            c.style.transform = `translateX(${slide.toFixed(2)}px)`;
+            c.style.filter = `blur(${(1 - labelOpacity) * 12}px)`; 
+
+            const line = c.querySelector('.sl-monolith__callout-line');
+            const text = c.querySelector('.sl-monolith__callout-text');
+            if (line) line.style.width = `${(labelOpacity * 40).toFixed(0)}px`;
+            if (text) {
+              const textInnerSlide = (1 - labelOpacity) * 10 * sideFactor;
+              text.style.transform = `translateX(${textInnerSlide.toFixed(2)}px)`;
+            }
+          });
+        }
+
+        notes.forEach((note, i) => {
+          const speed = (i + 1) * 30;
+          note.style.transform = `translate3d(${fProgress * speed}px, ${Math.sin(fProgress * 10 + i) * 20}px, 0)`;
+        });
+      } else {
+        currentActiveIndex = -1;
+        features.forEach(f => {
+            f.style.opacity = 0;
+            f.classList.remove('is-active');
+        });
+        if (progressBar) progressBar.style.height = currentProgress > 0.8 ? '100%' : '0%';
+        if (calloutContainer) calloutContainer.style.opacity = 0;
+      }
+
+      if (model && !isUserInteracting) {
+        const leanLimit = 10;
+        const lean = Math.max(-leanLimit, Math.min(leanLimit, delta * 1500));
+        model.cameraOrbit = `${orbitX + lean}deg ${pitch}deg 105%`;
+        model.exposure = exposure;
+        model.shadowIntensity = 1.5 - (exposure * 0.5);
+      }
+
+      requestAnimationFrame(updateMonolith);
+    }
+
+    window.addEventListener('resize', () => {
+      // Logic inside updateMonolith handles resizing via rect checks
+    });
+    
+    // Start the smooth animation loop
+    requestAnimationFrame(updateMonolith);
+    
+    model?.addEventListener('load', () => {
+      // Model loaded, loop will pick it up
+    });
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Scent Layering Monolith",
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "default": "THE METHODOLOGY"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "SCENT LAYERING"
+    },
+    {
+      "type": "textarea",
+      "id": "description",
+      "label": "Description",
+      "default": "Layering the scents together: all of our sprays are designed to be mixed."
+    },
+    {
+      "type": "header",
+      "content": "Feature 1"
+    },
+    {
+      "type": "text",
+      "id": "feature_1_title",
+      "label": "Title",
+      "default": "INFINITE COMBINATIONS"
+    },
+    {
+      "type": "textarea",
+      "id": "feature_1_text",
+      "label": "Text",
+      "default": "Craft a signature that is uniquely yours by blending distinct base foundations."
+    },
+    {
+      "type": "header",
+      "content": "Feature 2"
+    },
+    {
+      "type": "text",
+      "id": "feature_2_title",
+      "label": "Title",
+      "default": "OLFACTORY HARMONY"
+    },
+    {
+      "type": "textarea",
+      "id": "feature_2_text",
+      "label": "Text",
+      "default": "Shared molecular bonds allow for seamless transitions between different scents."
+    },
+    {
+      "type": "header",
+      "content": "Feature 3"
+    },
+    {
+      "type": "text",
+      "id": "feature_3_title",
+      "label": "Title",
+      "default": "LIQUID INTERACTION"
+    },
+    {
+      "type": "textarea",
+      "id": "feature_3_text",
+      "label": "Text",
+      "default": "Our formula ensures that overlapping sprays enhance rather than compete."
+    },
+    {
+      "type": "header",
+      "content": "Feature 4"
+    },
+    {
+      "type": "text",
+      "id": "feature_4_title",
+      "label": "Title",
+      "default": "DYNAMIC EVOLUTION"
+    },
+    {
+      "type": "textarea",
+      "id": "feature_4_text",
+      "label": "Text",
+      "default": "Experience how different layers reveal themselves across hours of wear."
+    }
+  ],
+  "presets": [
+    {
+      "name": "Scent Layering Monolith"
+    }
+  ]
+}
+{% endschema %}

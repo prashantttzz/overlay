@@ -1,0 +1,407 @@
+
+{%- style -%}
+  #contact-redesign-{{ section.id }} {
+    background-color: #000;
+    color: #fff;
+    min-height: 100vh;
+    font-family: var(--font-body--family), sans-serif;
+    position: relative;
+    overflow: hidden;
+    cursor: none; /* Hide default cursor for custom lens */
+    z-index: 1;
+  }
+
+  /* Force Global Header to White for this page */
+  .header, 
+  .menu-list__link, 
+  .header-actions__action svg,
+  .header__icon--menu svg,
+  .header__heading-link,
+  .header__active-menu-item,
+  .header__heading {
+    color: #fff !important;
+  }
+  
+  /* Force Logo Image to White */
+  .header-logo__image,
+  .header__heading-logo,
+  .header__heading-link img {
+    filter: none !important;
+  }
+  
+  .header-actions__action svg,
+  .header__icon--menu svg {
+    color: #fff !important;
+    stroke: #fff !important;
+    fill: none !important;
+  }
+
+  .menu-list__link--active::after {
+    background-color: #fff !important;
+  }
+  
+  .header__menu-item:hover {
+    color: rgba(255, 255, 255, 0.7) !important;
+  }
+
+  /* The Discovery Lens */
+  .discovery-lens {
+    position: fixed;
+    width: 350px;
+    height: 350px;
+    background: #fff;
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 9999;
+    mix-blend-mode: difference;
+    transform: translate(-50%, -50%);
+    transition: width 0.3s, height 0.3s, background 0.3s;
+    filter: blur(2px);
+    box-shadow: 0 0 100px rgba(255,255,255,0.2);
+  }
+
+  .discovery-lens.active {
+    width: 450px;
+    height: 450px;
+    background: #fff;
+  }
+
+  /* Layout */
+  .contact-discovery__container {
+    max-width: 1500px;
+    margin: 0 auto;
+    padding: 100px 60px;
+    position: relative;
+    z-index: 5;
+  }
+
+  .contact-discovery__grid {
+    display: grid;
+    grid-template-columns: 0.8fr 1.2fr;
+    gap: 10vw;
+    align-items: center;
+  }
+
+  @media screen and (max-width: 990px) {
+    .contact-discovery__container {
+      padding: 60px 20px;
+    }
+    .contact-discovery__grid {
+      grid-template-columns: 1fr;
+      gap: 60px;
+      text-align: center;
+    }
+    .discovery-info__heading {
+      font-size: 3.5rem;
+      margin-bottom: 30px;
+    }
+    .discovery-info__details {
+      align-items: center;
+      gap: 30px;
+    }
+    .discovery-form__input {
+      font-size: 1.3rem;
+      text-align: center;
+    }
+    .discovery-form__label {
+      left: 50%;
+      transform: translateX(-50%);
+      width: 100%;
+    }
+    .discovery-form__input:focus + .discovery-form__label,
+    .discovery-form__input:not(:placeholder-shown) + .discovery-form__label {
+      left: 50%;
+      transform: translateX(-50%);
+    }
+    #contact-redesign-{{ section.id }} {
+      cursor: auto;
+    }
+    .discovery-lens {
+      display: none;
+    }
+  }
+
+  /* Left Side: Hidden Details */
+  .discovery-info__heading {
+    font-family: 'Galderglynn Titling', sans-serif;
+    font-size: clamp(3rem, 8vw, 7rem);
+    line-height: 0.85;
+    text-transform: uppercase;
+    margin-bottom: 40px;
+  }
+
+  .discovery-info__details {
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+  }
+
+  .discovery-info__item h4 {
+    font-size: 0.7rem;
+    letter-spacing: 0.3em;
+    color: rgba(255, 255, 255, 0.4);
+    margin-bottom: 15px;
+    text-transform: uppercase;
+  }
+
+  .discovery-info__item p, .discovery-info__item a {
+    font-size: 1.1rem;
+    font-weight: 300;
+    color: #fff;
+    text-decoration: none;
+  }
+
+  /* Right Side: The Form */
+  .discovery-form__wrapper {
+    position: relative;
+  }
+
+  .discovery-form__field {
+    margin-bottom: 60px;
+    position: relative;
+  }
+
+  .discovery-form__input {
+    width: 100%;
+    background: transparent !important;
+    border: none;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 20px 0;
+    font-size: 1.6rem;
+    color: #fff !important;
+    font-family: inherit;
+    font-weight: 200;
+    transition: all 0.5s ease;
+  }
+
+  .discovery-form__input:focus {
+    outline: none;
+    border-bottom-color: #fff;
+    padding-left: 20px;
+  }
+
+  .discovery-form__label {
+    position: absolute;
+    top: 20px;
+    left: 0;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    color: rgba(255, 255, 255, 0.2);
+    transition: all 0.4s cubic-bezier(0.19, 1, 0.22, 1);
+    pointer-events: none;
+  }
+
+  .discovery-form__input:focus + .discovery-form__label,
+  .discovery-form__input:not(:placeholder-shown) + .discovery-form__label {
+    top: -25px;
+    font-size: 0.6rem;
+    color: #fff;
+    letter-spacing: 0.4em;
+  }
+
+  .discovery-form__input::placeholder {
+    color: transparent;
+  }
+
+  /* Discovery Button */
+  .discovery-form__button {
+    background: #fff;
+    color: #000;
+    border: none;
+    width: auto;
+    min-width: 200px;
+    padding: 20px 40px;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.3em;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.5s cubic-bezier(0.19, 1, 0.22, 1);
+    margin-top: 40px;
+  }
+
+  .discovery-form__button:hover {
+    letter-spacing: 0.8em;
+    background: #fff;
+    transform: scale(1.02);
+  }
+
+  /* Decorative Background Text */
+  .discovery-bg-text {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-family: 'Galderglynn Titling', sans-serif;
+    font-size: 40vw;
+    color: rgba(255, 255, 255, 0.02);
+    z-index: 1;
+    pointer-events: none;
+    text-transform: uppercase;
+    user-select: none;
+  }
+
+  /* Liquid Scanline Effect */
+  .scanline {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    background: linear-gradient(to bottom, transparent 50%, rgba(255, 255, 255, 0.01) 50%);
+    background-size: 100% 4px;
+    z-index: 5;
+    pointer-events: none;
+  }
+
+{%- endstyle -%}
+
+<div id="contact-redesign-{{ section.id }}" class="contact-discovery">
+  <div class="discovery-lens" id="discoveryLens"></div>
+  <div class="scanline"></div>
+  <div class="discovery-bg-text">OVERLAY</div>
+
+  <div class="contact-discovery__container">
+    <div class="contact-discovery__grid">
+      <!-- Section: The Hidden Identity -->
+      <div class="discovery-info">
+        <h1 class="discovery-info__heading">
+          CONTACT<br>US
+        </h1>
+        
+        <div class="discovery-info__details">
+          <div class="discovery-info__item">
+            <h4>PHYSICAL COORDINATES</h4>
+            <p>ARCHITECTURAL BLVD / SE1</p>
+          </div>
+          
+          <div class="discovery-info__item">
+            <h4>DIGITAL ACCESS</h4>
+            <a href="mailto:studio@overlay.com">STUDIO@OVERLAY.COM</a>
+          </div>
+          
+          <div class="discovery-info__item">
+            <h4>TIMEWINDOW</h4>
+            <p>10:00 — 18:00 GMT</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Section: The Input Discovery -->
+      <div class="discovery-form__wrapper">
+        {%- form 'contact', id: 'ContactForm', class: 'discovery-form' -%}
+          
+          {%- if form.posted_successfully? -%}
+            <div class="form-success-message" style="font-family: 'Galderglynn Titling', sans-serif; font-size: 2rem;">
+              TRANSMISSION SECURED.
+            </div>
+          {%- endif -%}
+
+          <div class="discovery-form__field">
+            <input
+              class="discovery-form__input"
+              type="text"
+              name="contact[name]"
+              id="Discovery-Name"
+              placeholder=" "
+              required
+            >
+            <label class="discovery-form__label" for="Discovery-Name">IDENTIFIER</label>
+          </div>
+
+          <div class="discovery-form__field">
+            <input
+              class="discovery-form__input"
+              type="email"
+              name="contact[email]"
+              id="Discovery-Email"
+              placeholder=" "
+              required
+            >
+            <label class="discovery-form__label" for="Discovery-Email">COMMUNICATION PATH</label>
+          </div>
+
+          <div class="discovery-form__field">
+            <textarea
+              class="discovery-form__input"
+              rows="1"
+              name="contact[body]"
+              id="Discovery-Message"
+              placeholder=" "
+              oninput="this.rows = this.value.split('\n').length"
+            ></textarea>
+            <label class="discovery-form__label" for="Discovery-Message">INQUIRY NARRATIVE</label>
+          </div>
+
+          <div class="discovery-form__submit">
+            <button type="submit" class="discovery-form__button">
+              SEND
+            </button>
+          </div>
+
+        {%- endform -%}
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const lens = document.getElementById('discoveryLens');
+    const container = document.getElementById('contact-redesign-{{ section.id }}');
+    const inputs = document.querySelectorAll('.discovery-form__input');
+
+    // Smooth Lens Follow with Velocity Deformation
+    let mouseX = 0, mouseY = 0;
+    let lensX = 0, lensY = 0;
+    let lastScrollY = window.scrollY;
+    let scrollVelocity = 0;
+
+    document.addEventListener('mousemove', (e) => {
+      mouseX = e.clientX;
+      mouseY = e.clientY;
+    });
+
+    function animateLens() {
+      // Calculate Scroll Velocity
+      const currentScrollY = window.scrollY;
+      scrollVelocity = (currentScrollY - lastScrollY) * 0.5;
+      lastScrollY = currentScrollY;
+
+      // High-mass inertia
+      lensX += (mouseX - lensX) * 0.075;
+      lensY += (mouseY - lensY) * 0.075;
+      
+      // Calculate deformation based on velocity
+      const velocity = Math.min(Math.abs(scrollVelocity), 100);
+      const stretch = 1 + (velocity / 200);
+      const skew = (scrollVelocity / 10);
+
+      lens.style.left = lensX + 'px';
+      lens.style.top = lensY + 'px';
+      lens.style.transform = `translate(-50%, -50%) scaleY(${stretch}) skewY(${skew}deg)`;
+      
+      requestAnimationFrame(animateLens);
+    }
+    animateLens();
+
+    // Lens Interaction on inputs
+    inputs.forEach(input => {
+      input.addEventListener('focus', () => lens.classList.add('active'));
+      input.addEventListener('blur', () => lens.classList.remove('active'));
+    });
+  });
+</script>
+
+{% schema %}
+{
+  "name": "Contact Redesign",
+  "settings": [],
+  "presets": [
+    {
+      "name": "Contact Redesign"
+    }
+  ]
+}
+{% endschema %}

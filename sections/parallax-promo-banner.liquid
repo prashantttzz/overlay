@@ -1,0 +1,214 @@
+{%- style -%}
+  .promo-banner-{{ section.id }} {
+    position: relative;
+    width: 100%;
+    min-height: {{ section.settings.banner_height }}px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 100px 5%;
+    overflow: hidden;
+    clip-path: inset(0); /* Necessary for the background to be contained while having a large min-height */
+    background-color: #000;
+  }
+
+  .promo-banner__bg-{{ section.id }} {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    min-height: 120vh; /* Make it taller for parallax movement */
+    background-size: cover;
+    background-position: {{ section.settings.desktop_alignment }};
+    background-repeat: no-repeat;
+    z-index: 0;
+    pointer-events: none;
+    will-change: transform;
+  }
+
+  .promo-banner__overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to bottom, rgba(0,0,0,0.2) 0%, rgba(0,0,0,0.6) 100%);
+    z-index: 1;
+  }
+
+  .promo-banner__content {
+    position: relative;
+    z-index: 2;
+    color: #fff;
+    max-width: 800px; /* Reduced max-width for better verticality */
+    margin: 0 auto;
+  }
+
+  .promo-banner__heading {
+    font-size: clamp(1.8rem, 4vw, 3rem); /* Reduced from 5.5rem */
+    text-transform: uppercase;
+    margin: 0;
+    font-family: var(--font-heading--family), serif;
+    color: #fff;
+    line-height: 1.1;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+  }
+
+  .promo-banner__subheading {
+    font-size: 11px; /* Reduced from 14px */
+    text-transform: uppercase;
+    letter-spacing: 0.4em;
+    margin-bottom: 1.5rem;
+    opacity: 0.7;
+    color: #fff;
+    font-weight: 500;
+  }
+
+  @media (max-width: 768px) {
+    .promo-banner-{{ section.id }} {
+      min-height: 250px;
+      padding: 40px 20px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+    .promo-banner__bg-{{ section.id }} {
+      /* Show whole image on mobile */
+      background-size: contain;
+      background-position: center;
+      min-height: 100%;
+      top: 0;
+      transform: none !important; /* Disable parallax on mobile to keep image contained */
+    }
+    .promo-banner__heading {
+      font-size: 1.4rem;
+      line-height: 1.2;
+    }
+    .promo-banner__subheading {
+      font-size: 10px;
+      margin-bottom: 0.8rem;
+    }
+  }
+{%- endstyle -%}
+
+<div class="promo-banner-{{ section.id }}" data-promo-parallax-container>
+  <div class="promo-banner__bg-{{ section.id }}" data-promo-parallax-bg 
+    style="background-image: url('{% if section.settings.image %}{{ section.settings.image | img_url: 'master' }}{% else %}https://cdn.shopify.com/s/files/1/0774/2894/9215/files/Gemini_Generated_Image_28qq8528qq8528qq.png?v=1777441675{% endif %}');">
+  </div>
+  <div class="promo-banner__overlay"></div>
+  <div class="promo-banner__content page-width-normal">
+    <div data-promo-parallax-content>
+      {% if section.settings.subheading != blank %}
+        <div class="promo-banner__subheading">{{ section.settings.subheading }}</div>
+      {% endif %}
+      <h2 class="promo-banner__heading">{{ section.settings.heading }}</h2>
+    </div>
+  </div>
+</div>
+
+<script>
+  (function() {
+    const initPromoParallax = () => {
+      const container = document.querySelector('.promo-banner-{{ section.id }}');
+      const bg = container?.querySelector('[data-promo-parallax-bg]');
+      const content = container?.querySelector('[data-promo-parallax-content]');
+      if (!container || !bg) return;
+
+      const handleScroll = () => {
+        // Disable parallax logic on mobile to keep image "whole"
+        if (window.innerWidth <= 768) {
+          bg.style.transform = '';
+          if (content) content.style.transform = '';
+          return;
+        }
+
+        const rect = container.getBoundingClientRect();
+        const windowHeight = window.innerHeight;
+        
+        if (rect.top > windowHeight || rect.bottom < 0) return;
+
+        const scrollProgress = (windowHeight - rect.top) / (windowHeight + rect.height);
+        const clampedProgress = Math.max(0, Math.min(1, scrollProgress));
+        
+        const bgMovement = -rect.top * 0.4;
+        bg.style.transform = `translate3d(0, ${bgMovement}px, 0)`;
+        
+        if (content) {
+          const contentMovement = (clampedProgress - 0.5) * -50;
+          content.style.transform = `translate3d(0, ${contentMovement}px, 0)`;
+        }
+      };
+
+      window.addEventListener('scroll', handleScroll, { passive: true });
+      handleScroll();
+      window.addEventListener('resize', handleScroll);
+    };
+
+    document.addEventListener('DOMContentLoaded', initPromoParallax);
+    if (window.Shopify && window.Shopify.designMode) {
+      document.addEventListener('shopify:section:load', initPromoParallax);
+    }
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Parallax Promo Banner",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Background Image"
+    },
+    {
+      "type": "select",
+      "id": "desktop_alignment",
+      "label": "Desktop Alignment",
+      "options": [
+        { "value": "left center", "label": "Left" },
+        { "value": "center center", "label": "Center" },
+        { "value": "right center", "label": "Right" }
+      ],
+      "default": "center center"
+    },
+    {
+      "type": "select",
+      "id": "mobile_alignment",
+      "label": "Mobile Alignment",
+      "options": [
+        { "value": "left center", "label": "Left" },
+        { "value": "center center", "label": "Center" },
+        { "value": "right center", "label": "Right" }
+      ],
+      "default": "left center"
+    },
+    {
+      "type": "text",
+      "id": "subheading",
+      "label": "Subheading",
+      "default": "COLLECT THE SERIES"
+    },
+    {
+      "type": "textarea",
+      "id": "heading",
+      "label": "Heading",
+      "default": "COMPLETE THE SET: BUY THREE AND GET 40% OFF"
+    },
+    {
+      "type": "range",
+      "id": "banner_height",
+      "min": 200,
+      "max": 800,
+      "step": 10,
+      "unit": "px",
+      "label": "Banner Height",
+      "default": 450
+    }
+  ],
+  "presets": [
+    {
+      "name": "Parallax Promo Banner"
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,79 @@
+
+{%- doc -%}
+  Renders a slideshow component.
+
+  @param {string} ref - The reference name for the component.
+  @param {string} class - Additional classes.
+  @param {string} slides - The slide elements.
+  @param {number} slide_count - The number of slides.
+  @param {string} slideshow_arrows - The navigation arrows.
+  @param {string} controls - The pagination controls.
+  @param {string} header - Optional header content.
+  @param {boolean} infinite - Whether the slideshow should loop.
+  @param {number} initial_slide - The index of the first slide.
+{%- enddoc -%}
+
+<slideshow-component
+  class="slideshow {{ class }}"
+  {% if ref %}ref="{{ ref }}"{% endif %}
+  data-slide-count="{{ slide_count }}"
+  data-infinite="{{ infinite | default: true }}"
+  data-initial-slide="{{ initial_slide | default: 0 }}"
+>
+  {% if header %}
+    <div class="slideshow__header">
+      {{ header }}
+    </div>
+  {% endif %}
+
+  <div class="slideshow__viewport" ref="viewport">
+    <div class="slideshow__slides" ref="slides">
+      {{ slides }}
+    </div>
+  </div>
+
+  {% if slideshow_arrows %}
+    <div class="slideshow__arrows-wrapper slideshow__arrows--{{ arrows_position | default: 'center' }}">
+      {{ slideshow_arrows }}
+    </div>
+  {% endif %}
+
+  {{ controls }}
+</slideshow-component>
+
+{% stylesheet %}
+  .slideshow {
+    position: relative;
+    display: block;
+    width: 100%;
+  }
+  .slideshow__viewport {
+    overflow: hidden;
+    width: 100%;
+  }
+  .slideshow__slides {
+    display: flex;
+    transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+    width: 100%;
+  }
+  .slideshow__slide {
+    flex: 0 0 100%;
+    width: 100%;
+  }
+  .slideshow__arrows-wrapper {
+    position: absolute;
+    top: 50%;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    transform: translateY(-50%);
+    pointer-events: none;
+    z-index: 2;
+  }
+  .slideshow__arrows-wrapper > * {
+    pointer-events: auto;
+  }
+  .slideshow__arrows--left { justify-content: flex-start; }
+  .slideshow__arrows--right { justify-content: flex-end; }
+  .slideshow__arrows--center { justify-content: space-between; }
+{% endstylesheet %}

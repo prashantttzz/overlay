@@ -1,0 +1,126 @@
+{{ 'footer-custom.css' | asset_url | stylesheet_tag }}
+
+<footer class="footer-custom">
+  <div class="footer-custom__inner page-width-normal">
+    <div class="footer-custom__top">
+      
+      <div class="footer-custom__column footer-custom__column--brand">
+        <h2 class="footer-custom__brand-name">{{ section.settings.brand_name }}</h2>
+        <div class="footer-custom__brand-desc">{{ section.settings.brand_desc }}</div>
+      </div>
+
+      <div class="footer-custom__column footer-custom__column--links">
+        <h3 class="footer-custom__heading">{{ section.settings.col1_heading }}</h3>
+        <ul class="footer-custom__linklist">
+          {% if section.settings.col1_menu != blank and linklists[section.settings.col1_menu].links.size > 0 %}
+            {% for link in linklists[section.settings.col1_menu].links %}
+              <li><a href="{{ link.url }}">{{ link.title }}</a></li>
+            {% endfor %}
+          {% else %}
+            <li><a href="#">SCENTS</a></li>
+            <li><a href="#">ARCHIVE</a></li>
+            <li><a href="#">STUDIO</a></li>
+            <li><a href="#">JOURNAL</a></li>
+          {% endif %}
+        </ul>
+      </div>
+
+      <div class="footer-custom__column footer-custom__column--links">
+        <h3 class="footer-custom__heading">{{ section.settings.col2_heading }}</h3>
+        <ul class="footer-custom__linklist">
+          {% if section.settings.col2_menu != blank and linklists[section.settings.col2_menu].links.size > 0 %}
+            {% for link in linklists[section.settings.col2_menu].links %}
+              <li><a href="{{ link.url }}">{{ link.title }}</a></li>
+            {% endfor %}
+          {% else %}
+            <li><a href="#">NEWSLETTER</a></li>
+            <li><a href="#">INSTAGRAM</a></li>
+            <li><a href="#">CONTACT</a></li>
+            <li><a href="#">LEGAL</a></li>
+          {% endif %}
+        </ul>
+      </div>
+
+      <div class="footer-custom__column footer-custom__column--newsletter">
+        <h3 class="footer-custom__heading">{{ section.settings.newsletter_heading }}</h3>
+        {% form 'customer', class: 'footer-custom__form' %}
+          <input type="hidden" name="contact[tags]" value="newsletter">
+          <div class="footer-custom__input-wrapper">
+            <input type="email" name="contact[email]" placeholder="EMAIL ADDRESS" required>
+            <button type="submit" aria-label="Subscribe">
+              <svg viewBox="0 0 14 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M8.53203 0L7.53671 0.93381L11.0825 4.31679H0V5.68321H11.0825L7.53671 9.06619L8.53203 10L14 5L8.53203 0Z" fill="currentColor"/>
+              </svg>
+            </button>
+          </div>
+        {% endform %}
+      </div>
+
+    </div>
+  </div>
+
+  <div class="footer-custom__bottom">
+    <div class="footer-custom__bottom-inner page-width-normal">
+      <div class="footer-custom__copyright">
+        2026 OVERLAY | POWERED BY CITY REACH
+      </div>
+      <div class="footer-custom__bottom-right">
+        <span>EST. 2024</span>
+      </div>
+    </div>
+  </div>
+</footer>
+
+{% schema %}
+{
+  "name": "Custom Footer",
+  "settings": [
+    {
+      "type": "text",
+      "id": "brand_name",
+      "label": "Brand Name",
+      "default": "OVERLAY"
+    },
+    {
+      "type": "richtext",
+      "id": "brand_desc",
+      "label": "Brand Description",
+      "default": "<p>Defining the scent of architecture through avant-garde olfactory design and minimalist aesthetics.</p>"
+    },
+    {
+      "type": "text",
+      "id": "col1_heading",
+      "label": "Column 1 Heading",
+      "default": "COLLECTIONS"
+    },
+    {
+      "type": "link_list",
+      "id": "col1_menu",
+      "label": "Column 1 Menu"
+    },
+    {
+      "type": "text",
+      "id": "col2_heading",
+      "label": "Column 2 Heading",
+      "default": "INFORMATION"
+    },
+    {
+      "type": "link_list",
+      "id": "col2_menu",
+      "label": "Column 2 Menu"
+    },
+    {
+      "type": "text",
+      "id": "newsletter_heading",
+      "label": "Newsletter Heading",
+      "default": "NEWSLETTER"
+    },
+    {
+      "type": "text",
+      "id": "copyright_text",
+      "label": "Copyright Text",
+      "default": "OVERLAY — SENSE & ARCHITECTURE"
+    }
+  ]
+}
+{% endschema %}

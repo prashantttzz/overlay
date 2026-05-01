@@ -1,0 +1,183 @@
+{{ 'custom-engraving.css' | asset_url | stylesheet_tag }}
+
+<div class="custom-engraving">
+  {% if section.settings.show_banner %}
+  <div class="custom-engraving__banner" data-parallax-container>
+    <div class="custom-engraving__banner-bg" data-parallax-bg style="background-image: url('{% if section.settings.banner_image %}{{ section.settings.banner_image | img_url: 'master' }}{% else %}https://cdn.shopify.com/s/files/1/0774/2894/9215/files/Gemini_Generated_Image_28qq8528qq8528qq.png?v=1777441675{% endif %}');"></div>
+    <div class="custom-engraving__banner-overlay"></div>
+    <div class="custom-engraving__banner-content page-width-normal reveal reveal--zoom">
+      <div data-parallax-content>
+        <h2>{{ section.settings.banner_heading }}</h2>
+      </div>
+    </div>
+  </div>
+  {% endif %}
+
+  <script>
+    (function() {
+      const initBannerParallax = () => {
+        const container = document.querySelector('[data-parallax-container]');
+        const bg = container?.querySelector('[data-parallax-bg]');
+        const content = container?.querySelector('[data-parallax-content]');
+        if (!container || !bg) return;
+
+        const handleScroll = () => {
+          const rect = container.getBoundingClientRect();
+          const windowHeight = window.innerHeight;
+          
+          if (rect.top > windowHeight || rect.bottom < 0) return;
+
+          const scrollProgress = (windowHeight - rect.top) / (windowHeight + rect.height);
+          const clampedProgress = Math.max(0, Math.min(1, scrollProgress));
+          
+          // Background anchored to viewport for stationary look
+          bg.style.transform = `translate3d(0, ${-rect.top}px, 0)`;
+          
+          // Content movement (+/- 30px, opposite direction)
+          if (content) {
+            const contentMovement = (clampedProgress - 0.5) * -60;
+            content.style.transform = `translate3d(0, ${contentMovement}px, 0)`;
+          }
+        };
+
+        window.addEventListener('scroll', handleScroll, { passive: true });
+        handleScroll();
+      };
+
+      document.addEventListener('DOMContentLoaded', initBannerParallax);
+      if (window.Shopify && window.Shopify.designMode) {
+        document.addEventListener('shopify:section:load', initBannerParallax);
+      }
+    })();
+  </script>
+
+  <div class="custom-engraving__split page-width-normal">
+    {% if section.settings.bg_text != blank %}
+    <div class="custom-engraving__bg-text">{{ section.settings.bg_text }}</div>
+    {% endif %}
+    
+    
+    <div class="custom-engraving__image-column reveal reveal--slide-left">
+      <div class="custom-engraving__image-wrapper">
+        {% if section.settings.main_image != blank %}
+          <img height="" width="" src="{{ section.settings.main_image | img_url: '800x' }}" alt="{{ section.settings.heading }}" loading="lazy">
+        {% else %}
+          <img height="" width="" src="https://cdn.shopify.com/s/files/1/0774/2894/9215/files/image_10.png?v=1777367312" alt="Custom Engraving" loading="lazy">
+        {% endif %}
+        
+        {% if section.settings.image_label != blank %}
+          <span class="custom-engraving__image-label">{{ section.settings.image_label }}</span>
+        {% endif %}
+      </div>
+    </div>
+    
+    
+    <div class="custom-engraving__text-column reveal reveal--slide-right">
+      {% if section.settings.eyebrow != blank %}
+      <div class="custom-engraving__eyebrow">
+        <span class="eyebrow-line">|</span> {{ section.settings.eyebrow }}
+      </div>
+      {% endif %}
+      
+      {% if section.settings.heading != blank %}
+      <h2 class="custom-engraving__heading">{{ section.settings.heading }}</h2>
+      {% endif %}
+      
+      {% if section.settings.description != blank %}
+      <div class="custom-engraving__description">
+        {{ section.settings.description }}
+      </div>
+      {% endif %}
+      
+      {% if section.settings.button_label != blank %}
+      <a href="{{ section.settings.button_link | default: '#' }}" class="custom-engraving__button">
+        {{ section.settings.button_label }}
+      </a>
+      {% endif %}
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Custom Engraving",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Promo Banner"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_banner",
+      "label": "Show Banner",
+      "default": true
+    },
+    {
+      "type": "image_picker",
+      "id": "banner_image",
+      "label": "Banner Background Image"
+    },
+    {
+      "type": "textarea",
+      "id": "banner_heading",
+      "label": "Banner Heading",
+      "default": "COLLECT THE SERIES: BUY THREE AND GET 40% OFF"
+    },
+    {
+      "type": "header",
+      "content": "Engraving Section"
+    },
+    {
+      "type": "text",
+      "id": "bg_text",
+      "label": "Background Watermark Text",
+      "default": "BESPOKE"
+    },
+    {
+      "type": "image_picker",
+      "id": "main_image",
+      "label": "Product Image"
+    },
+    {
+      "type": "text",
+      "id": "image_label",
+      "label": "Image Label (Bottom Left)",
+      "default": "STUDIO ARTISTRY"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow Text",
+      "default": "EXCLUSIVITY REDEFINED"
+    },
+    {
+      "type": "textarea",
+      "id": "heading",
+      "label": "Heading",
+      "default": "CUSTOM\nENGRAVING"
+    },
+    {
+      "type": "richtext",
+      "id": "description",
+      "label": "Description",
+      "default": "<p>Transform your signature bottle into a personal artifact. Our bespoke engraving service allows you to etch your own narrative onto the glass.</p>"
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Button Label",
+      "default": "PERSONALIZE YOUR BOTTLE"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Button Link"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Custom Engraving"
+    }
+  ]
+}
+{% endschema %}

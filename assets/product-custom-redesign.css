@@ -1,0 +1,423 @@
+
+/* Product Page Redesign Styles - Final Polish */
+
+.product-information__grid.product-information--redesign {
+  --gap: 0;
+  display: grid !important;
+  grid-template-columns: 1fr 1fr !important;
+  gap: 0 !important;
+  background-color: #ffffff !important;
+  align-items: center !important;
+  flex-grow: 1;
+  height: 100%;
+  overflow: hidden;
+}
+
+.product-information--redesign,
+.product-information.section {
+  padding-top: 0 !important;
+  margin-top: 35px !important; /* Offset for fixed header */
+  min-height: 100vh !important; /* Occupy remaining screen height */
+  display: flex !important;
+  flex-direction: column;
+}
+
+@media screen and (max-width: 749px) {
+  .product-information.section {
+    margin-top: 75px !important; /* Proper offset for mobile fixed header */
+    min-height: auto !important;
+  }
+}
+
+@media screen and (max-width: 1024px) {
+  .product-information--redesign,
+  .product-information.section {
+    min-height: auto !important;
+  }
+
+  .product-information__grid.product-information--redesign {
+    grid-template-columns: 1fr !important;
+    height: auto;
+  }
+}
+
+/* Hide Quantity Selector and Buy It Now if required by design */
+.product-information--redesign .quantity,
+.product-information--redesign .quantity-selector,
+.product-information--redesign .buy-it-now-button,
+.product-information--redesign .shopify-payment-button {
+  display: none !important;
+}
+
+@media screen and (max-width: 749px) {
+  .product-information__grid.product-information--redesign {
+    grid-template-columns: 1fr !important;
+  }
+  
+  .product-information--redesign .product-title h1,
+  .product-information--redesign .product-title p,
+  .product-information--redesign .product-title a,
+  .product-information--redesign .product-title .text-block {
+    white-space: normal !important;
+    font-size: clamp(1.4rem, 6vw, 1.8rem) !important; /* Smaller title on mobile */
+    word-break: break-word;
+  }
+
+  .product-information--redesign .product-price-block {
+    --font-size: 1rem !important;
+    font-size: 1rem !important;
+  }
+
+  .product-information--redesign .price {
+    font-size: 1rem !important; /* Even smaller price on mobile */
+  }
+
+  .product-information--redesign .product-information__media {
+    padding-bottom: 0 !important;
+  }
+
+  .product-information--redesign .product-details {
+    padding-top: 1rem !important;
+  }
+
+  .product-information--redesign .variant-picker__option-values {
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+  }
+
+  .product-information--redesign .variant-option input + label {
+    min-width: 0;
+    width: 100%;
+    padding: 0.875rem 1rem !important;
+    font-size: 0.72rem !important;
+  }
+
+  .product-information--redesign .variant-option {
+    width: 100%;
+  }
+
+  .product-details .group-block-content {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 0.25rem !important;
+  }
+
+  .engraving-option {
+    padding: 0.75rem !important;
+    margin-top: 0.5rem !important;
+    margin-bottom: 0.7rem !important;
+  }
+
+  .product-details .group-block-content > * {
+    margin-bottom: 0 !important;
+    order: 0;
+  }
+
+  .product-details .group-block-content .product-description-redesign {
+    order: 6 !important;
+  }
+
+  .product-details .group-block-content .trust-carousel {
+    order: 7 !important;
+  }
+
+  .product-details .group-block-content variant-picker {
+    order: 8 !important;
+  }
+}
+
+/* Header/Vendor Alignment */
+.product-information--redesign .product-vendor {
+  display: none !important;
+}
+
+/* Title - Force one line */
+.product-information--redesign .product-title h1,
+.product-information--redesign .product-title p,
+.product-information--redesign .product-title a,
+.product-information--redesign .product-title .text-block {
+  font-family: var(--font-galderglynn) !important;
+  font-size: clamp(2rem, 5vw, 3.2rem) !important;
+  font-weight: 500 !important;
+  letter-spacing: -0.01em !important;
+  text-transform: uppercase !important;
+  margin: -1rem 0 1.5rem 0 !important;
+  line-height: 1.1 !important;
+  white-space: nowrap !important;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: block !important;
+}
+
+@media screen and (max-width: 1024px) {
+  .product-information--redesign .product-title h1,
+  .product-information--redesign .product-title p,
+  .product-information--redesign .product-title a,
+  .product-information--redesign .product-title .text-block {
+    white-space: normal !important;
+    overflow: visible;
+    text-overflow: initial;
+    margin: 0 0 1rem 0 !important;
+    overflow-wrap: anywhere;
+  }
+}
+
+
+
+.product-information--redesign .product-information__media {
+  background-color: #ffffff !important; /* Subtle grey for image side */
+  height: auto !important;
+  min-height: 50vh;
+  display: flex;
+  align-items: center; 
+  justify-content: center;
+  padding: 5% !important;
+  position: relative;
+}
+
+@media screen and (min-width: 1025px) {
+  .product-information--redesign .product-information__media {
+    padding: 10% !important;
+  }
+}
+
+@media screen and (max-width: 1024px) {
+  .product-information--redesign .product-information__media {
+    min-height: 0;
+    padding: 2rem 1rem 1rem !important;
+  }
+}
+
+.product-information--redesign .product-media img {
+  object-fit: contain !important; /* Ensure image doesn't go end-to-end */
+  width: 100% !important;
+  height: auto !important;
+}
+
+.product-information--redesign .product-details {
+  padding: 5% !important;
+  padding-top: 0 !important;
+  display: flex;
+  flex-direction: column;
+  width: 100vw;
+  justify-content: flex-start;
+  gap: 1.5rem;
+  position: relative !important;
+  align-self: flex-start !important;
+}
+
+@media screen and (min-width: 1025px) {
+  .product-information--redesign .product-details {
+    padding: 15% 12% !important;
+    padding-top: 10% !important;
+    width: 50vw;
+  }
+}
+
+@media screen and (max-width: 1024px) {
+  .product-information--redesign .product-details {
+    padding: 1.5rem 1rem 2rem !important;
+    gap: 1rem;
+  }
+}
+
+/* Variant Selectors */
+.product-information--redesign .variant-option legend {
+  font-size: 0.6rem;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  margin-bottom: 1.2rem;
+  color: #c0c0c0;
+  font-weight: normal;
+}
+
+.product-information--redesign .variant-picker__option-values {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 1.5rem;
+}
+
+@media screen and (max-width: 1024px) {
+  .product-information--redesign .variant-picker__option-values {
+    gap: 0.75rem;
+  }
+}
+
+.product-information--redesign .variant-option input + label {
+  border: 1px solid #e0e0e0 !important;
+  border-radius: 0 !important;
+  padding: 10px 25px !important;
+  font-size: 0.8rem !important;
+  text-transform: uppercase !important;
+  cursor: pointer;
+  background: #fff !important;
+  color: #000 !important;
+  transition: all 0.2s ease;
+  min-width: 80px;
+  text-align: center;
+}
+
+@media screen and (max-width: 1024px) {
+  .product-information--redesign .variant-option input + label {
+    padding: 0.875rem 1rem !important;
+    min-width: 72px;
+  }
+}
+
+/* Price Style */
+.product-information--redesign .price {
+  font-size: 1rem !important;
+  font-weight: 300 !important;
+  display: block;
+  margin: 20px 0;
+  color: #000 !important;
+  letter-spacing: -0.02em;
+}
+
+@media screen and (min-width: 1025px) {
+  .product-information--redesign .price {
+    font-size: 2rem !important;
+  }
+}
+
+.product-information--redesign .price__container {
+  justify-content: flex-start !important;
+}
+
+/* Add to Cart Button */
+.product-information--redesign .buy-buttons-block,
+.product-information--redesign .product-form-buttons,
+.product-information--redesign .product-form-buttons > span {
+  margin-top: 0;
+  width: 100% !important;
+  flex: 1 1 100% !important;
+}
+
+.product-information--redesign .add-to-cart-button {
+  background: #000 !important;
+  color: #fff !important;
+  border-radius: 0 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.2em !important;
+  padding: 22px !important;
+  font-size: 0.8rem !important;
+  width: 100% !important;
+  max-width: none !important; /* Full width within container */
+  border: none !important;
+  transition: opacity 0.2s;
+  height: auto !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 300 !important;
+}
+
+@media screen and (max-width: 1024px) {
+  .product-information--redesign .add-to-cart-button {
+    padding: 18px !important;
+    letter-spacing: 0.14em !important;
+  }
+}
+
+.product-information--redesign .add-to-cart-button:hover {
+  opacity: 0.9 !important;
+}
+
+.product-information--redesign .add-to-cart-icon {
+  display: none !important;
+}
+
+/* Core Essence Box */
+.core-essence-box {
+  position: absolute;
+  bottom: 20px;
+  right: 0;
+  background: #fff;
+  padding: 15px 25px;
+  box-shadow: none;
+  z-index: 10;
+  text-align: left;
+}
+
+@media screen and (max-width: 1024px) {
+  .core-essence-box {
+    position: static;
+    width: 100%;
+    max-width: 100%;
+    margin-top: 1rem;
+    padding: 0.875rem 1rem;
+  }
+}
+
+@media screen and (min-width: 1025px) {
+  .core-essence-box {
+    bottom: 20%;
+    padding: 25px 40px;
+  }
+}
+
+.core-essence-box__label {
+  display: block;
+  font-size: 0.55rem;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  margin-bottom: 8px;
+  color: #000;
+  font-weight: bold;
+}
+
+.core-essence-box__value {
+  display: block;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #000;
+  font-weight: bold;
+}
+
+
+
+.product-information--redesign .product-media-gallery {
+  height: 100%;
+}
+
+.product-information--redesign .product-media-container {
+  height: 100%;
+  border-radius: 0 !important;
+}
+
+@media screen and (max-width: 1024px) {
+  .product-information--redesign .product-media-gallery,
+  .product-information--redesign .product-media-container {
+    height: auto;
+  }
+}
+
+
+
+@media screen and (min-width: 1025px) {
+
+  .product-information__grid.product-information--redesign .product-information__media {
+    position: relative;
+    height: 100%;
+    min-height: 800px;
+  }
+}
+
+.product-information__grid.product-information--redesign .product-details > .group-block {
+  width: 100% !important;
+  max-width: 450px !important;
+  margin: 0; /* Align left */
+}
+
+@media screen and (max-width: 1024px) {
+  .product-information__grid.product-information--redesign .product-details > .group-block {
+    max-width: none !important;
+  }
+}
+
+/* Clean up Shopify default spacings */
+.product-information--redesign .product-form-buttons {
+  gap: 0 !important;
+}

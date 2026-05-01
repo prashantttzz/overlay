@@ -1,0 +1,217 @@
+.curated-selection {
+  display: block;
+  padding: 60px var(--page-margin);
+}
+
+.curated-selection__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-bottom: 40px;
+}
+
+.curated-selection__title {
+  display: flex;
+  flex-direction: column;
+}
+
+.curated-selection__eyebrow {
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--color-foreground);
+  font-weight: 500;
+  margin-bottom: 8px;
+  font-family: var(--font-body--family), sans-serif;
+  opacity: 0.6;
+}
+
+.curated-selection__heading {
+  font-size: 1.5rem;
+  text-transform: uppercase;
+  margin: 0;
+  line-height: 1;
+  font-weight: 300;
+  font-family: var(--font-heading--family), sans-serif;
+  color: var(--color-foreground);
+}
+
+.curated-selection__controls {
+  display: flex;
+  gap: 12px;
+}
+
+.carousel-control {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  border: 1px solid var(--color-foreground);
+  background: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s;
+  color: var(--color-foreground);
+  opacity: 0.5;
+}
+
+.carousel-control:hover {
+  opacity: 1;
+}
+
+.carousel-control svg {
+  width: 24px;
+  height: 24px;
+}
+
+.curated-selection__carousel-container {
+  width: 100%;
+  overflow: hidden;
+}
+
+.curated-selection__carousel {
+  display: flex;
+  gap: 20px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none !important; /* Firefox */
+  -ms-overflow-style: none !important; /* IE/Edge */
+  padding-bottom: 20px; /* Optional: Space for potential shadows */
+}
+
+.curated-selection__carousel::-webkit-scrollbar {
+  display: none !important; /* Chrome/Safari */
+  width: 0 !important;
+  height: 0 !important;
+}
+
+.curated-selection__item {
+  flex: 0 0 100%; /* 1 on mobile */
+  scroll-snap-align: start;
+  display: flex;
+  flex-direction: column;
+}
+
+@media (min-width: 1024px) {
+  .curated-selection__item {
+    flex: 0 0 calc(25% - 15px); /* 4 on large display */
+  }
+}
+
+.curated-selection__image-wrapper {
+  background-color: transparent;
+  aspect-ratio: 4 / 5;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  text-decoration: none;
+}
+
+.curated-selection__image-wrapper img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.6s cubic-bezier(0.165, 0.84, 0.44, 1), filter 0.6s ease;
+  filter: grayscale(0.2) contrast(0.9);
+}
+
+.curated-selection__item:hover .curated-selection__image-wrapper img {
+  transform: scale(1.05);
+  filter: grayscale(0) contrast(1);
+}
+
+.curated-selection__info {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.curated-selection__info-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.curated-selection__product-title {
+  font-size: 1rem;
+  margin: 0;
+  text-transform: uppercase;
+  font-family: var(--font-body--family), sans-serif;
+  font-weight: 500;
+  text-decoration: none;
+  color: var(--color-foreground);
+}
+
+.curated-selection__price {
+  font-size: 1rem;
+  font-weight: 300;
+  font-family: var(--font-body--family), sans-serif;
+  color: var(--color-foreground);
+}
+
+.curated-selection__tags {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.curated-selection__tag {
+  font-size: 0.55rem;
+  text-transform: uppercase;
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  padding: 2px 6px;
+  color: var(--color-foreground);
+  font-family: var(--font-body--family), sans-serif;
+  opacity: 0.6;
+  font-weight: 300;
+  letter-spacing: 0.05em;
+}
+
+@media (max-width: 767px) {
+  .curated-selection__heading {
+    font-size: 1.25rem;
+  }
+  
+  .curated-selection__header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 20px;
+  }
+  
+  .curated-selection__controls {
+    display: none; /* Hide controls on mobile, as swipe is natural */
+  }
+}
+
+.curated-selection__form {
+  margin-top: 10px;
+}
+
+.curated-selection__atc-button {
+  width: 100%;
+  background: #000;
+  color: #fff;
+  border: none;
+  padding: 12px;
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  cursor: pointer;
+  transition: opacity 0.3s ease;
+  font-family: var(--font-body--family), sans-serif;
+  font-weight: 400;
+}
+
+.curated-selection__atc-button:hover {
+  opacity: 0.8;
+}
+
+.curated-selection__atc-button[disabled] {
+  background: #eee;
+  color: #999;
+  cursor: not-allowed;
+}
+

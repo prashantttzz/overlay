@@ -1,0 +1,83 @@
+
+{%- assign description_text = product.description | strip_html -%}
+{%- assign lines = description_text | newline_to_br | split: '<br />' -%}
+{%- assign extracted_notes = '' -%}
+
+{%- for line in lines -%}
+  {%- assign trimmed_line = line | strip -%}
+  {%- if trimmed_line != blank -%}
+    {%- assign extracted_notes = trimmed_line -%}
+    {%- break -%}
+  {%- endif -%}
+{%- endfor -%}
+
+<div class="product-description-redesign">
+
+
+  <div class="product-description-redesign__content">
+    {%- liquid
+      assign remaining_description = product.description
+      if extracted_notes != blank
+        if product.description contains '</p>'
+          assign parts = product.description | split: '</p>'
+          # Skip the first part and rejoin the rest
+          assign remaining_description = ''
+          for part in parts
+            unless forloop.first
+              if part != blank
+                assign remaining_description = remaining_description | append: part | append: '</p>'
+              endif
+            endunless
+          endfor
+        elsif product.description contains '<br'
+          assign parts = product.description | split: '<br'
+          assign remaining_description = ''
+          for part in parts
+            unless forloop.first
+              assign remaining_description = remaining_description | append: '<br' | append: part
+            endunless
+          endfor
+        endif
+      endif
+    -%}
+    {{ remaining_description | default: product.description }}
+  </div>
+</div>
+
+<style>
+  .product-description-redesign__tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    margin-top:-1rem;
+  }
+  .product-description-redesign__tag {
+    font-size: 0.75rem;
+    font-weight: 300;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: #000;
+    border-bottom: 1px solid #000;
+    padding-bottom: 2px;
+  }
+  .product-description-redesign__content {
+    font-size: 0.95rem;
+    line-height: 1.6;
+    font-weight: 300;
+    color: #444; /* Premium dark grey */
+    max-width: 48ch;
+  }
+  @media screen and (min-width: 750px) {
+    .product-description-redesign__content {
+      font-size: 0.85rem;
+      font-weight: 300;
+      padding-bottom:20px;
+      color: #777;
+      text-transform: lowercase !important;
+    }
+    .product-description-redesign__content p {
+      text-transform: lowercase !important;
+    }
+  }
+  .product-description-redesign__content p {  }
+</style>

@@ -1,0 +1,65 @@
+
+{%- doc -%}
+  Renders navigation arrows for a slideshow.
+
+  @param {string} class - Additional classes for the arrows container.
+  @param {string} icon_style - The style of the icons (arrow, chevron).
+  @param {string} icon_shape - The shape of the button (circle, square, none).
+{%- enddoc -%}
+
+<div class="slideshow__arrows {{ class }}">
+  <button
+    type="button"
+    class="slideshow__arrow slideshow__arrow--prev button-unstyled"
+    on:click="slideshow/prev"
+    aria-label="Previous slide"
+  >
+    <span class="svg-wrapper">
+      {%- if icon_style == 'chevron' -%}
+        {{- 'icon-caret.svg' | inline_asset_content -}}
+      {%- else -%}
+        {{- 'icon-arrow.svg' | inline_asset_content -}}
+      {%- endif -%}
+    </span>
+  </button>
+  <button
+    type="button"
+    class="slideshow__arrow slideshow__arrow--next button-unstyled"
+    on:click="slideshow/next"
+    aria-label="Next slide"
+  >
+    <span class="svg-wrapper">
+      {%- if icon_style == 'chevron' -%}
+        {{- 'icon-caret.svg' | inline_asset_content -}}
+      {%- else -%}
+        {{- 'icon-arrow.svg' | inline_asset_content -}}
+      {%- endif -%}
+    </span>
+  </button>
+</div>
+
+{% stylesheet %}
+  .slideshow__arrows {
+    display: flex;
+    gap: 1rem;
+    z-index: 2;
+  }
+  .slideshow__arrow {
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(5px);
+    border-radius: 50%;
+    transition: all 0.3s ease;
+  }
+  .slideshow__arrow:hover {
+    background: rgba(255, 255, 255, 0.2);
+  }
+  .slideshow__arrow--prev svg {
+    transform: rotate(180deg);
+  }
+{% endstylesheet %}

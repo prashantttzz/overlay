@@ -1,0 +1,192 @@
+
+{% stylesheet %}
+  .engraving-option {
+    margin-bottom: 2rem;
+    padding: 1.5rem;
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    background: #fafafa;
+    transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+  }
+
+  @media screen and (min-width: 750px) {
+    .engraving-option {
+      margin-bottom: 1rem;
+      padding: 0.75rem;
+    }
+  }
+
+  .engraving-option.is-active {
+    background: #fff;
+    border-color: #000;
+  }
+
+  .engraving-option__header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    cursor: pointer;
+    user-select: none;
+  }
+
+  .engraving-option__checkbox {
+    width: 20px;
+    height: 20px;
+    border: 1px solid #000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: background 0.3s ease;
+  }
+
+  .engraving-option__checkbox::after {
+    content: '';
+    width: 10px;
+    height: 10px;
+    background: #000;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+
+  input[type="checkbox"]:checked + .engraving-option__checkbox::after {
+    opacity: 1;
+  }
+
+  .engraving-option__label {
+    font-family: var(--font-galderglynn);
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    font-weight: 500;
+  }
+
+  .engraving-option__price {
+    font-weight: 300;
+    opacity: 0.6;
+    margin-left: auto;
+  }
+
+  .engraving-option__content {
+    max-height: 0;
+    overflow: hidden;
+    transition: all 0.5s cubic-bezier(0.165, 0.84, 0.44, 1);
+    opacity: 0;
+  }
+
+  .engraving-option.is-active .engraving-option__content {
+    max-height: 150px;
+    opacity: 1;
+    margin-top: 1.5rem;
+  }
+
+  .engraving-option__input-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .engraving-option__input-group label {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    opacity: 0.5;
+  }
+
+  .engraving-option__input {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    font-family: var(--font-galderglynn);
+    font-size: 14px;
+    background: transparent;
+    outline: none;
+    transition: border-color 0.3s ease;
+    color: #000; /* Ensured black text as requested */
+  }
+
+  .engraving-option__input:focus {
+    border-color: #000;
+  }
+
+  .engraving-option__hint {
+    font-size: 10px;
+    margin-top: 10px;
+    opacity: 0.4;
+    font-style: italic;
+  }
+{% endstylesheet %}
+
+<div class="engraving-option" id="engraving-{{ block.id }}" data-engraving-block>
+  <label class="engraving-option__header">
+    <input type="checkbox" id="engraving-toggle-{{ block.id }}" class="visually-hidden" data-engraving-toggle>
+    <span class="engraving-option__checkbox"></span>
+    <span class="engraving-option__label">Add Engraving</span>
+    <span class="engraving-option__price">+ $10.00</span>
+  </label>
+
+  <div class="engraving-option__content">
+    <div class="engraving-option__input-group">
+      <label for="engraving-text-{{ block.id }}">Personalized Message (Max 12 chars)</label>
+      <input 
+        type="text" 
+        id="engraving-text-{{ block.id }}" 
+        class="engraving-option__input" 
+        placeholder="ENTER INITIALS OR NAME"
+        maxlength="12"
+        data-engraving-input
+      >
+    </div>
+    <p class="engraving-option__hint">Engraving is permanent and adds 2-3 business days to processing.</p>
+  </div>
+</div>
+
+<script>
+  (function() {
+    const block = document.getElementById('engraving-{{ block.id }}');
+    const toggle = block.querySelector('[data-engraving-toggle]');
+    const input = block.querySelector('[data-engraving-input]');
+    
+    // Find the global overlay in the media gallery
+    const getGlobalOverlay = () => document.getElementById('engraving-overlay-global');
+
+    toggle.addEventListener('change', () => {
+      block.classList.toggle('is-active', toggle.checked);
+      const overlay = getGlobalOverlay();
+      
+      if (overlay) {
+        overlay.style.display = toggle.checked ? 'block' : 'none';
+        if (!toggle.checked) {
+          overlay.textContent = '';
+          input.value = '';
+        } else {
+          // Force scroll to top/main image if gallery is a component
+          const gallery = document.querySelector('media-gallery');
+          if (gallery && gallery.slideshow) {
+             gallery.slideshow.select(0);
+          }
+          // Smooth scroll to gallery for better visibility on mobile
+          gallery?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+      }
+    });
+
+    input.addEventListener('input', () => {
+      const overlay = getGlobalOverlay();
+      if (overlay) {
+        overlay.textContent = input.value;
+      }
+    });
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Custom Engraving",
+  "settings": [],
+  "presets": [
+    {
+      "name": "Custom Engraving"
+    }
+  ]
+}
+{% endschema %}

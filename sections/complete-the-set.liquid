@@ -1,0 +1,168 @@
+{{ 'curated-selection.css' | asset_url | stylesheet_tag }}
+
+<curated-selection class="curated-selection page-width-normal">
+  <div class="curated-selection__header">
+    <div class="curated-selection__title">
+      <span class="curated-selection__eyebrow">{{ section.settings.eyebrow }}</span>
+      <h2 class="curated-selection__heading">{{ section.settings.heading }}</h2>
+    </div>
+    <div class="curated-selection__controls">
+      <button class="carousel-control prev" aria-label="Previous">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M15 18L9 12L15 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+      <button class="carousel-control next" aria-label="Next">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M9 18L15 12L9 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <div class="curated-selection__carousel-container">
+    <div class="curated-selection__carousel">
+      {%- liquid
+        assign current_product = product
+        assign products = section.settings.collection.products
+        if section.settings.collection == blank
+          assign products = collections.all.products
+        endif
+        assign displayed_count = 0
+      -%}
+
+      {% for related_product in products %}
+        {% if related_product.id == current_product.id %}
+          {% continue %}
+        {% endif %}
+        
+        {% if displayed_count >= 10 %}
+          {% break %}
+        {% endif %}
+        
+        {% assign displayed_count = displayed_count | plus: 1 %}
+
+        <div class="curated-selection__item">
+          <a href="{{ related_product.url }}" class="curated-selection__image-wrapper">
+            <img src="{{ related_product.featured_image | img_url: '600x' }}" alt="{{ related_product.title }}" loading="lazy" width="600" height="600">
+          </a>
+          <div class="curated-selection__info">
+            <div class="curated-selection__info-top">
+              <a href="{{ related_product.url }}" class="curated-selection__product-title">{{ related_product.title }}</a>
+              <span class="curated-selection__price">{{ related_product.price | money_without_trailing_zeros }}</span>
+            </div>
+            <div class="curated-selection__tags">
+              {% assign description_text = related_product.description | strip_html %}
+              {% assign lines = description_text | newline_to_br | split: '<br />' %}
+              {% assign extracted_notes = '' %}
+              
+              {% for line in lines %}
+                {% assign trimmed_line = line | strip %}
+                {% if trimmed_line != blank %}
+                  {% assign extracted_notes = trimmed_line %}
+                  {% break %}
+                {% endif %}
+              {% endfor %}
+
+              {% if extracted_notes != blank %}
+                {% assign clean_notes = extracted_notes | replace: ', AND ', ', ' | replace: ', and ', ', ' | replace: ' AND ', ', ' | replace: ' and ', ', ' | replace: ' & ', ', ' %}
+                {% assign tags_list = clean_notes | split: ',' %}
+                {% for tag in tags_list %}
+                  {% assign clean_tag = tag | strip %}
+                  {% if clean_tag != blank %}
+                    <span class="curated-selection__tag">{{ clean_tag }}</span>
+                  {% endif %}
+                {% endfor %}
+              {% endif %}
+            </div>
+            <form method="post" action="/cart/add" class="curated-selection__form">
+              {%- assign variant = related_product.selected_or_first_available_variant | default: related_product.variants.first -%}
+              <input type="hidden" name="id" value="{{ variant.id }}">
+              <button type="submit" class="curated-selection__atc-button" {% unless variant.available %}disabled{% endunless %}>
+                {% if variant.available %}
+                  ADD TO COLLECTION
+                {% else %}
+                  SOLD OUT
+                {% endif %}
+              </button>
+            </form>
+          </div>
+        </div>
+      {% endfor %}
+
+      {% if products == blank or products.size == 0 %}
+        {% for i in (1..5) %}
+          <div class="curated-selection__item">
+            <div class="curated-selection__image-wrapper" style="background: #f4f4f4;">
+            </div>
+            <div class="curated-selection__info">
+              <div class="curated-selection__info-top">
+                <h3 class="curated-selection__product-title">PRODUCT NAME</h3>
+                <span class="curated-selection__price">$180</span>
+              </div>
+              <div class="curated-selection__tags">
+                <span class="curated-selection__tag">NOTE 1</span>
+                <span class="curated-selection__tag">NOTE 2</span>
+              </div>
+              <div class="curated-selection__form">
+                <button type="button" class="curated-selection__atc-button">ADD TO COLLECTION</button>
+              </div>
+            </div>
+          </div>
+        {% endfor %}
+      {% endif %}
+    </div>
+  </div>
+</curated-selection>
+
+<script>
+  if (!customElements.get('curated-selection')) {
+    customElements.define('curated-selection', class extends HTMLElement {
+      connectedCallback() {
+        this.addEventListener('click', (event) => {
+          if (event.target.closest('.carousel-control.next')) {
+            this.scrollNext();
+          } else if (event.target.closest('.carousel-control.prev')) {
+            this.scrollPrev();
+          }
+        });
+      }
+
+      scrollNext() {
+        const carousel = this.querySelector('.curated-selection__carousel');
+        if(carousel) carousel.scrollBy({ left: carousel.clientWidth, behavior: 'smooth' });
+      }
+
+      scrollPrev() {
+        const carousel = this.querySelector('.curated-selection__carousel');
+        if(carousel) carousel.scrollBy({ left: -carousel.clientWidth, behavior: 'smooth' });
+      }
+    });
+  }
+</script>
+
+{% schema %}
+{
+  "name": "Complete The Set",
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow Text",
+      "default": "THE ART OF THE LAYER"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "THE COLLECTOR’S TRILOGY: COMPLETE YOUR SERIES & UNLOCK 40% SAVINGS"
+    },
+    {
+      "type": "collection",
+      "id": "collection",
+      "label": "Collection to display"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Complete The Set"
+    }
+  ]
+}
+{% endschema %}

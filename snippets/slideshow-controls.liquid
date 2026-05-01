@@ -1,0 +1,82 @@
+
+{%- doc -%}
+  Renders pagination controls (dots, thumbnails, counter) for a slideshow.
+
+  @param {string} class - Additional classes.
+  @param {string} style - The style of the controls (dots, thumbnails, counter).
+  @param {number} item_count - The number of items in the slideshow.
+  @param {object} thumbnails - The media items for thumbnails.
+{%- enddoc -%}
+
+<div class="slideshow__controls {{ class }} slideshow__controls--{{ style }}">
+  {%- if style == 'dots' -%}
+    <div class="slideshow__dots">
+      {%- for i in (1..item_count) -%}
+        <button
+          type="button"
+          class="slideshow__dot {% if forloop.first %}is-active{% endif %} button-unstyled"
+          on:click="slideshow/select?index={{ forloop.index0 }}"
+          aria-label="Go to slide {{ forloop.index }}"
+          data-index="{{ forloop.index0 }}"
+        ></button>
+      {%- endfor -%}
+    </div>
+  {%- elsif style == 'thumbnails' -%}
+    <div class="slideshow__thumbnails">
+      {%- for media in thumbnails -%}
+        <button
+          type="button"
+          class="slideshow__thumbnail {% if forloop.first %}is-active{% endif %} button-unstyled"
+          on:click="slideshow/select?index={{ forloop.index0 }}"
+          aria-label="Go to slide {{ forloop.index }}"
+          data-index="{{ forloop.index0 }}"
+        >
+          {{ media.preview_image | image_url: width: 200 | image_tag: loading: 'lazy' }}
+        </button>
+      {%- endfor -%}
+    </div>
+  {%- elsif style == 'counter' -%}
+    <div class="slideshow__counter">
+      <span class="slideshow__counter-current">1</span>
+      <span class="slideshow__counter-separator">/</span>
+      <span class="slideshow__counter-total">{{ item_count }}</span>
+    </div>
+  {%- endif -%}
+</div>
+
+{% stylesheet %}
+  .slideshow__dots {
+    display: flex;
+    gap: 0.5rem;
+    justify-content: center;
+    padding: 1rem 0;
+  }
+  .slideshow__dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    border: 1px solid currentColor;
+    opacity: 0.5;
+    transition: all 0.3s ease;
+  }
+  .slideshow__dot.is-active {
+    opacity: 1;
+    background: currentColor;
+  }
+  .slideshow__thumbnails {
+    display: flex;
+    gap: 0.5rem;
+    overflow-x: auto;
+    padding: 1rem 0;
+  }
+  .slideshow__thumbnail {
+    width: 60px;
+    height: 60px;
+    opacity: 0.5;
+    border: 2px solid transparent;
+  }
+  .slideshow__thumbnail.is-active {
+    opacity: 1;
+    border-color: currentColor;
+  }
+{% endstylesheet %}

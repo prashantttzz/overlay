@@ -1,0 +1,56 @@
+{%- assign description_text = closest.product.description | strip_html -%}
+{%- assign lines = description_text | newline_to_br | split: '<br />' -%}
+{%- assign extracted_notes = '' -%}
+{%- for line in lines -%}
+  {%- assign trimmed_line = line | strip -%}
+  {%- if trimmed_line != blank -%}
+    {%- assign extracted_notes = trimmed_line -%}
+    {%- break -%}
+  {%- endif -%}
+{%- endfor -%}
+
+{%- if extracted_notes != blank -%}
+  <div class="product-description-redesign__tags spacing-style" style="{% render 'spacing-style', settings: block.settings %}">
+    {%- assign clean_notes = extracted_notes | replace: ', AND ', ', ' | replace: ', and ', ', ' | replace: ' AND ', ', ' | replace: ' and ', ', ' | replace: ' & ', ', ' -%}
+    {%- assign tags_list = clean_notes | split: ',' -%}
+    {%- for tag in tags_list -%}
+      {%- assign clean_tag = tag | strip -%}
+      {%- if clean_tag != blank -%}
+        <span class="product-description-redesign__tag">{{ clean_tag }}</span>
+      {%- endif -%}
+    {%- endfor -%}
+  </div>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Extracted Notes",
+  "settings": [
+    {
+      "type": "range",
+      "id": "padding-block-start",
+      "label": "t:settings.top",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding-block-end",
+      "label": "t:settings.bottom",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 16
+    }
+  ],
+  "presets": [
+    {
+      "name": "Extracted Notes"
+    }
+  ]
+}
+{% endschema %}

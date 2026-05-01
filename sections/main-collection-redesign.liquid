@@ -1,0 +1,111 @@
+
+{{ 'collection-custom-redesign.css' | asset_url | stylesheet_tag }}
+
+<section class="collection-redesign-section" id="collection-redesign-{{ section.id }}">
+  <!-- Hero Banner -->
+  <div class="collection-hero-banner">
+    <div class="collection-hero-banner__bg">
+      {% if section.settings.hero_image != blank %}
+        <img src="{{ section.settings.hero_image | img_url: '2400x' }}" alt="{{ section.settings.hero_heading | default: collection.title }}">
+      {% else %}
+        <img src="https://cdn.shopify.com/s/files/1/0774/2894/9215/files/offer0bg.webp?v=1777367390" alt="Collection Hero">
+      {% endif %}
+      <div class="collection-hero-banner__overlay"></div>
+    </div>
+    <div class="collection-hero-banner__content">
+      <span class="collection-hero-banner__subtitle">THE PERFUMERY ARCHIVE</span>
+      <h1 class="collection-hero-banner__title">{{ section.settings.hero_heading | default: collection.title }}</h1>
+    </div>
+  </div>
+
+  <div class="collection-watermark">COLLECTION</div>
+
+  <results-list
+    class="collection-container-full"
+    section-id="{{ section.id }}"
+  >
+    <!-- Main Content -->
+    <main class="main-content-full" id="ResultsList">
+      {% paginate collection.products by section.settings.products_per_page %}
+        <div class="product-grid-new full-width-grid" id="product-grid">
+          {% for product in collection.products %}
+            <div class="grid__item">
+              <a href="{{ product.url }}" class="product-card-ui">
+                <div class="product-card-ui__image">
+                  <img
+                    src="{{ product.featured_media | img_url: '800x' }}"
+                    alt="{{ product.title | escape }}"
+                    loading="lazy"
+                  >
+                </div>
+                <div class="product-card-ui__meta">
+                  {% if product.metafields.descriptors.subtitle %}
+                    {{ product.metafields.descriptors.subtitle }}
+                  {% else %}
+                    MINIMALIST / ARCHIVAL
+                  {% endif %}
+                </div>
+                <div class="product-card-ui__info">
+                  <h3 class="product-card-ui__title">{{ product.title }}</h3>
+                  <span class="product-card-ui__price">{{ product.price | money_without_trailing_zeros }}</span>
+                </div>
+                <div class="product-card-ui__size">
+                  {% if product.variants.first.title contains 'ml' or product.variants.first.title contains 'ML' %}
+                    {{ product.variants.first.title }}
+                  {% else %}
+                    50ML
+                  {% endif %}
+                </div>
+              </a>
+            </div>
+          {% endfor %}
+        </div>
+
+        <!-- Pagination UI -->
+        {% if paginate.pages > 1 %}
+          <div class="pagination-ui">
+            <div class="pagination-links">
+              {% if paginate.previous %}
+                <a href="{{ paginate.previous.url }}" class="pagination-link">PREV</a>
+              {% endif %}
+
+              {% for part in paginate.parts %}
+                {% if part.is_link %}
+                  <a href="{{ part.url }}" class="pagination-link">{{ part.title }}</a>
+                {% else %}
+                  <span class="pagination-link {% if part.title == paginate.current_page %}is-active{% endif %}">{{ part.title }}</span>
+                {% endif %}
+              {% endfor %}
+
+              {% if paginate.next %}
+                <a href="{{ paginate.next.url }}" class="pagination-link">NEXT</a>
+              {% endif %}
+            </div>
+          </div>
+        {% endif %}
+      {% endpaginate %}
+    </main>
+  </results-list>
+</section>
+
+{% schema %}
+{
+  "name": "Collection Redesign",
+  "settings": [
+    {
+      "type": "range",
+      "id": "products_per_page",
+      "min": 8,
+      "max": 48,
+      "step": 4,
+      "default": 16,
+      "label": "Products per page"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Collection Redesign"
+    }
+  ]
+}
+{% endschema %}

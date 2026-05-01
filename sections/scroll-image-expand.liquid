@@ -1,0 +1,276 @@
+{%- liquid
+  assign section_id = 'section-' | append: section.id
+-%}
+
+{%- style -%}
+  #{{ section_id }} {
+    position: relative;
+    height: 300vh; /* Extra height for scroll duration */
+    background-color: {{ section.settings.bg_color }};
+    overflow: clip;
+  }
+
+  .scroll-reveal__sticky {
+    position: sticky;
+    top: 0;
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+
+  .scroll-reveal__image-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    will-change: clip-path;
+  }
+
+  .scroll-reveal__image-wrapper {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    /* Initial state: small centered box */
+    clip-path: inset(30% 35% 30% 35% round 30px);
+    transition: clip-path 0.1s linear;
+  }
+
+  .scroll-reveal__image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transform: scale(1.2); /* Slight zoom out as it reveals */
+    transition: transform 0.1s linear;
+  }
+
+  .scroll-reveal__overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(to bottom, rgba(0,0,0,0.3), rgba(0,0,0,0.6));
+    z-index: 2;
+    opacity: 0;
+    transition: opacity 0.5s ease;
+  }
+
+  .scroll-reveal__content {
+    position: relative;
+    z-index: 3;
+    text-align: center;
+    color: #fff;
+    max-width: 800px;
+    padding: 0 2rem;
+    opacity: 0;
+    transform: translateY(30px);
+    transition: all 0.8s cubic-bezier(0.23, 1, 0.32, 1);
+    pointer-events: none;
+  }
+
+  .scroll-reveal__content.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+  }
+
+  .scroll-reveal__heading {
+    font-size: clamp(2.5rem, 8vw, 5.5rem);
+    font-family: var(--font-galderglynn);
+    text-transform: uppercase;
+    margin: 0 0 1.5rem 0;
+    line-height: 1;
+    letter-spacing: 0.05em;
+  }
+
+  .scroll-reveal__text {
+    font-size: 1.125rem;
+    line-height: 1.6;
+    margin: 0 0 2.5rem 0;
+    opacity: 0.9;
+    font-weight: 300;
+  }
+
+  .scroll-reveal__button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #fff;
+    color: #000;
+    padding: 1.25rem 3.5rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    text-decoration: none;
+    transition: all 0.4s ease;
+  }
+
+  .scroll-reveal__button:hover {
+    background-color: transparent;
+    color: #fff;
+    box-shadow: inset 0 0 0 1px #fff;
+  }
+
+  @media (max-width: 768px) {
+    #{{ section_id }} {
+      height: 250vh;
+    }
+    .scroll-reveal__image-wrapper {
+        clip-path: inset(35% 20% 35% 20% round 20px);
+    }
+    .scroll-reveal__heading {
+        font-size: clamp(2rem, 12vw, 3.5rem);
+    }
+  }
+{%- endstyle -%}
+
+<section id="{{ section_id }}" class="scroll-reveal-section" data-scroll-reveal>
+  <div class="scroll-reveal__sticky">
+    <div class="scroll-reveal__image-container">
+      <div class="scroll-reveal__image-wrapper" data-reveal-wrapper>
+        {%- if section.settings.image != blank -%}
+          {{ section.settings.image | image_url: width: 2500 | image_tag: 
+            class: 'scroll-reveal__image',
+            loading: 'lazy',
+            widths: '375, 550, 750, 1100, 1500, 1780, 2000, 3000'
+          }}
+        {%- else -%}
+          {{ 'lifestyle-1' | placeholder_svg_tag: 'scroll-reveal__image placeholder-svg' }}
+        {%- endif -%}
+        <div class="scroll-reveal__overlay" data-reveal-overlay></div>
+      </div>
+    </div>
+
+    <div class="scroll-reveal__content" data-reveal-content>
+      {%- if section.settings.heading != blank -%}
+        <h2 class="scroll-reveal__heading">{{ section.settings.heading | escape }}</h2>
+      {%- endif -%}
+      
+      {%- if section.settings.text != blank -%}
+        <div class="scroll-reveal__text">{{ section.settings.text }}</div>
+      {%- endif -%}
+
+      {%- if section.settings.button_label != blank -%}
+        <a href="{{ section.settings.button_link }}" class="scroll-reveal__button">
+          {{ section.settings.button_label | escape }}
+        </a>
+      {%- endif -%}
+    </div>
+  </div>
+</section>
+
+<script>
+  (function() {
+    const initScrollReveal = () => {
+      const section = document.querySelector('#{{ section_id }}');
+      const wrapper = section.querySelector('[data-reveal-wrapper]');
+      const image = section.querySelector('.scroll-reveal__image');
+      const content = section.querySelector('[data-reveal-content]');
+      const overlay = section.querySelector('[data-reveal-overlay]');
+
+      const handleScroll = () => {
+        const rect = section.getBoundingClientRect();
+        const windowHeight = window.innerHeight;
+        const isMobile = window.innerWidth <= 768;
+        
+        const totalHeight = section.offsetHeight;
+        const scrollOffset = -rect.top;
+        const scrollRange = totalHeight - windowHeight;
+        
+        let progress = Math.max(0, Math.min(1, scrollOffset / scrollRange));
+        
+        // Expansion settings
+        const initialH = isMobile ? 20 : 35;
+        const initialV = isMobile ? 35 : 30;
+        const initialR = isMobile ? 20 : 30;
+
+        // 1. Update Clip Path (Expand Image)
+        const expansionProgress = Math.min(1, progress * 1.5);
+        const finalInsetH = initialH * (1 - expansionProgress);
+        const finalInsetV = initialV * (1 - expansionProgress);
+        const finalRadius = initialR * (1 - expansionProgress);
+
+        wrapper.style.clipPath = `inset(${finalInsetV}% ${finalInsetH}% ${finalInsetV}% ${finalInsetH}% round ${finalRadius}px)`;
+        
+        // 2. Update Image Zoom
+        const zoom = 1.2 - (expansionProgress * 0.2);
+        image.style.transform = `scale(${zoom})`;
+
+        // 3. Show Overlay and Content
+        if (expansionProgress > 0.9) {
+          overlay.style.opacity = Math.min(0.6, (expansionProgress - 0.9) * 6);
+          content.classList.add('is-visible');
+        } else {
+          overlay.style.opacity = 0;
+          content.classList.remove('is-visible');
+        }
+      };
+
+      window.addEventListener('scroll', handleScroll, { passive: true });
+      handleScroll(); // Initial call
+    };
+
+    // Initialize on load and Shopify Editor events
+    document.addEventListener('DOMContentLoaded', initScrollReveal);
+    if (window.Shopify && window.Shopify.designMode) {
+      document.addEventListener('shopify:section:load', initScrollReveal);
+    }
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Scroll Image Expansion",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Image"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "The Art of Layering"
+    },
+    {
+      "type": "richtext",
+      "id": "text",
+      "label": "Description",
+      "default": "<p>Discover our unique approach to scent creation, where every note is designed to be experienced individually or combined.</p>"
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Button Label",
+      "default": "Explore Collection"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Button Link"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background Color",
+      "default": "#ffffff"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Scroll Image Expansion"
+    }
+  ]
+}
+{% endschema %}

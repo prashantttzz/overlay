@@ -1,0 +1,108 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "overlay_hero": {
+      "type": "overlay-modern-hero",
+      "blocks": {
+        "note_1": {
+          "type": "note",
+          "settings": {
+            "text": "VETIVER"
+          }
+        },
+        "note_2": {
+          "type": "note",
+          "settings": {
+            "text": "ASH"
+          }
+        },
+        "note_3": {
+          "type": "note",
+          "settings": {
+            "text": "COLD RAIN"
+          }
+        }
+      },
+      "block_order": [
+        "note_1",
+        "note_2",
+        "note_3"
+      ],
+      "settings": {
+        "heading": "ALL OVER\nSPRAY HOUSE",
+        "description": "Made to be mixed, find your mix.",
+        "button_label": "EXPLORE COLLECTION",
+        "button_link": "shopify://collections/all",
+        "show_marquee": true,
+        "marquee_text": "NEW ARCHIVE DROP / STUDIO EXCLUSIVE • SENSE & ARCHITECTURE • REFRACTED ART COLLECTION AVAILABLE NOW • LIMITED EDITION SCENTS"
+      }
+    },
+    "curated_selection": {
+      "type": "curated-selection",
+      "settings": {
+        "eyebrow": "CURATED SELECTION",
+        "heading": "THE CURATION",
+        "collection": "all"
+      }
+    },
+    "promo_banner": {
+      "type": "parallax-promo-banner",
+      "settings": {
+        "subheading": "COLLECT THE SERIES",
+        "heading": "COMPLETE THE SET: BUY THREE AND GET 40% OFF",
+        "banner_height": 450
+      }
+    },
+    "engraving_expansion": {
+      "type": "engraving-expand-parallax",
+      "settings": {
+        "bg_watermark": "CUSTOM ENGRAVING",
+        "heading": "ETCHED IN TIME",
+        "text": "<p>Experience the ultimate luxury of customization. Every bottle tells a story, and now you can etch yours forever with our bespoke engraving service.</p>",
+        "button_label": "Personalize Yours",
+        "bg_color": "#ffffff"
+      }
+    },
+    "scent_layering": {
+      "type": "scent-layering",
+      "settings": {
+        "eyebrow": "THE METHODOLOGY",
+        "heading": "SCENT LAYERING",
+        "description": "Layering the scents together: all of our sprays are designed to be mixed, so you can do more than a combo to mix your perfumes.",
+        "feature_1_title": "INFINITE COMBINATIONS",
+        "feature_1_text": "Craft a signature that is uniquely yours by blending distinct base foundations.",
+        "feature_2_title": "OLFACTORY HARMONY",
+        "feature_2_text": "Shared molecular bonds allow for seamless transitions between different scents.",
+        "feature_3_title": "LIQUID INTERACTION",
+        "feature_3_text": "Our formula ensures that overlapping sprays enhance rather than compete.",
+        "feature_4_title": "DYNAMIC EVOLUTION",
+        "feature_4_text": "Experience how different layers reveal themselves across hours of wear."
+      }
+    },
+    "editorial_mood_gallery": {
+      "type": "editorial-mood-gallery",
+      "settings": {
+        "eyebrow": "THE ARCHIVE",
+        "heading": "REFRACTED VISIONS",
+        "collection": "all",
+        "button_label": "EXPLORE ALL ARCHIVES"
+      }
+    }
+  },
+  "order": [
+    "overlay_hero",
+    "curated_selection",
+    "promo_banner",
+    "engraving_expansion",
+    "scent_layering",
+    "editorial_mood_gallery"
+  ]
+}
