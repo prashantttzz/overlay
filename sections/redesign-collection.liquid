@@ -66,10 +66,7 @@
   <!-- 1. Small Hero Banner -->
   <div class="collection-small-banner" data-home-hero>
     <div class="small-banner__bg">
-      <img src="https://cdn.shopify.com/s/files/1/0774/2894/9215/files/dds.jpg?v=1777634713" alt="Collection Banner">
-    </div>
-    <div class="small-banner__content">
-      <h2 class="small-banner__title">smell like temptation</h2>
+      <img src="https://cdn.shopify.com/s/files/1/0774/2894/9215/files/wew.jpg?v=1777636205" alt="Collection Banner">
     </div>
   </div>
 
@@ -194,21 +191,7 @@
           {% paginate collection.products by section.settings.products_per_page %}
             <div class="product-grid-new" id="product-grid">
               {% for product in collection.products %}
-                <div class="grid__item">
-                  <a href="{{ product.url }}" class="product-card-ui">
-                    <div class="product-card-ui__image">
-                      <img
-                        src="{{ product.featured_media | img_url: '800x' }}"
-                        alt="{{ product.title | escape }}"
-                        loading="lazy"
-                      >
-                    </div>
-                    <div class="product-card-ui__info">
-                      <h3 class="product-card-ui__title">{{ product.title }}</h3>
-                      <span class="product-card-ui__price">{{ product.price | money_without_trailing_zeros }}</span>
-                    </div>
-                  </a>
-                </div>
+                {% render 'noir-product-card', product: product %}
               {% endfor %}
             </div>
 
@@ -360,7 +343,64 @@
           sortDropdown.classList.remove('is-active');
         }
       });
-    }
+    }    // Robust AJAX Search within page
+    const productGrid = document.querySelector('.product-grid-new');
+
+    document.querySelectorAll('form[action="/search"]').forEach(form => {
+      form.addEventListener('submit', function(e) {
+        // Only run AJAX if we are on the redesign collection page
+        if (!productGrid) return;
+
+        e.preventDefault();
+        e.stopImmediatePropagation();
+
+        const searchTerm = this.querySelector('input[name="q"]').value;
+        const searchUrl = `/search?q=${encodeURIComponent(searchTerm)}&type=product`;
+
+        // Show loading state
+        productGrid.style.opacity = '0.3';
+        productGrid.style.transition = 'opacity 0.3s ease';
+        productGrid.style.pointerEvents = 'none';
+
+        fetch(searchUrl)
+          .then(response => response.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(html, 'text/html');
+            
+            const newGrid = doc.querySelector('.product-grid-new') || 
+                            doc.querySelector('.product-grid') || 
+                            doc.querySelector('.grid-container') ||
+                            doc.querySelector('.main-collection-grid');
+            
+            if (newGrid && (newGrid.children.length > 0 || newGrid.innerHTML.trim() !== '')) {
+              productGrid.innerHTML = newGrid.innerHTML;
+              
+              if (!productGrid.classList.contains('product-grid-new')) {
+                productGrid.classList.add('product-grid-new');
+              }
+
+              if (typeof observer !== 'undefined') {
+                document.querySelectorAll('.reveal-item').forEach(item => {
+                  observer.observe(item);
+                });
+              }
+            } else {
+              productGrid.innerHTML = '<div class="no-results-noir" style="grid-column: 1/-1; text-align: center; padding: 100px 0; font-family: var(--font-galderglynn); letter-spacing: 0.1em; text-transform: uppercase;">NO ARCHIVAL PIECES FOUND FOR: ' + searchTerm.toUpperCase() + '</div>';
+            }
+            
+            productGrid.style.opacity = '1';
+            productGrid.style.pointerEvents = 'auto';
+
+            productGrid.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            window.history.pushState({}, '', `/search?q=${encodeURIComponent(searchTerm)}`);
+          })
+          .catch(err => {
+            console.error('AJAX Search failed:', err);
+            window.location.href = searchUrl; 
+          });
+      });
+    });
   });
 
   // Robust Parallax Effect

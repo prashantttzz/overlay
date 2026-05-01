@@ -322,7 +322,7 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
-  object-position:bottom; /* Centered for better overall visibility */
+  object-position:center; /* Centered for better overall visibility */
 }
 
 .small-banner__content {

@@ -1,0 +1,15 @@
+<div class="grid__item">
+  <a href="{{ product.url }}" class="product-card-ui">
+    <div class="product-card-ui__image">
+      <img
+        src="{{ product.featured_media | img_url: '800x' }}"
+        alt="{{ product.title | escape }}"
+        loading="lazy"
+      >
+    </div>
+    <div class="product-card-ui__info">
+      <h3 class="product-card-ui__title">{{ product.title }}</h3>
+      <span class="product-card-ui__price">{{ product.price | money_without_trailing_zeros }}</span>
+    </div>
+  </a>
+</div>
