@@ -1,0 +1,65 @@
+
+{
+  "sections": {
+    "main": {
+      "type": "faq-redesign",
+      "settings": {
+        "eyebrow": "HELP CENTER",
+        "title": "FREQUENTLY ASKED QUESTIONS"
+      },
+      "blocks": {
+        "faq_1": {
+          "type": "faq",
+          "settings": {
+            "question": "How do I track my order?",
+            "answer": "<p>Once your order is shipped, you will receive an email with a tracking link. You can also track your order directly in your account dashboard under 'Order History'.</p>"
+          }
+        },
+        "faq_2": {
+          "type": "faq",
+          "settings": {
+            "question": "What is the typical shipping duration?",
+            "answer": "<p>Standard shipping takes 3-5 business days. Express shipping options are available at checkout for 1-2 day delivery.</p>"
+          }
+        },
+        "faq_3": {
+          "type": "faq",
+          "settings": {
+            "question": "What is your return policy?",
+            "answer": "<p>We offer a 30-day return policy for all unworn and unwashed items. Returns must be initiated through our returns portal to receive a prepaid shipping label.</p>"
+          }
+        },
+        "faq_4": {
+          "type": "faq",
+          "settings": {
+            "question": "Do you offer international shipping?",
+            "answer": "<p>Yes, we ship globally. International shipping rates and delivery times vary by location and are calculated at checkout.</p>"
+          }
+        },
+        "faq_5": {
+          "type": "faq",
+          "settings": {
+            "question": "Are the fragrance ingredients sustainable?",
+            "answer": "<p>Our scents are crafted using sustainably sourced botanical extracts and high-grade synthetic molecules that adhere to the strictest environmental standards.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "faq_1",
+        "faq_2",
+        "faq_3",
+        "faq_4",
+        "faq_5"
+      ]
+    }
+  ,
+    "footer": {
+      "type": "footer-custom",
+      "settings": {}
+    }
+  },
+  "order": [
+    "main",
+    "footer"
+  ]
+}

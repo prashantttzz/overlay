@@ -1,0 +1,64 @@
+
+{
+  "sections": {
+    "main": {
+      "type": "policy-redesign",
+      "settings": {
+        "eyebrow": "PRIVACY PROTOCOL",
+        "title": "PRIVACY POLICY"
+      },
+      "blocks": {
+        "block_1": {
+          "type": "content_block",
+          "settings": {
+            "heading": "01. OVERVIEW",
+            "content": "<p>At <b>OVERLAY</b>, we respect your privacy and are committed to protecting your personal data. This policy outlines how we handle your information when you visit our digital atelier and interact with our services.</p>"
+          }
+        },
+        "block_2": {
+          "type": "content_block",
+          "settings": {
+            "heading": "02. INFORMATION WE COLLECT",
+            "content": "<p>We collect information that allows us to provide a bespoke experience:</p><ul class='policy-list'><li><b>Identity Data:</b> Name, username, or similar identifier.</li><li><b>Contact Data:</b> Billing address, delivery address, email, and phone numbers.</li><li><b>Financial Data:</b> Encrypted payment card details processed by our secure partners.</li><li><b>Technical Data:</b> IP address, browser type, and time zone settings.</li></ul>"
+          }
+        },
+        "block_3": {
+          "type": "content_block",
+          "settings": {
+            "heading": "03. HOW WE USE YOUR DATA",
+            "content": "<p>Your data is used strictly to enhance your journey with us:</p><ul class='policy-list'><li>To process and deliver your orders.</li><li>To manage our relationship with you, including notifying you about changes to our terms.</li><li>To use data analytics to improve our website, products, and marketing.</li></ul>"
+          }
+        },
+        "block_4": {
+          "type": "content_block",
+          "settings": {
+            "heading": "04. DATA SECURITY",
+            "content": "<p>We have put in place appropriate security measures to prevent your personal data from being accidentally lost, used, or accessed in an unauthorized way. We limit access to your personal data to those employees and partners who have a business need to know.</p>"
+          }
+        },
+        "block_5": {
+          "type": "content_block",
+          "settings": {
+            "heading": "05. YOUR RIGHTS",
+            "content": "<p>Under certain circumstances, you have rights under data protection laws in relation to your personal data, including the right to request access, correction, erasure, or restriction of processing.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "block_1",
+        "block_2",
+        "block_3",
+        "block_4",
+        "block_5"
+      ]
+    },
+    "footer": {
+      "type": "footer-custom",
+      "settings": {}
+    }
+  },
+  "order": [
+    "main",
+    "footer"
+  ]
+}

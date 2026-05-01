@@ -176,6 +176,18 @@
         overlay.textContent = input.value;
       }
     });
+
+    input.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        const gallery = document.querySelector('media-gallery');
+        if (gallery) {
+          gallery.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        } else {
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+      }
+    });
   })();
 </script>
 

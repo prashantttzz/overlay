@@ -1,20 +1,141 @@
-
 {{ 'collection-custom-redesign.css' | asset_url | stylesheet_tag }}
 
-<section class="collection-redesign-section" id="collection-redesign-{{ section.id }}">
-  <!-- Hero Banner -->
-  <div class="collection-hero-banner">
-    <div class="collection-hero-banner__bg">
-      {% if section.settings.hero_image != blank %}
-        <img src="{{ section.settings.hero_image | img_url: '2400x' }}" alt="{{ section.settings.hero_heading | default: collection.title }}">
-      {% else %}
-        <img src="https://cdn.shopify.com/s/files/1/0774/2894/9215/files/offer0bg.webp?v=1777367390" alt="Collection Hero">
-      {% endif %}
-      <div class="collection-hero-banner__overlay"></div>
+<style>
+  /* Bulletproof Header Overrides for Collection Page */
+  .template-collection #header-component,
+  body[data-template*="collection"] #header-component {
+    background-color: transparent !important;
+    border-bottom: none !important;
+    transition: background-color 0.4s ease, backdrop-filter 0.4s ease;
+  }
+
+  .template-collection #header-component.is-on-home-hero,
+  body[data-template*="collection"] #header-component.is-on-home-hero {
+    --menu-top-level-font-color: #fff !important;
+    color: #fff !important;
+  }
+
+  .template-collection #header-component.is-on-home-hero .menu-list__link,
+  body[data-template*="collection"] #header-component.is-on-home-hero .menu-list__link {
+    color: #fff !important;
+  }
+
+  .template-collection #header-component.is-on-home-hero .header-logo__image,
+  body[data-template*="collection"] #header-component.is-on-home-hero .header-logo__image {
+    filter: none !important;
+  }
+
+  .template-collection #header-component.is-on-home-hero .header-actions__action svg,
+  .template-collection #header-component.is-on-home-hero .header__icon--menu svg,
+  body[data-template*="collection"] #header-component.is-on-home-hero .header-actions__action svg,
+  body[data-template*="collection"] #header-component.is-on-home-hero .header__icon--menu svg {
+    color: #fff !important;
+    stroke: #fff !important;
+    fill: none !important;
+  }
+
+  /* Scrolled State */
+  .template-collection #header-component.is-scrolled:not(.is-on-home-hero),
+  body[data-template*="collection"] #header-component.is-scrolled:not(.is-on-home-hero) {
+    background-color: rgba(255, 255, 255, 0.75) !important;
+    backdrop-filter: blur(20px) saturate(180%) !important;
+    -webkit-backdrop-filter: blur(20px) saturate(180%) !important;
+  }
+
+  .template-collection #header-component.is-scrolled:not(.is-on-home-hero) .menu-list__link,
+  body[data-template*="collection"] #header-component.is-scrolled:not(.is-on-home-hero) .menu-list__link {
+    color: #000 !important;
+  }
+
+  .template-collection #header-component.is-scrolled:not(.is-on-home-hero) .header-logo__image,
+  body[data-template*="collection"] #header-component.is-scrolled:not(.is-on-home-hero) .header-logo__image {
+    filter: invert(1) !important;
+  }
+
+  .template-collection #header-component.is-scrolled:not(.is-on-home-hero) .header-actions__action svg,
+  .template-collection #header-component.is-scrolled:not(.is-on-home-hero) .header__icon--menu svg,
+  body[data-template*="collection"] #header-component.is-scrolled:not(.is-on-home-hero) .header-actions__action svg,
+  body[data-template*="collection"] #header-component.is-scrolled:not(.is-on-home-hero) .header__icon--menu svg {
+    color: #000 !important;
+    stroke: #000 !important;
+    fill: none !important;
+  }
+</style>
+
+<div class="template-collection-wrapper">
+  <!-- 1. Small Hero Banner -->
+  <div class="collection-small-banner" data-home-hero>
+    <div class="small-banner__bg">
+      <img src="https://cdn.shopify.com/s/files/1/0774/2894/9215/files/h.jpg?v=1777629694" alt="Collection Banner">
     </div>
-    <div class="collection-hero-banner__content">
-      <span class="collection-hero-banner__subtitle">THE PERFUMERY ARCHIVE</span>
-      <h1 class="collection-hero-banner__title">{{ section.settings.hero_heading | default: collection.title }}</h1>
+    <div class="small-banner__content">
+      <span class="banner-eyebrow">- Collections</span>
+      <h2 class="small-banner__title">smell like temptation</h2>
+      <p class="small-banner__text">Collect The Archival Series</p>
+    </div>
+  </div>
+
+  <!-- 2. Top Navigation & Search Bar -->
+  <div class="collection-top-nav-bar">
+    <div class="top-nav-wrapper">
+      <div class="nav-pills-left desktop-only">
+        <div class="nav-pill dropdown">
+          <span>Categories</span>
+          <svg width="10" height="10" viewBox="0 0 10 10"><path d="M1 3L5 7L9 3" stroke="currentColor" fill="none"/></svg>
+        </div>
+        <a href="#" class="nav-pill">New Arrivals</a>
+        <a href="#" class="nav-pill">Sale</a>
+      </div>
+
+      <div class="top-bar-search">
+        <form action="{{ routes.search_url }}" method="get" role="search" class="pill-search-form">
+          <input 
+            type="text" 
+            name="q" 
+            placeholder="Search..." 
+            class="pill-search-input"
+            value="{{ search.terms | escape }}"
+          >
+          <button type="submit" class="pill-search-submit">
+            <svg width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M14.5 14.5L10.5 10.5M6.5 12.5C3.18629 12.5 0.5 9.81371 0.5 6.5C0.5 3.18629 3.18629 0.5 6.5 0.5C9.81371 0.5 12.5 3.18629 12.5 6.5C12.5 9.81371 9.81371 12.5 6.5 12.5Z" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+        </form>
+      </div>
+
+      <div class="nav-pills-right desktop-only">
+        <a href="#" class="nav-pill">Men</a>
+        <a href="#" class="nav-pill">Women</a>
+        <a href="#" class="nav-pill">Children</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3. Collection Title Header -->
+  <div class="collection-title-header">
+    <div class="title-left-side">
+      <div class="breadcrumb-nav">Home • {{ collection.title }}</div>
+      <h1 class="collection-main-title">{{ collection.title | default: "Archival Collection" }}</h1>
+    </div>
+    <div class="title-right-side">
+      <div class="custom-sort-dropdown" id="SortDropdown">
+        <div class="sort-dropdown__trigger">
+          <span class="current-sort">
+            {%- for option in collection.sort_options -%}
+              {%- if option.value == collection.sort_by -%}{{ option.name }}{%- endif -%}
+            {%- endfor -%}
+            {%- if collection.sort_by == blank -%}Featured{%- endif -%}
+          </span>
+          <svg width="10" height="10" viewBox="0 0 10 10"><path d="M1 3L5 7L9 3" stroke="currentColor" fill="none"/></svg>
+        </div>
+        <div class="sort-dropdown__options">
+          {%- for option in collection.sort_options -%}
+            <div class="sort-dropdown__option {% if option.value == collection.sort_by %}is-selected{% endif %}" 
+                 onclick="window.location.href = window.location.pathname + '?sort_by={{ option.value }}'">
+              {{ option.name }}
+            </div>
+          {%- endfor -%}
+        </div>
+      </div>
     </div>
   </div>
 
@@ -22,68 +143,199 @@
     class="collection-container-full"
     section-id="{{ section.id }}"
   >
-    <!-- Main Content -->
+
+    <!-- Main Content Layout -->
     <main class="main-content-full" id="ResultsList">
-      {% paginate collection.products by section.settings.products_per_page %}
-        <div class="product-grid-new full-width-grid" id="product-grid">
-          {% for product in collection.products %}
-            <div class="grid__item reveal-item">
-              <a href="{{ product.url }}" class="product-card-ui">
-                <div class="product-card-ui__image">
-                  <img
-                    src="{{ product.featured_media | img_url: '800x' }}"
-                    alt="{{ product.title | escape }}"
-                    loading="lazy"
-                  >
-                </div>
-                <div class="product-card-ui__meta">
-                  {% if product.metafields.descriptors.subtitle %}
-                    {{ product.metafields.descriptors.subtitle }}
-                  {% else %}
-                    MINIMALIST / ARCHIVAL
-                  {% endif %}
-                </div>
-                <div class="product-card-ui__info">
-                  <h3 class="product-card-ui__title">{{ product.title }}</h3>
-                  <span class="product-card-ui__price">{{ product.price | money_without_trailing_zeros }}</span>
-                </div>
-                <div class="product-card-ui__size">
-                  {% if product.variants.first.title contains 'ml' or product.variants.first.title contains 'ML' %}
-                    {{ product.variants.first.title }}
-                  {% else %}
-                    50ML
-                  {% endif %}
-                </div>
-              </a>
+      <div class="collection-layout-wrapper">
+        <!-- Left Sidebar Filters -->
+        <aside class="collection-sidebar-left">
+          {%- if collection.filters.size > 0 -%}
+            <div class="sidebar-block filters-block">
+              <div class="sidebar-title-row">
+                <h4 class="sidebar-title">Filters</h4>
+                <a href="{{ collection.url }}?sort_by={{ collection.sort_by }}" class="clear-filters">Reset</a>
+              </div>
+              <form class="sidebar-filters-form">
+                {%- for filter in collection.filters -%}
+                  <div class="filter-group">
+                    <div class="filter-group-header">
+                      <span class="filter-label">{{ filter.label }}</span>
+                      <a href="{{ filter.url_to_remove }}" class="filter-group-reset">Reset</a>
+                    </div>
+                    <div class="filter-group-content">
+                      {%- case filter.type -%}
+                        {%- when 'list' -%}
+                          <ul class="filter-list">
+                            {%- for value in filter.values -%}
+                              <li class="filter-item">
+                                <label class="filter-checkbox-label">
+                                  <input type="checkbox"
+                                    name="{{ value.param_name }}"
+                                    value="{{ value.value }}"
+                                    {% if value.active %}checked{% endif %}
+                                    {% if value.count == 0 and value.active == false %}disabled{% endif %}
+                                    onchange="this.form.submit()"
+                                  >
+                                  <span class="checkbox-box"></span>
+                                  <span class="filter-value-text">{{ value.label }}</span>
+                                  <span class="filter-value-count">{{ value.count }}</span>
+                                </label>
+                              </li>
+                            {%- endfor -%}
+                          </ul>
+                          {% if filter.values.size > 6 %}
+                            <div class="filter-show-more-wrapper">
+                              <button type="button" class="filter-show-more-link">Show more +</button>
+                            </div>
+                          {% endif %}
+                        {%- when 'price_range' -%}
+                          <div class="filter-price-slider">
+                             <div class="price-range-labels">
+                               <span>{{ filter.min_value.value | money_without_currency | default: 0 }}</span>
+                               <span>{{ filter.max_value.value | money_without_currency | default: filter.range_max | money_without_currency }}</span>
+                             </div>
+                             <div class="price-slider-track"></div>
+                          </div>
+                      {%- endcase -%}
+                    </div>
+                  </div>
+                {%- endfor -%}
+              </form>
             </div>
-          {% endfor %}
-        </div>
+          {%- endif -%}
+        </aside>
 
-        <!-- Pagination UI -->
-        {% if paginate.pages > 1 %}
-          <div class="pagination-ui">
-            <div class="pagination-links">
-              {% if paginate.previous %}
-                <a href="{{ paginate.previous.url }}" class="pagination-link">PREV</a>
-              {% endif %}
-
-              {% for part in paginate.parts %}
-                {% if part.is_link %}
-                  <a href="{{ part.url }}" class="pagination-link">{{ part.title }}</a>
-                {% else %}
-                  <span class="pagination-link {% if part.title == paginate.current_page %}is-active{% endif %}">{{ part.title }}</span>
-                {% endif %}
+        <div class="collection-grid-content">
+          {% paginate collection.products by section.settings.products_per_page %}
+            <div class="product-grid-new" id="product-grid">
+              {% for product in collection.products %}
+                <div class="grid__item">
+                  <a href="{{ product.url }}" class="product-card-ui">
+                    <div class="product-card-ui__image">
+                      <img
+                        src="{{ product.featured_media | img_url: '800x' }}"
+                        alt="{{ product.title | escape }}"
+                        loading="lazy"
+                      >
+                    </div>
+                    <div class="product-card-ui__info">
+                      <h3 class="product-card-ui__title">{{ product.title }}</h3>
+                      <span class="product-card-ui__price">{{ product.price | money_without_trailing_zeros }}</span>
+                    </div>
+                  </a>
+                </div>
               {% endfor %}
-
-              {% if paginate.next %}
-                <a href="{{ paginate.next.url }}" class="pagination-link">NEXT</a>
-              {% endif %}
             </div>
-          </div>
-        {% endif %}
-      {% endpaginate %}
+
+            <!-- Pagination UI -->
+            {% if paginate.pages > 1 %}
+              <div class="pagination-ui">
+                <div class="pagination-links">
+                  {% if paginate.previous %}
+                    <a href="{{ paginate.previous.url }}" class="pagination-link">PREV</a>
+                  {% endif %}
+
+                  {% for part in paginate.parts %}
+                    {% if part.is_link %}
+                      <a href="{{ part.url }}" class="pagination-link">{{ part.title }}</a>
+                    {% else %}
+                      <span class="pagination-link {% if part.title == paginate.current_page %}is-active{% endif %}">{{ part.title }}</span>
+                    {% endif %}
+                  {% endfor %}
+
+                  {% if paginate.next %}
+                    <a href="{{ paginate.next.url }}" class="pagination-link">NEXT</a>
+                  {% endif %}
+                </div>
+              </div>
+            {% endif %}
+          {% endpaginate %}
+        </div>
+      </div>
     </main>
   </results-list>
+  <!-- Mobile Sticky Bottom Bar -->
+  <div class="mobile-sticky-bar">
+    <button class="mobile-bar-btn" id="mobileSortBtn" onclick="document.getElementById('MobileSortDrawer').classList.add('is-open')">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5L6 10L11 15"></path><path d="M21 19l-5-5-5 5"></path></svg>
+      <span>SORT</span>
+    </button>
+    <div class="mobile-bar-divider"></div>
+    <button class="mobile-bar-btn" id="mobileFilterBtn" onclick="document.getElementById('MobileFilterDrawer').classList.add('is-open')">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="21" x2="4" y2="14"></line><line x1="4" y1="10" x2="3"></line><line x1="12" y1="21" x2="12" y2="12"></line><line x1="12" y1="8" x2="12" y2="3"></line><line x1="20" y1="21" x2="20" y2="16"></line><line x1="20" y1="12" x2="20" y2="3"></line><line x1="1" y1="14" x2="7" y2="14"></line><line x1="9" y1="8" x2="15" y2="8"></line><line x1="17" y1="16" x2="23" y2="16"></line></svg>
+      <span>FILTER</span>
+    </button>
+  </div>
+
+  <!-- Mobile Drawers -->
+  <div class="mobile-drawer" id="MobileFilterDrawer">
+    <div class="drawer-header">
+      <h3>Filters</h3>
+      <button class="drawer-close" onclick="this.closest('.mobile-drawer').classList.remove('is-open')">&times;</button>
+    </div>
+    <div class="drawer-content">
+      <div class="sidebar-clone">
+        <form class="mobile-filter-form">
+          {%- for filter in collection.filters -%}
+            <div class="filter-group">
+              <div class="filter-group-header">
+                <span class="filter-label">{{ filter.label }}</span>
+                <a href="{{ filter.url_to_remove }}" class="filter-group-reset">Reset</a>
+              </div>
+              <div class="filter-group-content">
+                {%- case filter.type -%}
+                  {%- when 'list' -%}
+                    <ul class="filter-list">
+                      {%- for value in filter.values -%}
+                        <li class="filter-item">
+                          <label class="filter-checkbox-label">
+                            <input type="checkbox"
+                              name="{{ value.param_name }}"
+                              value="{{ value.value }}"
+                              {% if value.active %}checked{% endif %}
+                              {% if value.count == 0 and value.active == false %}disabled{% endif %}
+                              onchange="this.form.submit()"
+                            >
+                            <span class="checkbox-box"></span>
+                            <span class="filter-value-text">{{ value.label }}</span>
+                            <span class="filter-value-count">{{ value.count }}</span>
+                          </label>
+                        </li>
+                      {%- endfor -%}
+                    </ul>
+                  {%- when 'price_range' -%}
+                    <div class="filter-price-slider">
+                       <div class="price-range-labels">
+                         <span>{{ filter.min_value.value | money_without_currency | default: 0 }}</span>
+                         <span>{{ filter.max_value.value | money_without_currency | default: filter.range_max | money_without_currency }}</span>
+                       </div>
+                       <div class="price-slider-track"></div>
+                    </div>
+                {%- endcase -%}
+              </div>
+            </div>
+          {%- endfor -%}
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <div class="mobile-drawer" id="MobileSortDrawer">
+    <div class="drawer-header">
+      <h3>Sort By</h3>
+      <button class="drawer-close" onclick="this.closest('.mobile-drawer').classList.remove('is-open')">&times;</button>
+    </div>
+    <div class="drawer-content">
+      <div class="mobile-sort-list">
+        {%- for option in collection.sort_options -%}
+          <div class="mobile-sort-option {% if option.value == collection.sort_by %}active{% endif %}" 
+               onclick="window.location.href = window.location.pathname + '?sort_by={{ option.value }}'">
+            {{ option.name }}
+          </div>
+        {%- endfor -%}
+      </div>
+    </div>
+  </div>
 </section>
 
 <script>
@@ -109,22 +361,65 @@
       observer.observe(item);
     });
   });
+
+  // Robust Parallax Effect
+  window.addEventListener('scroll', () => {
+    const banner = document.querySelector('.collection-hero-banner');
+    const parallaxBg = document.querySelector('.parallax-bg img');
+    if (banner && parallaxBg) {
+      const scrollPos = window.pageYOffset;
+      const bannerTop = banner.offsetTop;
+      const bannerHeight = banner.offsetHeight;
+      
+      // Calculate parallax only when banner is in view
+      if (scrollPos + window.innerHeight > bannerTop && scrollPos < bannerTop + bannerHeight) {
+        const offset = (scrollPos - bannerTop) * 0.3;
+        parallaxBg.style.transform = `translate3d(0, ${offset}px, 0)`;
+      }
+    }
+  });
 </script>
+</div>
 
 {% schema %}
 {
   "name": "Collection Redesign",
   "settings": [
     {
+      "type": "header",
+      "content": "Split Banner"
+    },
+    {
       "type": "image_picker",
-      "id": "hero_image",
-      "label": "Hero Image"
+      "id": "hero_image_left",
+      "label": "Left Panel Image (Lifestyle)"
+    },
+    {
+      "type": "image_picker",
+      "id": "hero_image_right",
+      "label": "Right Panel Image (Product)"
     },
     {
       "type": "text",
-      "id": "hero_heading",
-      "label": "Hero Heading",
-      "default": "ALL CREATIONS"
+      "id": "hero_heading_modern",
+      "label": "Modern Heading",
+      "default": "ethical beauty, sustainable impact."
+    },
+    {
+      "type": "textarea",
+      "id": "hero_subheading",
+      "label": "Subheading",
+      "default": "Committed to sustainable beauty and minimal impact for the planet."
+    },
+    {
+      "type": "header",
+      "content": "Catalog Header"
+    },
+    {
+      "type": "text",
+      "id": "catalog_label",
+      "label": "Active Tab Label",
+      "default": "best sellers"
     },
     {
       "type": "range",

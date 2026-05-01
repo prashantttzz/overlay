@@ -1,0 +1,143 @@
+
+{{ 'noir-utility.css' | asset_url | stylesheet_tag }}
+
+{%- style -%}
+  #policy-{{ section.id }} {
+    z-index: 1;
+  }
+  
+  /* Force Global Header to White for this page */
+  .header, 
+  .menu-list__link, 
+  .header-actions__action svg,
+  .header__icon--menu svg,
+  .header__heading-link,
+  .header__active-menu-item,
+  .header__heading {
+    color: #fff !important;
+  }
+  
+  .header-logo__image,
+  .header__heading-logo,
+  .header__heading-link img {
+    filter: none !important;
+  }
+  
+  .header-actions__action svg,
+  .header__icon--menu svg {
+    color: #fff !important;
+    stroke: #fff !important;
+    fill: none !important;
+  }
+{%- endstyle -%}
+
+<section id="policy-{{ section.id }}" class="noir-utility-section">
+  <div class="noir-utility-bg-text">LEGAL</div>
+  
+  <div class="noir-utility-container">
+    <div class="noir-utility-header">
+      <span class="noir-utility-eyebrow">{{ section.settings.eyebrow | default: "PRIVACY PROTOCOL" }}</span>
+      <h1 class="noir-utility-title">{{ section.settings.title | default: "PRIVACY POLICY" }}</h1>
+    </div>
+
+    <div class="policy-content">
+      {%- for block in section.blocks -%}
+        <div class="policy-block" {{ block.shopify_attributes }}>
+          <h2 class="policy-block-title">{{ block.settings.heading }}</h2>
+          <div class="policy-text">
+            {{ block.settings.content }}
+          </div>
+        </div>
+      {%- endfor -%}
+    </div>
+
+    <div class="noir-utility-footer" style="margin-top: 100px; padding-top: 40px; border-top: 1px solid rgba(255,255,255,0.1);">
+      <p style="color: rgba(255,255,255,0.4); font-size: 0.8rem; letter-spacing: 0.1em; line-height: 1.6;">
+        LAST UPDATED: {{ "now" | date: "%B %d, %Y" | upcase }}<br>
+        IF YOU HAVE QUESTIONS REGARDING THESE TERMS, PLEASE CONTACT <a href="mailto:legal@overlay.com" style="color: #fff;">LEGAL@OVERLAY.COM</a>
+      </p>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Policy Redesign",
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "default": "PRIVACY PROTOCOL"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Title",
+      "default": "PRIVACY POLICY"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "content_block",
+      "name": "Content Block",
+      "settings": [
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "Heading",
+          "default": "01. DATA COLLECTION"
+        },
+        {
+          "type": "richtext",
+          "id": "content",
+          "label": "Content",
+          "default": "<p>We collect information that you provide directly to us, such as when you create an account, make a purchase, or communicate with us. This may include your name, email address, shipping address, and payment information.</p>"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Policy Redesign",
+      "blocks": [
+        {
+          "type": "content_block",
+          "settings": {
+            "heading": "01. OVERVIEW",
+            "content": "<p>At <b>OVERLAY</b>, we respect your privacy and are committed to protecting your personal data. This policy outlines how we handle your information when you visit our digital atelier and interact with our services.</p>"
+          }
+        },
+        {
+          "type": "content_block",
+          "settings": {
+            "heading": "02. INFORMATION WE COLLECT",
+            "content": "<p>We collect information that allows us to provide a bespoke experience:</p><ul class='policy-list'><li><b>Identity Data:</b> Name, username, or similar identifier.</li><li><b>Contact Data:</b> Billing address, delivery address, email, and phone numbers.</li><li><b>Financial Data:</b> Encrypted payment card details processed by our secure partners.</li><li><b>Technical Data:</b> IP address, browser type, and time zone settings.</li></ul>"
+          }
+        },
+        {
+          "type": "content_block",
+          "settings": {
+            "heading": "03. HOW WE USE YOUR DATA",
+            "content": "<p>Your data is used strictly to enhance your journey with us:</p><ul class='policy-list'><li>To process and deliver your orders.</li><li>To manage our relationship with you, including notifying you about changes to our terms.</li><li>To use data analytics to improve our website, products, and marketing.</li></ul>"
+          }
+        },
+        {
+          "type": "content_block",
+          "settings": {
+            "heading": "04. DATA SECURITY",
+            "content": "<p>We have put in place appropriate security measures to prevent your personal data from being accidentally lost, used, or accessed in an unauthorized way. We limit access to your personal data to those employees and partners who have a business need to know.</p>"
+          }
+        },
+        {
+          "type": "content_block",
+          "settings": {
+            "heading": "05. YOUR RIGHTS",
+            "content": "<p>Under certain circumstances, you have rights under data protection laws in relation to your personal data, including the right to request access, correction, erasure, or restriction of processing.</p>"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

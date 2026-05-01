@@ -171,18 +171,17 @@
 }
 
 @media (max-width: 767px) {
+  .curated-selection__item {
+    flex: 0 0 85%; /* Slightly peek the next item */
+  }
+
+  .curated-selection__image-wrapper {
+    aspect-ratio: 3 / 4; /* Taller on mobile */
+  }
+  
   .curated-selection__heading {
-    font-size: 1.25rem;
-  }
-  
-  .curated-selection__header {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 20px;
-  }
-  
-  .curated-selection__controls {
-    display: none; /* Hide controls on mobile, as swipe is natural */
+    font-size: 1rem;
+    font-weight: 600; /* Semibold */
   }
 }
 

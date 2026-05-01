@@ -927,6 +927,28 @@
     color: #000 !important;
     border-radius: 0 !important;
   }
+
+  /* Product Page Header Override */
+  .template-product #header-component {
+    background-color: rgba(0, 0, 0, 0.8) !important;
+    backdrop-filter: blur(25px) saturate(10%) !important;
+    -webkit-backdrop-filter: blur(25px) saturate(150%) !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
+  }
+
+  .template-product .menu-list__link,
+  .template-product .header-actions__action svg,
+  .template-product .header__icon--menu svg {
+    color: #fff !important;
+  }
+
+  .template-product .header-logo__image {
+    filter: none !important;
+  }
+
+  .template-product .menu-list__link--active::after {
+    background-color: #fff !important;
+  }
 {% endstylesheet %}
 
 {% unless request.design_mode %}

@@ -1,0 +1,172 @@
+
+{{ 'noir-utility.css' | asset_url | stylesheet_tag }}
+
+{%- style -%}
+  #faq-{{ section.id }} {
+    z-index: 1;
+  }
+  
+  /* Force Global Header to White for this page */
+  .header, 
+  .menu-list__link, 
+  .header-actions__action svg,
+  .header__icon--menu svg,
+  .header__heading-link,
+  .header__active-menu-item,
+  .header__heading {
+    color: #fff !important;
+  }
+  
+  .header-logo__image,
+  .header__heading-logo,
+  .header__heading-link img {
+    filter: none !important;
+  }
+  
+  .header-actions__action svg,
+  .header__icon--menu svg {
+    color: #fff !important;
+    stroke: #fff !important;
+    fill: none !important;
+  }
+{%- endstyle -%}
+
+<section id="faq-{{ section.id }}" class="noir-utility-section">
+  <div class="noir-utility-bg-text">SUPPORT</div>
+  
+  <div class="noir-utility-container">
+    <div class="noir-utility-header">
+      <span class="noir-utility-eyebrow">{{ section.settings.eyebrow | default: "HELP CENTER" }}</span>
+      <h1 class="noir-utility-title">{{ section.settings.title | default: "FREQUENTLY ASKED QUESTIONS" }}</h1>
+    </div>
+
+    <div class="faq-accordion">
+      {%- for block in section.blocks -%}
+        <div class="faq-item" {{ block.shopify_attributes }}>
+          <button class="faq-question-trigger" aria-expanded="false">
+            <span class="faq-question-text">{{ block.settings.question }}</span>
+            <span class="faq-icon"></span>
+          </button>
+          <div class="faq-answer-wrapper">
+            <div class="faq-answer-content">
+              {{ block.settings.answer }}
+            </div>
+          </div>
+        </div>
+      {%- endfor -%}
+    </div>
+    
+    <div class="noir-utility-footer" style="margin-top: 100px; text-align: center;">
+      <p style="color: rgba(255,255,255,0.4); font-size: 0.9rem; letter-spacing: 0.1em;">
+        STILL NEED ASSISTANCE? <a href="/pages/contact" style="color: #fff; text-decoration: underline;">CONTACT OUR STUDIO</a>
+      </p>
+    </div>
+  </div>
+</section>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const faqItems = document.querySelectorAll('.faq-item');
+    
+    faqItems.forEach(item => {
+      const trigger = item.querySelector('.faq-question-trigger');
+      
+      trigger.addEventListener('click', () => {
+        const isActive = item.classList.contains('is-active');
+        
+        // Close others
+        faqItems.forEach(otherItem => {
+          otherItem.classList.remove('is-active');
+          otherItem.querySelector('.faq-question-trigger').setAttribute('aria-expanded', 'false');
+        });
+        
+        if (!isActive) {
+          item.classList.add('is-active');
+          trigger.setAttribute('aria-expanded', 'true');
+        }
+      });
+    });
+  });
+</script>
+
+{% schema %}
+{
+  "name": "FAQ Redesign",
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "default": "HELP CENTER"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Title",
+      "default": "FREQUENTLY ASKED QUESTIONS"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "faq",
+      "name": "FAQ Item",
+      "settings": [
+        {
+          "type": "text",
+          "id": "question",
+          "label": "Question",
+          "default": "How do I track my order?"
+        },
+        {
+          "type": "richtext",
+          "id": "answer",
+          "label": "Answer",
+          "default": "<p>Once your order is shipped, you will receive an email with a tracking link. You can also track your order directly in your account dashboard under 'Order History'.</p>"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "FAQ Redesign",
+      "blocks": [
+        {
+          "type": "faq",
+          "settings": {
+            "question": "What is the typical shipping duration?",
+            "answer": "<p>Standard shipping takes 3-5 business days. Express shipping options are available at checkout for 1-2 day delivery.</p>"
+          }
+        },
+        {
+          "type": "faq",
+          "settings": {
+            "question": "What is your return policy?",
+            "answer": "<p>We offer a 30-day return policy for all unworn and unwashed items. Returns must be initiated through our returns portal to receive a prepaid shipping label.</p>"
+          }
+        },
+        {
+          "type": "faq",
+          "settings": {
+            "question": "Do you offer international shipping?",
+            "answer": "<p>Yes, we ship globally. International shipping rates and delivery times vary by location and are calculated at checkout.</p>"
+          }
+        },
+        {
+          "type": "faq",
+          "settings": {
+            "question": "Are the fragrance ingredients sustainable?",
+            "answer": "<p>Our scents are crafted using sustainably sourced botanical extracts and high-grade synthetic molecules that adhere to the strictest environmental standards.</p>"
+          }
+        },
+        {
+          "type": "faq",
+          "settings": {
+            "question": "How should I store my perfume?",
+            "answer": "<p>To preserve the integrity of the fragrance, store your bottle in a cool, dark place away from direct sunlight and extreme temperature fluctuations.</p>"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
