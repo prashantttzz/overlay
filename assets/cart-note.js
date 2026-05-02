@@ -16,6 +16,8 @@ class CartNote extends Component {
   updateCartNote = debounce(async (event) => {
     if (!(event.target instanceof HTMLTextAreaElement)) return;
 
+    cartPerformance.createStartingMarker('note-update:user-action');
+
     const note = event.target.value;
     if (this.#activeFetch) {
       this.#activeFetch.abort();

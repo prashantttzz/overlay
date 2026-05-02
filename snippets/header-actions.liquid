@@ -13,7 +13,13 @@
   {% endif %}
 
   {% if settings.cart_type == 'drawer' and template.name != 'cart' %}
-    {% render 'cart-drawer' %}
+    <button
+      class="button header-actions__action action__cart button-unstyled"
+      on:click="#cart-drawer/open"
+      aria-label="{{ 'accessibility.open_cart_drawer' | t }} {{ 'accessibility.cart_count' | t }}: {{ cart.item_count }}"
+    >
+      {% render 'cart-icon-component' %}
+    </button>
   {% else %}
     <a
       href="{{ routes.cart_url }}"

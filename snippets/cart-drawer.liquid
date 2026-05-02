@@ -16,19 +16,13 @@
 {{ 'cart-custom-redesign.css' | asset_url | stylesheet_tag }}
 
 <cart-drawer-component
+  id="cart-drawer"
   class="cart-drawer"
   {{ block.shopify_attributes }}
   {% if settings.auto_open_cart_drawer %}
     auto-open
   {% endif %}
 >
-  <button
-    class="button header-actions__action button-unstyled"
-    on:click="/open"
-    aria-label="{{ 'accessibility.open_cart_drawer' | t }} {{ 'accessibility.cart_count' | t}}: {{ cart.item_count }}"
-  >
-    {% render 'cart-icon-component' %}
-  </button>
 
   <dialog
     ref="dialog"

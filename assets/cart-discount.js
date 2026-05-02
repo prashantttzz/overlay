@@ -42,6 +42,8 @@ class CartDiscount extends Component {
     event.preventDefault();
     event.stopPropagation();
 
+    cartPerformance.createStartingMarker('discount-update:user-action');
+
     const form = event.target;
     if (!(form instanceof HTMLFormElement)) return;
 

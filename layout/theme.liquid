@@ -28,6 +28,9 @@
     {%- render 'color-schemes' -%}
     {%- render 'theme-styles-variables' -%}
     {{ 'animations.css' | asset_url | stylesheet_tag }}
+    {{ 'promo-popup.css' | asset_url | stylesheet_tag }}
+    <script src="{{ 'engraving-cart.js' | asset_url }}" defer></script>
+    <script src="{{ 'promo-popup.js' | asset_url }}" defer></script>
 
     {% if request.design_mode %}
       {%- render 'theme-editor' -%}
@@ -68,6 +71,10 @@
     {% if settings.quick_add or settings.mobile_quick_add %}
       {% render 'quick-add-modal' %}
     {% endif %}
+
+    {% section 'cart-drawer' %}
+
+    {% render 'promo-popup' %}
 
     <script>
       document.addEventListener('DOMContentLoaded', function() {

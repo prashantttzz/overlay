@@ -1,4 +1,3 @@
-
 {%- liquid
   assign section_id = 'section-' | append: section.id
 -%}
@@ -201,6 +200,48 @@
     from { transform: translateX(0); }
     to { transform: translateX(-100%); }
   }
+
+  /* Instant Hero Animations */
+  .hero-animate {
+    opacity: 0;
+    animation-fill-mode: both;
+    animation-duration: 0.8s;
+    animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .hero-animate--fade-up {
+    animation-name: heroFadeUp;
+  }
+
+  .hero-animate--scale {
+    animation-name: heroScale;
+  }
+
+  .hero-animate--delay-1 { animation-delay: 0.1s; }
+  .hero-animate--delay-2 { animation-delay: 0.25s; }
+  .hero-animate--delay-3 { animation-delay: 0.4s; }
+
+  @keyframes heroFadeUp {
+    from {
+      opacity: 0;
+      transform: translateY(30px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes heroScale {
+    from {
+      opacity: 0;
+      transform: scale(0.9);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
 {%- endstyle -%}
 
 <section id="{{ section_id }}" data-home-hero>
@@ -223,17 +264,17 @@
     <div class="overlay-hero__content">
 
       {%- if section.settings.heading != blank -%}
-        <h1 class="overlay-hero__heading reveal reveal--fade-up reveal--stagger-1">{{ section.settings.heading | newline_to_br }}</h1>
+        <h1 class="overlay-hero__heading">{{ section.settings.heading | newline_to_br }}</h1>
       {%- endif -%}
 
-      <div class="overlay-hero__description-wrapper reveal reveal--fade-up reveal--stagger-2">
+      <div class="overlay-hero__description-wrapper hero-animate hero-animate--fade-up hero-animate--delay-2">
         {%- if section.settings.description != blank -%}
           <p class="overlay-hero__description">{{ section.settings.description }}</p>
         {%- endif -%}
       </div>
 
       {%- if section.settings.button_label != blank -%}
-        <a href="{{ section.settings.button_link }}" class="overlay-hero__button reveal reveal--scale reveal--stagger-3">
+        <a href="{{ section.settings.button_link }}" class="overlay-hero__button hero-animate hero-animate--scale hero-animate--delay-3">
           {{ section.settings.button_label }}
         </a>
       {%- endif -%}

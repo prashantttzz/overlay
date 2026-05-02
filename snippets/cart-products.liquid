@@ -97,6 +97,10 @@
 
           <tbody role="rowgroup">
             {% for item in cart.items %}
+              {%- comment -%} Hide engraving variant as standalone row — shown as sub-item below parent {%- endcomment -%}
+              {%- if item.variant_id == 48572858400991 -%}
+                {%- continue -%}
+              {%- endif -%}
               <tr
                 role="row"
                 class="cart-items__table-row{% if item.parent_relationship.parent != null %} cart-items__nested-line{% endif %}"
@@ -148,6 +152,11 @@
                       {{- item.product.title -}}
                     </a>
                   </p>
+                  
+                  <p class="cart-items__details-price">
+                    {{ item.original_price | money }}
+                  </p>
+
                   {% if item.product.vendor and block_settings.vendor %}
                     <p>
                       {{ item.product.vendor }}
@@ -186,7 +195,8 @@
 
                       {%- for property in item.properties -%}
                         {%- assign property_first_char = property.first | slice: 0 -%}
-                        {%- if property.last != blank and property_first_char != '_' -%}
+                        {%- comment -%} Hide 'Engraving Text' from normal properties — displayed as sub-item below {%- endcomment -%}
+                        {%- if property.last != blank and property_first_char != '_' and property.first != 'Engraving Text' -%}
                           <div class="cart-items__properties">
                             <dt>{{ property.first }}:</dt>
                             <dd>
@@ -217,9 +227,14 @@
                     </ul>
                   {% endif %}
 
-                  <div class="cart-items__price">
-                    <span class="cart-items__qty-label">QTY: {{ item.quantity }}</span>
-                    <span>{{ item.original_price | money }}</span>
+                  <div class="cart-items__actions">
+                    <div class="cart-items__quantity">
+                      {% render 'quantity-selector', 
+                        product: item.product, 
+                        in_cart_quantity: item.quantity, 
+                        line_index: forloop.index0 
+                      %}
+                    </div>
                     <button
                       class="cart-items__remove"
                       type="button"
@@ -228,6 +243,33 @@
                       REMOVE
                     </button>
                   </div>
+
+                  {%- comment -%} Engraving sub-item display — logically linked by Engraving Text property {%- endcomment -%}
+                  {%- assign engraving_text_prop = item.properties['Engraving Text'] -%}
+                  {%- if engraving_text_prop != blank -%}
+                    {%- for eng_item in cart.items -%}
+                      {%- if eng_item.variant_id == 48572858400991 and eng_item.properties['Engraving Text'] == engraving_text_prop -%}
+                        <div class="cart-engraving-subitem">
+                          <span class="cart-engraving-subitem__icon">
+                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                              <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                              <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                            </svg>
+                          </span>
+                          <div class="cart-engraving-subitem__details">
+                            <span class="cart-engraving-subitem__label">
+                              Personalization: "{{ engraving_text_prop }}"
+                            </span>
+                            <span class="cart-engraving-subitem__price">
+                              {%- comment -%} Show quantity matching the parent item for logical consistency {%- endcomment -%}
+                              x{{ item.quantity }} = {{ eng_item.variant.price | times: item.quantity | money }}
+                            </span>
+                          </div>
+                        </div>
+                        {%- break -%}
+                      {%- endif -%}
+                    {%- endfor -%}
+                  {%- endif -%}
                 </td>
                 <td
                   class="cart-items__error hidden"

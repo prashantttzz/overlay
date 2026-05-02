@@ -164,10 +164,37 @@ class ProductFormComponent extends Component {
     // Stop default behaviour from the browser
     event.preventDefault();
 
+    cartPerformance.createStartingMarker('add:user-action');
+
     if (this.#timeout) clearTimeout(this.#timeout);
 
     // Check if the add to cart button is disabled and do an early return if it is
     if (this.refs.addToCartButtonContainer?.refs.addToCartButton?.getAttribute('disabled') === 'true') return;
+
+    // ── Engraving validation ─────────────────────────────────────────────
+    const engravingBlock = document.querySelector('[data-engraving-block]');
+    const engravingToggle = engravingBlock?.querySelector('[data-engraving-toggle]');
+    const engravingInput = engravingBlock?.querySelector('[data-engraving-input]');
+    const engravingError = engravingBlock?.querySelector('[data-engraving-error]');
+    const engravingEnabled = engravingToggle?.checked || false;
+    let engravingText = '';
+
+    if (engravingEnabled) {
+      engravingText = engravingInput?.value?.trim() || '';
+      const isConfirmed = engravingBlock?.getAttribute('data-confirmed') === 'true';
+
+      if (!engravingText || !isConfirmed) {
+        // Block submit — show inline error
+        if (engravingError) {
+          engravingError.textContent = !engravingText ? 'Please enter engraving text' : 'Please confirm your engraving';
+          engravingError.style.display = 'block';
+        }
+        engravingInput?.focus();
+        return;
+      }
+      if (engravingError) engravingError.style.display = 'none';
+    }
+    // ── End engraving validation ─────────────────────────────────────────
 
     // Send the add to cart information to the cart
     const form = this.querySelector('form');
@@ -175,6 +202,17 @@ class ProductFormComponent extends Component {
     if (!form) throw new Error('Product form element missing');
 
     const formData = new FormData(form);
+
+    // ── Inject engraving text as line item property on the main product ──
+    if (engravingEnabled && engravingText) {
+      formData.set('properties[Engraving Text]', engravingText);
+      // Add a unique ID to ensure engraved items don't merge, even if text is same
+      formData.set('properties[_engraving_id]', Date.now().toString());
+    } else {
+      formData.delete('properties[Engraving Text]');
+      formData.delete('properties[_engraving_id]');
+    }
+    // ── End inject ───────────────────────────────────────────────────────
 
     const cartItemsComponents = document.querySelectorAll('cart-items-component');
     let cartItemComponentsSectionIds = [];
@@ -184,6 +222,9 @@ class ProductFormComponent extends Component {
       }
       formData.append('sections', cartItemComponentsSectionIds.join(','));
     });
+
+    // Capture quantity for engraving pairing
+    const addedQty = Number(formData.get('quantity')) || Number(this.dataset.quantityDefault) || 1;
 
     const fetchCfg = fetchConfig('javascript', { body: formData });
 
@@ -195,7 +236,7 @@ class ProductFormComponent extends Component {
       },
     })
       .then((response) => response.json())
-      .then((response) => {
+      .then(async (response) => {
         if (response.status) {
           this.dispatchEvent(
             new CartErrorEvent(form.getAttribute('id') || '', response.message, response.description, response.errors)
@@ -230,7 +271,7 @@ class ProductFormComponent extends Component {
             new CartAddEvent({}, this.id, {
               didError: true,
               source: 'product-form-component',
-              itemCount: Number(formData.get('quantity')) || Number(this.dataset.quantityDefault),
+              itemCount: addedQty,
               productId: this.dataset.productId,
             })
           );
@@ -245,6 +286,16 @@ class ProductFormComponent extends Component {
           }
 
           if (!id) throw new Error('Form ID is required');
+
+          // ── Add engraving variant to cart after main product succeeds ──
+          if (engravingEnabled && engravingText && window.EngravingCart) {
+            try {
+              await window.EngravingCart.addEngraving(engravingText, addedQty);
+            } catch (engErr) {
+              console.error('[Engraving] Failed to add engraving variant:', engErr);
+            }
+          }
+          // ── End engraving add ──────────────────────────────────────────
 
           // Add aria-live region to inform screen readers that the item was added
           if (this.refs.addToCartButtonContainer?.refs.addToCartButton) {
@@ -262,9 +313,9 @@ class ProductFormComponent extends Component {
           this.dispatchEvent(
             new CartAddEvent({}, id.toString(), {
               source: 'product-form-component',
-              itemCount: Number(formData.get('quantity')) || Number(this.dataset.quantityDefault),
+              itemCount: addedQty,
               productId: this.dataset.productId,
-              sections: response.sections,
+              sections: engravingEnabled ? null : response.sections, // Prevent stale HTML if engraving is being added separately
             })
           );
         }
@@ -275,6 +326,13 @@ class ProductFormComponent extends Component {
       .finally(() => {
         // add more thing to do in here if needed.
         cartPerformance.measureFromEvent('add:user-action', event);
+
+        // ── Post-add: refresh cart drawer to show engraving sub-items ──
+        if (engravingEnabled && engravingText && window.EngravingCart) {
+          // Force a refresh (true) to ensure the newly added engraving variant shows up
+          // since the initial response.sections didn't include it.
+          window.EngravingCart.manageEngravings(true);
+        }
       });
   }
 

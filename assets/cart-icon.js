@@ -103,6 +103,6 @@ class CartIcon extends Component {
   };
 }
 
-if (!customElements.get('cart-icon')) {
-  customElements.define('cart-icon', CartIcon);
+if (!customElements.get('cart-icon-component')) {
+  customElements.define('cart-icon-component', CartIcon);
 }

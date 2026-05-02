@@ -1,0 +1,229 @@
+/* Promo Popup Styles */
+.promo-popup {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 10000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.5s ease;
+}
+
+.promo-popup.is-active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.promo-popup__overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+.promo-popup__container {
+  position: relative;
+  background: #fff;
+  width: 95%;
+  max-width: 900px;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 30px 60px rgba(0,0,0,0.4);
+  transform: translateY(50px) scale(0.9);
+  transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+  overflow: hidden;
+  border-radius: 4px;
+}
+
+.promo-popup.is-active .promo-popup__container {
+  transform: translateY(0) scale(1);
+}
+
+.promo-popup__content {
+  display: flex;
+  min-height: 500px;
+}
+
+.promo-popup__left {
+  flex: 4;
+  padding: 80px 60px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: left;
+  background: white;
+}
+
+.promo-popup__right {
+  flex: 6;
+  background: #000;
+  position: relative;
+  overflow: hidden;
+}
+
+.promo-popup__right img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: right;
+  transition: transform 2s ease;
+  filter: brightness(0.9);
+}
+
+.promo-popup.is-active .promo-popup__right img {
+  transform: scale(1.1);
+}
+
+.promo-popup__badge {
+  font-size: 12px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: #a3a3a3;
+  margin-bottom: 24px;
+  font-weight: 700;
+  display: inline-block;
+  border-bottom: 2px solid #eee;
+  padding-bottom: 4px;
+}
+
+.promo-popup__title {
+  font-size: 48px;
+  line-height: 1;
+  margin: 0 0 24px;
+  font-family: var(--font-galderglynn);
+  font-weight: 700;
+  color: #000;
+  text-transform: uppercase;
+}
+
+.promo-popup__title .highlight {
+  color: #000;
+  display: block;
+  font-size: 80px;
+  line-height: 0.9;
+  margin-top: 10px;
+}
+
+.promo-popup__text {
+  font-size: 18px;
+  color: #444;
+  margin-bottom: 48px;
+  line-height: 1.5;
+  font-weight: 400;
+}
+
+.promo-popup__actions {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.promo-popup__btn {
+  background: #000;
+  color: #fff;
+  padding: 20px 40px;
+  text-decoration: none;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  transition: all 0.4s cubic-bezier(0.19, 1, 0.22, 1);
+  display: inline-block;
+  border: 1px solid #000;
+  text-transform: uppercase;
+}
+
+.promo-popup__btn:hover {
+  background: white;
+  color: #000;
+  transform: translateY(-2px);
+  box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+}
+
+
+.promo-popup__close {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  background: #718096; /* Greyish background like in image */
+  border: none;
+  cursor: pointer;
+  z-index: 10;
+  width: 32px;
+  height: 32px;
+  color: #fff;
+  transition: all 0.3s ease;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.promo-popup__close:hover {
+  transform: rotate(90deg) scale(1.1);
+  background: #000;
+  color: #fff;
+}
+
+@media (max-width: 850px) {
+  .promo-popup__container {
+    max-height: 85vh;
+    width: 85%;
+    display: flex;
+    flex-direction: column;
+  }
+  .promo-popup__content {
+    flex-direction: column;
+    min-height: auto;
+    overflow-y: auto;
+    flex: 1;
+  }
+  .promo-popup__left {
+    padding: 50px 30px;
+    text-align: center;
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-height: 280px;
+  }
+  .promo-popup__right {
+    height: 250px;
+    flex: none;
+  }
+  .promo-popup__actions {
+    align-items: center;
+    width: 100%;
+  }
+  .promo-popup__btn {
+    width: 100%;
+    text-align: center;
+    background: white;
+    font-size: 11px;
+    color: black;
+    border: 2px solid black;
+  }
+  .promo-popup__btn:hover {
+    background: black;
+    color: white;
+  }
+  .promo-popup__title {
+    font-size: 20px;
+    margin-bottom: 10px;
+  }
+  .promo-popup__text {
+    font-size: 11px;
+    margin-bottom: 18px;
+  }
+  .promo-popup__title .highlight {
+    font-size: 40px;
+  }
+}

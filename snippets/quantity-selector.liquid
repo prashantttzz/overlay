@@ -45,7 +45,7 @@
     on:focus="/selectInputValue"
     ref="quantityInput"
     aria-label="{{ 'accessibility.quantity' | t }}"
-    {% if line_index %}
+    {% if line_index != null %}
       data-cart-line="{{ line_index | plus: 1 }}"
     {% endif %}
     {% if variant.quantity_rule.max %}

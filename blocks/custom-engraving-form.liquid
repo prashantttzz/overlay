@@ -12,6 +12,8 @@
     .engraving-option {
       margin-bottom: 1rem;
       padding: 0.75rem;
+      margin-top: 1rem;
+      width: 50%;
     }
   }
 
@@ -74,7 +76,7 @@
   }
 
   .engraving-option.is-active .engraving-option__content {
-    max-height: 150px;
+    max-height: 200px;
     opacity: 1;
     margin-top: 1.5rem;
   }
@@ -90,6 +92,9 @@
     text-transform: uppercase;
     letter-spacing: 0.1em;
     opacity: 0.5;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
   }
 
   .engraving-option__input {
@@ -108,33 +113,99 @@
     border-color: #000;
   }
 
+  .engraving-option__countdown {
+    font-weight: 400;
+    opacity: 0.8;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .engraving-option__error {
+    color: #c00;
+    font-size: 11px;
+    margin-top: 6px;
+    font-style: italic;
+    display: none;
+  }
+
   .engraving-option__hint {
     font-size: 10px;
     margin-top: 10px;
     opacity: 0.4;
     font-style: italic;
   }
+
+  .engraving-option__input-wrapper {
+    display: flex;
+    gap: 8px;
+    align-items: stretch;
+  }
+
+  .engraving-option__confirm {
+    background: #000;
+    color: #fff;
+    border: 1px solid #000;
+    padding: 0 15px;
+    font-family: var(--font-galderglynn);
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    white-space: nowrap;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .engraving-option__confirm:hover {
+    background: #333;
+    border-color: #333;
+  }
+
+  .engraving-option__confirm.is-confirmed {
+    background: #fff;
+    color: #000;
+    border-color: #000;
+    cursor: default;
+  }
+
+  .engraving-option__confirm.is-confirmed::after {
+    content: ' ✓';
+    margin-left: 4px;
+  }
 {% endstylesheet %}
 
-<div class="engraving-option" id="engraving-{{ block.id }}" data-engraving-block>
+<div class="engraving-option" id="engraving-{{ block.id }}"
+     data-engraving-block
+     data-engraving-variant-id="48572858400991"
+     data-engraving-price="25.00">
   <label class="engraving-option__header">
     <input type="checkbox" id="engraving-toggle-{{ block.id }}" class="visually-hidden" data-engraving-toggle>
     <span class="engraving-option__checkbox"></span>
     <span class="engraving-option__label">Add Engraving</span>
-    <span class="engraving-option__price">+ $10.00</span>
+    <span class="engraving-option__price">+ 25.00 AED</span>
   </label>
 
   <div class="engraving-option__content">
     <div class="engraving-option__input-group">
-      <label for="engraving-text-{{ block.id }}">Personalized Message (Max 12 chars)</label>
-      <input 
-        type="text" 
-        id="engraving-text-{{ block.id }}" 
-        class="engraving-option__input" 
-        placeholder="ENTER INITIALS OR NAME"
-        maxlength="12"
-        data-engraving-input
-      >
+      <label for="engraving-text-{{ block.id }}">
+        Personalized Message
+        <span class="engraving-option__countdown" data-engraving-countdown>30 / 30</span>
+      </label>
+      <div class="engraving-option__input-wrapper">
+        <input
+          type="text"
+          id="engraving-text-{{ block.id }}"
+          class="engraving-option__input"
+          placeholder="ENTER YOUR TEXT"
+          maxlength="30"
+          data-engraving-input
+        >
+        <button type="button" class="engraving-option__confirm" data-engraving-confirm>
+          CONFIRM
+        </button>
+      </div>
+      <p class="engraving-option__error" data-engraving-error>Please enter and confirm engraving text</p>
     </div>
     <p class="engraving-option__hint">Engraving is permanent and adds 2-3 business days to processing.</p>
   </div>
@@ -145,32 +216,96 @@
     const block = document.getElementById('engraving-{{ block.id }}');
     const toggle = block.querySelector('[data-engraving-toggle]');
     const input = block.querySelector('[data-engraving-input]');
-    
-    // Find the global overlay in the media gallery
+    const countdown = block.querySelector('[data-engraving-countdown]');
+    const errorEl = block.querySelector('[data-engraving-error]');
+    const confirmBtn = block.querySelector('[data-engraving-confirm]');
+    let isConfirmed = false;
+
+    const MAX_CHARS = 30;
+
+    // Find the global overlay in the media gallery (visual preview)
     const getGlobalOverlay = () => document.getElementById('engraving-overlay-global');
 
-    toggle.addEventListener('change', () => {
+    // Live character countdown
+    function updateCountdown() {
+      const remaining = MAX_CHARS - input.value.length;
+      countdown.textContent = remaining + ' / ' + MAX_CHARS;
+    }
+
+    function setConfirmed(state) {
+      isConfirmed = state;
+      if (state) {
+        confirmBtn.classList.add('is-confirmed');
+        confirmBtn.textContent = 'CONFIRMED';
+        block.setAttribute('data-confirmed', 'true');
+        errorEl.style.display = 'none';
+      } else {
+        confirmBtn.classList.remove('is-confirmed');
+        confirmBtn.textContent = 'CONFIRM';
+        block.removeAttribute('data-confirmed');
+      }
+    }
+
+    confirmBtn.addEventListener('click', () => {
+      const text = input.value.trim();
+      if (text) {
+        setConfirmed(true);
+      } else {
+        errorEl.style.display = 'block';
+        input.focus();
+      }
+    });
+
+    toggle.addEventListener('change', async () => {
       block.classList.toggle('is-active', toggle.checked);
       const overlay = getGlobalOverlay();
-      
-      if (overlay) {
-        overlay.style.display = toggle.checked ? 'block' : 'none';
-        if (!toggle.checked) {
-          overlay.textContent = '';
-          input.value = '';
-        } else {
-          // Force scroll to top/main image if gallery is a component
+
+      if (toggle.checked) {
+        // Show the input, focus it
+        input.focus();
+        errorEl.style.display = 'none';
+        setConfirmed(false);
+
+        // Gallery preview (keep existing UX)
+        if (overlay) {
+          overlay.style.display = 'block';
           const gallery = document.querySelector('media-gallery');
           if (gallery && gallery.slideshow) {
-             gallery.slideshow.select(0);
+            gallery.slideshow.select(0);
           }
-          // Smooth scroll to gallery for better visibility on mobile
           gallery?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+      } else {
+        // Unchecked: remove engraving from cart if it exists
+        const text = input.value.trim();
+        if (text && window.EngravingCart) {
+          await window.EngravingCart.removeEngraving(text);
+          await window.EngravingCart.refreshCartDrawer();
+        }
+
+        // Clear UI state
+        input.value = '';
+        errorEl.style.display = 'none';
+        setConfirmed(false);
+        updateCountdown();
+
+        // Hide gallery preview
+        if (overlay) {
+          overlay.style.display = 'none';
+          overlay.textContent = '';
         }
       }
     });
 
     input.addEventListener('input', () => {
+      updateCountdown();
+      setConfirmed(false); // Reset confirmation on edit
+      
+      if (input.value.trim()) {
+        errorEl.style.display = 'none';
+      }
+
+      // Update gallery preview
       const overlay = getGlobalOverlay();
       if (overlay) {
         overlay.textContent = input.value;
@@ -180,14 +315,11 @@
     input.addEventListener('keydown', (e) => {
       if (e.key === 'Enter') {
         e.preventDefault();
-        const gallery = document.querySelector('media-gallery');
-        if (gallery) {
-          gallery.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        } else {
-          window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
+        confirmBtn.click();
       }
     });
+
+    updateCountdown();
   })();
 </script>
 

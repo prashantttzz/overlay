@@ -1,14 +1,35 @@
 
 /* Custom Cart Redesign */
 
+.cart-drawer {
+  position: relative;
+  z-index: 10001;
+}
+
 .cart-drawer__dialog {
-  width: 650px;
+  width: 550px;
+  max-width: 100vw;
   overflow-x: hidden !important;
+}
+
+@media screen and (max-width: 749px) {
+  .cart-drawer__dialog {
+    width: 100%;
+  }
 }
 
 .cart-drawer__inner {
   padding: 40px;
   background: white;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+@media screen and (max-width: 749px) {
+  .cart-drawer__inner {
+    padding: 20px;
+  }
 }
 
 .cart-drawer__header {
@@ -44,16 +65,33 @@
 
 /* Cart Items */
 .cart-items__table-row {
-  grid-template-columns: 100px 1fr;
+  grid-template-columns: 80px 1fr;
   grid-template-areas: "media details";
-  gap: 20px;
-  border-bottom: none !important;
-  margin-bottom: 30px;
+  gap: 15px;
+  border-bottom: 1px solid #eee !important;
+  margin-bottom: 20px;
+  background: transparent;
+  padding: 0 0 20px 0;
+  border-radius: 0;
+}
+
+@media screen and (max-width: 749px) {
+  .cart-items__table-row {
+    grid-template-columns: 60px 1fr;
+    gap: 12px;
+  }
 }
 
 .cart-items__media {
-  width: 100px;
-  height: 120px;
+  width: 80px;
+  height: 100px;
+}
+
+@media screen and (max-width: 749px) {
+  .cart-items__media {
+    width: 60px;
+    height: 80px;
+  }
 }
 
 .cart-items__media-container {
@@ -77,42 +115,80 @@
   margin: 0;
 }
 
-.cart-items__price {
+.cart-items__details-price {
   font-weight: 400;
-  font-size: 0.9rem;
-  margin-top: 10px;
+  font-size: 0.85rem;
+  color: #000;
+  margin: 2px 0 6px 0;
+}
+
+.cart-items__actions {
   display: flex;
   align-items: center;
   gap: 15px;
+  margin-top: 15px;
 }
 
 .cart-items__remove {
-  font-size: 0.6rem;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  color: #ccc;
-  text-decoration: none;
+  font-size: 0.65rem;
+  text-transform: capitalize;
+  letter-spacing: 0.05em;
+  color: #666;
+  text-decoration: underline;
   background: none;
   border: none;
   padding: 0;
   width: auto;
   height: auto;
+  cursor: pointer;
+  margin-top: 5px;
 }
 
 .cart-items__remove:hover {
   color: #000;
 }
 
-/* Hide default quantity and icon */
 .cart-items__quantity {
-  display: none !important;
+  display: flex !important;
+  align-items: center;
+  gap: 10px;
 }
 
-.cart-items__qty-label {
-  font-size: 0.7rem;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  color: #999;
+.cart-items__quantity .quantity-selector {
+  display: flex;
+  align-items: center;
+  border: 1px solid #eee;
+  height: 32px;
+  background: #fff;
+  padding: 0 5px;
+}
+
+.cart-items__quantity .quantity-selector input {
+  width: 30px;
+  border: none;
+  text-align: center;
+  font-size: 0.8rem;
+  padding: 0;
+  background: transparent;
+  appearance: none;
+  -moz-appearance: textfield;
+}
+
+.cart-items__quantity .quantity-selector button {
+  width: 30px;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  background: transparent;
+  border: none;
+  padding: 0;
+}
+
+.cart-items__quantity .quantity-selector svg {
+  width: 10px;
+  height: 10px;
 }
 
 .cart-drawer__items,
@@ -237,8 +313,15 @@
 
 /* Summary Footer */
 .cart-drawer__summary {
-  padding: 40px 0 0 0;
+  padding: 30px 0 0 0;
   border-top: 1px solid #eee;
+  margin-top: auto;
+}
+
+@media screen and (max-width: 749px) {
+  .cart-drawer__summary {
+    padding: 20px 0 0 0;
+  }
 }
 
 .cart__summary-totals {
@@ -340,4 +423,78 @@
 
 .cart-drawer__policy-links a:hover {
   color: #000;
+}
+
+/* ── Properties List ── */
+.cart-items__variants {
+  margin: 8px 0 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.cart-items__properties {
+  display: flex !important;
+  align-items: center;
+  gap: 6px;
+  margin: 3px 0;
+}
+
+.cart-items__properties::before {
+  content: "•";
+  color: #999;
+  font-size: 8px;
+}
+
+.cart-items__properties dt,
+.cart-items__properties dd {
+  display: inline !important;
+  font-size: 0.65rem !important;
+  color: #999 !important;
+  margin: 0 !important;
+}
+
+/* ── Engraving Sub-Item in Cart Drawer ── */
+.cart-engraving-subitem {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin-top: 8px;
+  padding: 10px;
+  background: #fafafa;
+  border: 1px solid rgba(0, 0, 0, 0.03);
+}
+
+.cart-engraving-subitem__icon {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-top: 2px;
+  color: #000;
+  opacity: 0.6;
+}
+
+.cart-engraving-subitem__details {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  gap: 4px;
+}
+
+.cart-engraving-subitem__label {
+  color: #000;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-size: 10px;
+  font-weight: 500;
+  opacity: 0.8;
+}
+
+.cart-engraving-subitem__price {
+  color: #999;
+  font-weight: 400;
+  white-space: nowrap;
+  font-size: 9px;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
 }

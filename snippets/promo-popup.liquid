@@ -1,0 +1,33 @@
+{% comment %}
+  Promo Popup Snippet
+  Displays a discount incentive when landing (10s) or adding first item to cart.
+{% endcomment %}
+
+<div id="PromoPopup" class="promo-popup" aria-hidden="true">
+  <div class="promo-popup__overlay"></div>
+  <div class="promo-popup__container">
+    <button type="button" class="promo-popup__close" aria-label="Close popup">
+      <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M15 5L5 15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M5 5L15 15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </button>
+    
+    <div class="promo-popup__content">
+      <div class="promo-popup__left">
+        <div class="promo-popup__badge">EXCLUSIVE OFFER</div>
+        <h2 class="promo-popup__title">BUY 3 GET<br><span class="highlight">40% OFF</span></h2>
+        <p class="promo-popup__text" data-promo-text>Add 3 more products to avail 40% discount</p>
+        
+        <div class="promo-popup__actions">
+          <a href="/collections/all" class="promo-popup__btn">SHOP THE COLLECTION</a>
+        </div>
+      </div>
+      
+      <div class="promo-popup__right">
+        <img src="https://cdn.shopify.com/s/files/1/0774/2894/9215/files/h.jpg?v=1777629694" alt="Promo Image" loading="lazy">
+      </div>
+    </div>
+  </div>
+</div>
+

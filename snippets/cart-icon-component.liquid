@@ -1,7 +1,7 @@
 {%- doc -%}
   Renders the cart icon, which displays the number of items in the cart via a bubble.
 {%- enddoc -%}
-<cart-icon
+<cart-icon-component
   class="
     header-actions__cart-icon
     {% unless cart == empty %} header-actions__cart-icon--has-cart{% endunless %}
@@ -16,10 +16,10 @@
   </span>
 
   {% render 'cart-bubble', limit: 100, live_region: true, test_id: test_id %}
-</cart-icon>
+</cart-icon-component>
 
 {% stylesheet %}
-  cart-icon:has(.cart-bubble__text-count:empty) {
+  cart-icon-component:has(.cart-bubble__text-count:empty) {
     --cart-bubble-size: 10px;
     --cart-bubble-top: 9px;
     --cart-bubble-right: 9px;
