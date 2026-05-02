@@ -18,9 +18,7 @@ class CartDrawerComponent extends DialogComponent {
   }
 
   #handleCartAdd = () => {
-    if (this.hasAttribute('auto-open')) {
-      this.showDialog();
-    }
+    this.showDialog();
   };
 
   open() {

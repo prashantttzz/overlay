@@ -72,21 +72,25 @@
       {% render 'quick-add-modal' %}
     {% endif %}
 
+
     {% section 'cart-drawer' %}
 
-    {% render 'promo-popup' %}
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    {% render 'discount-unlocked-popup' %}
+    {% comment %} {% render 'promo-popup' %} {% endcomment %}
+
 
     <script>
       document.addEventListener('DOMContentLoaded', function() {
+        // Redirect cart page to home (effectively "deleting" the cart page in favor of drawer)
+        if (window.location.pathname.endsWith('/cart')) {
+          window.location.replace('/');
+        }
+
         const revealCallback = (entries, observer) => {
           entries.forEach(entry => {
             if (entry.isIntersecting) {
               entry.target.classList.add('is-visible');
-              // We can unobserve if we want the animation to happen only once
-              // observer.unobserve(entry.target);
-            } else {
-              // Remove class if you want it to re-animate when scrolling back (crazy effect)
-              // entry.target.classList.remove('is-visible');
             }
           });
         };

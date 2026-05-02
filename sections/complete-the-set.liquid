@@ -71,17 +71,25 @@
                 {% endfor %}
               {% endif %}
             </div>
-            <form method="post" action="/cart/add" class="curated-selection__form">
-              {%- assign variant = related_product.selected_or_first_available_variant | default: related_product.variants.first -%}
-              <input type="hidden" name="id" value="{{ variant.id }}">
-              <button type="submit" class="curated-selection__atc-button" {% unless variant.available %}disabled{% endunless %}>
-                {% if variant.available %}
-                  ADD TO COLLECTION
-                {% else %}
-                  SOLD OUT
-                {% endif %}
-              </button>
-            </form>
+            <product-form-component
+              data-section-id="{{ section.id }}"
+              data-product-id="{{ related_product.id }}"
+              on:submit="/handleSubmit"
+            >
+              <div ref="liveRegion" class="visually-hidden"></div>
+              <form method="post" action="/cart/add" class="curated-selection__form">
+                {%- assign variant = related_product.selected_or_first_available_variant | default: related_product.variants.first -%}
+                <input type="hidden" name="id" value="{{ variant.id }}" ref="variantId">
+                <button type="submit" class="curated-selection__atc-button" {% unless variant.available %}disabled{% endunless %}>
+                  {% if variant.available %}
+                    ADD TO COLLECTION
+                  {% else %}
+                    SOLD OUT
+                  {% endif %}
+                </button>
+                <span class="product-form-text__error hidden" ref="addToCartTextError"></span>
+              </form>
+            </product-form-component>
           </div>
         </div>
       {% endfor %}

@@ -355,7 +355,11 @@
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.2em;
-  color: #ccc;
+  color: #999;
+}
+
+.cart__total-label.is-total {
+  color: #000;
 }
 
 .cart__total-value {
@@ -498,3 +502,60 @@
   letter-spacing: 0.05em;
   text-transform: uppercase;
 }
+
+.cart-drawer__summary .cart__original-total {
+  align-items: flex-start !important;
+  margin-bottom: 15px;
+}
+
+.cart__price-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 4px;
+}
+
+.cart__original-total-value {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #000;
+}
+
+.cart__summary-discounts {
+  width: 100%;
+}
+
+.cart__discount {
+  display: flex !important;
+  justify-content: flex-end !important;
+  align-items: center !important;
+  gap: 6px;
+  color: #000;
+  margin-top: 2px;
+}
+
+.cart__discount-label {
+  font-size: 0.65rem !important;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.cart__discount-label svg {
+  width: 10px;
+  height: 10px;
+}
+
+.cart__discount-value {
+  font-size: 0.65rem !important;
+  font-weight: 600;
+}
+
+.cart-drawer__summary .cart__total-container {
+  margin-top: 15px;
+  padding-top: 15px;
+  border-top: 1px solid #eee !important;
+}
+

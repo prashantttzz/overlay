@@ -7,28 +7,25 @@
 <header-actions
   {{- block.shopify_attributes -}}
 >
+  {% assign item_count = 0 %}
+  {% for item in cart.items %}
+    {% if item.variant_id != 48572858400991 %}
+      {% assign item_count = item_count | plus: item.quantity %}
+    {% endif %}
+  {% endfor %}
+
   {% if shop.customer_accounts_enabled %}
     {% render 'account-popover' %}
     {% render 'account-drawer' %}
   {% endif %}
 
-  {% if settings.cart_type == 'drawer' and template.name != 'cart' %}
-    <button
-      class="button header-actions__action action__cart button-unstyled"
-      on:click="#cart-drawer/open"
-      aria-label="{{ 'accessibility.open_cart_drawer' | t }} {{ 'accessibility.cart_count' | t }}: {{ cart.item_count }}"
-    >
-      {% render 'cart-icon-component' %}
-    </button>
-  {% else %}
-    <a
-      href="{{ routes.cart_url }}"
-      class="header-actions__action action__cart"
-      aria-label="{{ 'accessibility.cart' | t }} {{ 'accessibility.cart_count' | t }}: {{ cart.item_count }}"
-    >
-      {% render 'cart-icon-component' %}
-    </a>
-  {% endif %}
+  <button
+    class="button header-actions__action action__cart button-unstyled"
+    on:click="#cart-drawer/open"
+    aria-label="{{ 'accessibility.open_cart_drawer' | t }} {{ 'accessibility.cart_count' | t }}: {{ item_count }}"
+  >
+    {% render 'cart-icon-component' %}
+  </button>
 </header-actions>
 
 {% stylesheet %}
@@ -146,7 +143,6 @@
     display: flex;
     flex-direction: column;
     padding-inline: var(--cart-drawer-padding);
-    overflow-y: auto;
 
     @media screen and (min-width: 750px) {
       padding-inline: var(--cart-drawer-padding-desktop);

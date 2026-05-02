@@ -67,7 +67,13 @@
           >
             <div class="cart-drawer__heading">
               <span>SHOPPING BAG</span>
-              <span class="cart-bubble">{{ cart.item_count | prepend: '0' | slice: -2, 2 }} ITEMS</span>
+              {% assign item_count = 0 %}
+              {% for item in cart.items %}
+                {% if item.variant_id != 48572858400991 %}
+                  {% assign item_count = item_count | plus: item.quantity %}
+                {% endif %}
+              {% endfor %}
+              <span class="cart-bubble">{{ item_count | prepend: '0' | slice: -2, 2 }} ITEMS</span>
             </div>
 
             <button
@@ -87,17 +93,21 @@
             aria-label="{{ 'accessibility.cart' | t }}"
             style="--header-height: 60px;"
           >
+
             <div
               class="cart-drawer__items"
             >
               {% render 'cart-products' %}
             </div>
 
+            {% render 'cart-promo-card' %}
+
             <div
               class="cart-drawer__summary"
             >
               {% render 'cart-summary' %}
             </div>
+
           </div>
         {%- endif -%}
       </cart-items-component>
@@ -155,6 +165,7 @@
     height: calc(100% - var(--header-height));
     display: flex;
     flex-direction: column;
+    overflow-y: auto;
   }
 
   .cart-drawer__summary {

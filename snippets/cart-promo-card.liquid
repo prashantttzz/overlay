@@ -1,0 +1,87 @@
+
+<div class="cart-promo-card" id="CartPromoCard">
+  <div class="cart-promo-card__content">
+    <div class="cart-promo-card__image">
+      <img src="https://cdn.shopify.com/s/files/1/0774/2894/9215/files/h.jpg?v=1777629694" alt="Promo Image" loading="lazy">
+    </div>
+
+    <div class="cart-promo-card__info">
+      <h3 class="cart-promo-card__title">BUY 3, GET 40% OFF</h3>
+      <p class="cart-promo-card__text" data-cart-promo-text>Add 3 more to unlock.</p>
+    </div>
+  </div>
+</div>
+
+<style>
+  .cart-promo-card {
+    margin: 15px;
+    background: linear-gradient(145deg, #ffffff, #fcfcfc);
+    border: 1px solid rgba(0,0,0,0.03);
+    overflow: hidden;
+    display: none; 
+    box-shadow: 0 10px 25px rgba(0,0,0,0.04), 0 2px 5px rgba(0,0,0,0.02);
+    position: relative;
+  }
+
+  .cart-promo-card::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.8), transparent);
+    z-index: 2;
+  }
+
+  .cart-drawer:not(.cart-drawer--empty) .cart-promo-card {
+    display: block;
+  }
+
+  .cart-promo-card__content {
+    display: flex;
+    align-items: center;
+    min-height: 80px;
+  }
+
+  .cart-promo-card__image {
+    flex: 0 0 80px;
+    height: 80px;
+    background: #000;
+  }
+
+  .cart-promo-card__image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .cart-promo-card__info {
+    flex: 1;
+    padding: 12px 15px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .cart-promo-card__title {
+    font-size: 13px;
+    margin: 0 0 4px;
+    font-family: var(--font-galderglynn);
+    font-weight: 700;
+    line-height: 1.2;
+    text-transform: uppercase;
+    color: #000;
+    letter-spacing: 0.05em;
+  }
+
+  .cart-promo-card__text {
+    font-size: 10px;
+    margin: 0;
+    line-height: 1.2;
+    color: #999;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+  }
+</style>
+

@@ -209,6 +209,19 @@
         
         const responseData = await res.json();
         
+        // Calculate visible count (excluding engravings)
+        let visibleCount = 0;
+        if (responseData.items) {
+          responseData.items.forEach((item) => {
+            if (item.variant_id !== ENGRAVING_VARIANT_ID) {
+              visibleCount += item.quantity;
+            }
+          });
+        } else {
+          // Fallback if items not in response (though update.js should have it)
+          visibleCount = responseData.item_count;
+        }
+
         // Notify other components
         document.dispatchEvent(new CustomEvent('cart:update', {
           bubbles: true,
@@ -216,7 +229,7 @@
             resource: responseData,
             data: { 
               sections: responseData.sections || {},
-              itemCount: responseData.item_count 
+              itemCount: visibleCount 
             } 
           }
         }));
@@ -347,18 +360,23 @@
           }
         });
 
-        // Update any cart bubble/count elements
-        const bubbles = document.querySelectorAll('.cart-bubble');
-        bubbles.forEach((el) => {
-          const formatted = String(visibleCount).padStart(2, '0') + ' ITEMS';
-          el.textContent = formatted;
-        });
+        // 1. Update the Cart Drawer heading specifically
+        const drawerHeadingBubble = document.querySelector('.cart-drawer__heading .cart-bubble');
+        if (drawerHeadingBubble) {
+          drawerHeadingBubble.textContent = String(visibleCount).padStart(2, '0') + ' ITEMS';
+        }
 
-        // Update cart icon count (the small badge)
-        const cartIcons = document.querySelectorAll('cart-icon');
-        cartIcons.forEach((icon) => {
-          const countEl = icon.querySelector('[data-cart-count]');
-          if (countEl) countEl.textContent = visibleCount;
+        // 2. Update the Header Cart Icon badge (numeric bubble)
+        // Target the specific count element to preserve badge styling (background, etc.)
+        const headerBubbles = document.querySelectorAll('.header-actions__cart-icon [ref="cartBubbleCount"]');
+        headerBubbles.forEach((el) => {
+          el.textContent = visibleCount;
+          // Toggle visibility if count is 0
+          el.classList.toggle('hidden', visibleCount === 0);
+          const bubbleContainer = el.closest('.cart-bubble');
+          if (bubbleContainer) {
+            bubbleContainer.classList.toggle('visually-hidden', visibleCount === 0);
+          }
         });
       } catch (e) {
         // Non-critical, fail silently
