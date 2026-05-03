@@ -244,10 +244,9 @@
           }
         }
 
-        // Refresh UI
-        if (responseData.sections) {
-          this.renderSections(responseData.sections);
-        } else {
+        // Let the theme's cart listeners morph the returned sections.
+        // Only fall back to a manual refresh if the response didn't include them.
+        if (!responseData.sections) {
           await this.refreshCartDrawer();
         }
       } else {
@@ -263,9 +262,14 @@
       Object.keys(sections).forEach(id => {
         const html = sections[id];
         const currentSection = document.querySelector(`[data-section-id="${id}"]`);
-        
-        if (currentSection && html) {
-          currentSection.innerHTML = html;
+
+        if (!currentSection || !html) return;
+
+        const newDoc = new DOMParser().parseFromString(html, 'text/html');
+        const newSection = newDoc.querySelector(`[data-section-id="${id}"]`);
+
+        if (newSection) {
+          currentSection.innerHTML = newSection.innerHTML;
         }
       });
       this.updateCartBubble();
@@ -285,37 +289,18 @@
 
       if (sectionIds.length === 0) return;
 
-      // Fetch updated section HTML
+      // Fetch updated section HTML from Shopify's Section Rendering API.
       const params = new URLSearchParams();
       sectionIds.forEach((id) => params.append('sections', id));
 
       try {
-        const res = await fetch('/cart.js?' + params.toString(), {
+        const res = await fetch(window.location.pathname + '?' + params.toString(), {
           credentials: 'same-origin',
-          headers: { 'Content-Type': 'application/json' },
+          headers: { 'X-Requested-With': 'XMLHttpRequest' },
         });
-        const cartData = await res.json();
+        const sectionData = await res.json();
 
-        // If the theme exposes a morph/render function, use it
-        // Otherwise dispatch a cart update event to trigger re-render
-        if (cartData.sections) {
-          sectionIds.forEach((id) => {
-            if (cartData.sections[id]) {
-              const parser = new DOMParser();
-              const newDoc = parser.parseFromString(cartData.sections[id], 'text/html');
-              const currentSection = document.querySelector(
-                '[data-section-id="' + id + '"]'
-              );
-              if (currentSection && currentSection.closest('.shopify-section')) {
-                const sectionEl = currentSection.closest('.shopify-section');
-                const newSectionContent = newDoc.querySelector('.shopify-section');
-                if (sectionEl && newSectionContent) {
-                  sectionEl.innerHTML = newSectionContent.innerHTML;
-                }
-              }
-            }
-          });
-        }
+        this.renderSections(sectionData);
       } catch (e) {
         // Fallback: force page section re-render via the theme's section renderer
         try {

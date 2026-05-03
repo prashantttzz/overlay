@@ -101,31 +101,7 @@
     line-height: 1.2;
   }
 
-  .mood-gallery__cta {
-    margin-top: 250px; 
-    text-align: center;
-    position: relative;
-    z-index: 10;
-  }
 
-  .mood-gallery__button {
-    font-size: 13px;
-    letter-spacing: 0.4em;
-    text-transform: uppercase;
-    color: #000;
-    text-decoration: none;
-    padding: 1.5rem 4.5rem;
-    border: 1px solid rgba(0, 0, 0, 0.15);
-    transition: all 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
-    display: inline-block;
-    white-space: nowrap; /* Prevent text wrapping */
-  }
-
-  .mood-gallery__button:hover {
-    background: #000;
-    color: #fff;
-    border-color: #000;
-  }
 
   @media (max-width: 768px) {
     #editorial-mood-{{ section.id }} {
@@ -146,14 +122,7 @@
       width: 100%;
       max-width: 400px;
     }
-    .mood-gallery__cta {
-      margin-top: 60px;
-    }
-    .mood-gallery__button {
-      padding: 1rem 2.5rem; /* Adjusted for better fit on narrow screens */
-      font-size: 11px;
-      letter-spacing: 0.3em;
-    }
+
   }
 {%- endstyle -%}
 
@@ -199,11 +168,7 @@
       {%- endif -%}
     </div>
 
-    <div class="mood-gallery__cta">
-      <a href="{{ section.settings.button_link | default: routes.all_products_collection_url }}" class="mood-gallery__button">
-        {{ section.settings.button_label }}
-      </a>
-    </div>
+
 
   </div>
 </section>
@@ -275,17 +240,7 @@
       "id": "collection",
       "label": "Collection"
     },
-    {
-      "type": "text",
-      "id": "button_label",
-      "label": "Button Label",
-      "default": "EXPLORE ALL ARCHIVES"
-    },
-    {
-      "type": "url",
-      "id": "button_link",
-      "label": "Button Link"
-    }
+
   ],
   "presets": [
     {

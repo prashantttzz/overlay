@@ -93,21 +93,23 @@
             aria-label="{{ 'accessibility.cart' | t }}"
             style="--header-height: 60px;"
           >
-
-            <div
-              class="cart-drawer__items"
-            >
-              {% render 'cart-products' %}
+            <div class="cart-drawer__items-scroll">
+              <div
+                class="cart-drawer__items"
+              >
+                {% render 'cart-products' %}
+              </div>
             </div>
 
-            {% render 'cart-promo-card' %}
+            <div class="cart-drawer__footer">
+              {% render 'cart-promo-card' %}
 
-            <div
-              class="cart-drawer__summary"
-            >
-              {% render 'cart-summary' %}
+              <div
+                class="cart-drawer__summary"
+              >
+                {% render 'cart-summary' %}
+              </div>
             </div>
-
           </div>
         {%- endif -%}
       </cart-items-component>
@@ -165,13 +167,30 @@
     height: calc(100% - var(--header-height));
     display: flex;
     flex-direction: column;
+    min-height: 0;
+    overflow: hidden;
+  }
+
+  .cart-drawer__items-scroll {
+    flex: 1 1 auto;
+    min-height: 0;
     overflow-y: auto;
+    overscroll-behavior: contain;
+    padding-right: 4px;
+  }
+
+  .cart-drawer__footer {
+    flex: 0 0 auto;
+    background-color: var(--color-background);
+    padding-top: 16px;
+    border-top: 1px solid #eee;
   }
 
   .cart-drawer__summary {
     background-color: var(--color-background);
-    position: sticky;
-    bottom: 0;
-    z-index: 1;
+  }
+
+  .cart-drawer__items {
+    padding-bottom: 8px;
   }
 {% endstylesheet %}

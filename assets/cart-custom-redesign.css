@@ -19,23 +19,23 @@
 }
 
 .cart-drawer__inner {
-  padding: 40px;
-  background: white;
+  padding: 40px 40px 20px 40px;
   height: 100%;
   display: flex;
   flex-direction: column;
+  min-height: 0;
 }
 
 @media screen and (max-width: 749px) {
   .cart-drawer__inner {
-    padding: 20px;
+    padding: 20px 20px 10px 20px;
   }
 }
 
 .cart-drawer__header {
   padding: 0 0 30px 0;
   border-bottom: 1px solid #eee;
-  margin-bottom: 30px;
+  margin-bottom: 5px;
   align-items: flex-start;
 }
 
@@ -191,7 +191,12 @@
   height: 10px;
 }
 
+.cart-items-component {
+  min-height: 0;
+}
+
 .cart-drawer__items,
+.cart-drawer__items-scroll,
 .cart-drawer__content,
 .cart-drawer__inner,
 .cart-drawer__dialog {
@@ -200,6 +205,7 @@
 }
 
 .cart-drawer__items::-webkit-scrollbar,
+.cart-drawer__items-scroll::-webkit-scrollbar,
 .cart-drawer__content::-webkit-scrollbar,
 .cart-drawer__inner::-webkit-scrollbar,
 .cart-drawer__dialog::-webkit-scrollbar {
@@ -208,8 +214,8 @@
 
 /* Bespoke Services Section */
 .cart-drawer__bespoke {
-  margin-top: 40px;
-  padding-top: 40px;
+  /* margin-top: 40px; */
+  /* padding-top: 40px; */
   border-top: 1px solid #eee;
 }
 
@@ -232,7 +238,6 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 15px;
 }
 
 .bespoke-service-header h4 {
@@ -313,15 +318,19 @@
 
 /* Summary Footer */
 .cart-drawer__summary {
-  padding: 30px 0 0 0;
-  border-top: 1px solid #eee;
-  margin-top: auto;
+  padding: 0;
+  border-top: 0;
+  margin-top: 0;
 }
 
 @media screen and (max-width: 749px) {
   .cart-drawer__summary {
-    padding: 20px 0 0 0;
+    padding: 0;
   }
+}
+
+.cart-drawer__footer {
+  box-shadow: 0 -10px 24px rgba(255, 255, 255, 0.96);
 }
 
 .cart__summary-totals {
@@ -372,6 +381,7 @@
   display: flex;
   flex-direction: column;
   gap: 0 !important;
+  margin-top: 4px;
 }
 
 .cart__checkout-button {
@@ -387,7 +397,7 @@
   align-items: center !important;
   justify-content: center !important;
   transition: opacity 0.3s ease !important;
-  margin-bottom: 0 !important;
+  margin-top: -25px !important;
 }
 
 .cart__checkout-button:hover {
@@ -399,7 +409,7 @@
   flex-direction: column;
   align-items: center;
   gap: 15px;
-  margin-top: 15px;
+  margin-top: 0px;
 }
 
 .tax-note {
@@ -554,8 +564,8 @@
 }
 
 .cart-drawer__summary .cart__total-container {
-  margin-top: 15px;
-  padding-top: 15px;
+  margin-top: 5px;
+  padding-top: 5px;
   border-top: 1px solid #eee !important;
 }
 

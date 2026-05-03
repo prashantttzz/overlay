@@ -139,7 +139,7 @@
   font-weight: 500 !important;
   letter-spacing: -0.01em !important;
   text-transform: uppercase !important;
-  margin: -1rem 0 1.5rem 0 !important;
+  margin: -1rem 0 0.5rem 0 !important;
   line-height: 1.1 !important;
   white-space: nowrap !important;
   overflow: hidden;
@@ -199,7 +199,7 @@
   flex-direction: column;
   width: 100vw;
   justify-content: flex-start;
-  gap: 1.5rem;
+  gap: 0.75rem;
   position: relative !important;
   align-self: flex-start !important;
 }
@@ -264,22 +264,42 @@
 }
 
 /* Price Style */
+.product-information--redesign .price,
+.product-information--redesign .compare-at-price {
+  font-weight: 300 !important;
+  letter-spacing: -0.02em;
+}
+
 .product-information--redesign .price {
   font-size: 1rem !important;
-  font-weight: 300 !important;
-  display: block;
-  margin: 20px 0;
+  display: inline-block;
+  margin: 0;
   color: #000 !important;
-  letter-spacing: -0.02em;
+}
+
+.product-information--redesign .compare-at-price {
+  font-size: 0.8rem !important;
+  opacity: 0.3 !important;
+  text-decoration: line-through;
+  color: #999 !important;
+  display: inline-block;
 }
 
 @media screen and (min-width: 1025px) {
   .product-information--redesign .price {
-    font-size: 2rem !important;
+    font-size: 2.2rem !important;
+  }
+  .product-information--redesign .compare-at-price {
+    font-size: 1.2rem !important;
   }
 }
 
 .product-information--redesign .price__container {
+  display: flex;
+  flex-direction: row;
+  align-items: baseline;
+  gap: 15px;
+  margin: 0;
   justify-content: flex-start !important;
 }
 

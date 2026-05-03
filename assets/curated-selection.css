@@ -1,6 +1,10 @@
 .curated-selection {
   display: block;
   padding: 60px var(--page-margin);
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  overflow: hidden;
 }
 
 .curated-selection__header {
@@ -68,6 +72,8 @@
 .curated-selection__carousel-container {
   width: 100%;
   overflow: hidden;
+  max-width: 100%;
+  min-width: 0;
 }
 
 .curated-selection__carousel {
@@ -78,6 +84,10 @@
   scrollbar-width: none !important; /* Firefox */
   -ms-overflow-style: none !important; /* IE/Edge */
   padding-bottom: 20px; /* Optional: Space for potential shadows */
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
 }
 
 .curated-selection__carousel::-webkit-scrollbar {
@@ -91,6 +101,8 @@
   scroll-snap-align: start;
   display: flex;
   flex-direction: column;
+  min-width: 0;
+  box-sizing: border-box;
 }
 
 @media (min-width: 1024px) {
@@ -213,4 +225,3 @@
   color: #999;
   cursor: not-allowed;
 }
-

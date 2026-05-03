@@ -14,10 +14,13 @@
 
 <style>
   .cart-promo-card {
-    margin: 15px;
+    margin: 15px 0 10px;
     background: linear-gradient(145deg, #ffffff, #fcfcfc);
     border: 1px solid rgba(0,0,0,0.03);
     overflow: hidden;
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
     display: none; 
     box-shadow: 0 10px 25px rgba(0,0,0,0.04), 0 2px 5px rgba(0,0,0,0.02);
     position: relative;
@@ -42,12 +45,16 @@
     display: flex;
     align-items: center;
     min-height: 80px;
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
   }
 
   .cart-promo-card__image {
     flex: 0 0 80px;
     height: 80px;
     background: #000;
+    min-width: 0;
   }
 
   .cart-promo-card__image img {
@@ -58,10 +65,13 @@
 
   .cart-promo-card__info {
     flex: 1;
+    min-width: 0;
+    max-width: calc(100% - 80px);
     padding: 12px 15px;
     display: flex;
     flex-direction: column;
     justify-content: center;
+    box-sizing: border-box;
   }
 
   .cart-promo-card__title {
@@ -73,6 +83,7 @@
     text-transform: uppercase;
     color: #000;
     letter-spacing: 0.05em;
+    overflow-wrap: anywhere;
   }
 
   .cart-promo-card__text {
@@ -82,6 +93,29 @@
     color: #999;
     text-transform: uppercase;
     letter-spacing: 0.02em;
+    overflow-wrap: anywhere;
+  }
+
+  @media screen and (max-width: 749px) {
+    .cart-promo-card {
+      margin: 12px 0 12px;
+      box-shadow: 0 6px 18px rgba(0,0,0,0.04), 0 1px 3px rgba(0,0,0,0.02);
+    }
+
+    .cart-promo-card__content {
+      align-items: stretch;
+      min-height: 0;
+    }
+
+    .cart-promo-card__image {
+      flex-basis: 72px;
+      height: auto;
+      min-height: 72px;
+    }
+
+    .cart-promo-card__info {
+      max-width: calc(100% - 72px);
+      padding: 10px 12px;
+    }
   }
 </style>
-

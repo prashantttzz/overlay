@@ -19,36 +19,24 @@
   <div class="curated-selection__carousel-container">
     <div class="curated-selection__carousel">
       {%- liquid
-        assign current_product = product
         assign products = section.settings.collection.products
         if section.settings.collection == blank
           assign products = collections.all.products
         endif
-        assign displayed_count = 0
       -%}
 
-      {% for related_product in products %}
-        {% if related_product.id == current_product.id %}
-          {% continue %}
-        {% endif %}
-        
-        {% if displayed_count >= 10 %}
-          {% break %}
-        {% endif %}
-        
-        {% assign displayed_count = displayed_count | plus: 1 %}
-
+      {% for product in products %}
         <div class="curated-selection__item">
-          <a href="{{ related_product.url }}" class="curated-selection__image-wrapper">
-            <img src="{{ related_product.featured_image | img_url: '600x' }}" alt="{{ related_product.title }}" loading="lazy" width="600" height="600">
+          <a href="{{ product.url }}" class="curated-selection__image-wrapper">
+            <img src="{{ product.featured_image | img_url: '600x' }}" alt="{{ product.title }}" loading="lazy" width="600" height="600">
           </a>
           <div class="curated-selection__info">
             <div class="curated-selection__info-top">
-              <a href="{{ related_product.url }}" class="curated-selection__product-title">{{ related_product.title }}</a>
-              <span class="curated-selection__price">{{ related_product.price | money_without_trailing_zeros }}</span>
+              <a href="{{ product.url }}" class="curated-selection__product-title">{{ product.title }}</a>
+              <span class="curated-selection__price">{{ product.price | money_without_trailing_zeros }}</span>
             </div>
             <div class="curated-selection__tags">
-              {% assign description_text = related_product.description | strip_html %}
+              {% assign description_text = product.description | strip_html %}
               {% assign lines = description_text | newline_to_br | split: '<br />' %}
               {% assign extracted_notes = '' %}
               
@@ -71,50 +59,9 @@
                 {% endfor %}
               {% endif %}
             </div>
-            <product-form-component
-              data-section-id="{{ section.id }}"
-              data-product-id="{{ related_product.id }}"
-              on:submit="/handleSubmit"
-            >
-              <div ref="liveRegion" class="visually-hidden"></div>
-              <form method="post" action="/cart/add" class="curated-selection__form">
-                {%- assign variant = related_product.selected_or_first_available_variant | default: related_product.variants.first -%}
-                <input type="hidden" name="id" value="{{ variant.id }}" ref="variantId">
-                <button type="submit" class="curated-selection__atc-button" {% unless variant.available %}disabled{% endunless %}>
-                  {% if variant.available %}
-                    ADD TO COLLECTION
-                  {% else %}
-                    SOLD OUT
-                  {% endif %}
-                </button>
-                <span class="product-form-text__error hidden" ref="addToCartTextError"></span>
-              </form>
-            </product-form-component>
           </div>
         </div>
       {% endfor %}
-
-      {% if products == blank or products.size == 0 %}
-        {% for i in (1..5) %}
-          <div class="curated-selection__item">
-            <div class="curated-selection__image-wrapper" style="background: #f4f4f4;">
-            </div>
-            <div class="curated-selection__info">
-              <div class="curated-selection__info-top">
-                <h3 class="curated-selection__product-title">PRODUCT NAME</h3>
-                <span class="curated-selection__price">$180</span>
-              </div>
-              <div class="curated-selection__tags">
-                <span class="curated-selection__tag">NOTE 1</span>
-                <span class="curated-selection__tag">NOTE 2</span>
-              </div>
-              <div class="curated-selection__form">
-                <button type="button" class="curated-selection__atc-button">ADD TO COLLECTION</button>
-              </div>
-            </div>
-          </div>
-        {% endfor %}
-      {% endif %}
     </div>
   </div>
 </curated-selection>
@@ -147,7 +94,7 @@
 
 {% schema %}
 {
-  "name": "Complete The Set",
+  "name": "Co  mplete The Set",
   "settings": [
     {
       "type": "text",

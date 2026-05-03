@@ -74,16 +74,19 @@
         color-{{ settings.drawer_color_scheme }}
       "
     >
-      <button
-        class="button button-unstyled close-button menu-drawer__close-button"
-        type="button"
-        aria-label="{{ 'actions.close' | t }}"
-        on:click="/close"
-      >
-        <span class="svg-wrapper header-drawer-icon header-drawer-icon--close">
-          {{- 'icon-close.svg' | inline_asset_content -}}
-        </span>
-      </button>
+      <div class="menu-drawer__header-overlay">
+        <span class="menu-drawer__logo">OVERLAY</span>
+        <button
+          class="button button-unstyled close-button menu-drawer__close-button"
+          type="button"
+          aria-label="{{ 'actions.close' | t }}"
+          on:click="/close"
+        >
+          <span class="svg-wrapper header-drawer-icon header-drawer-icon--close">
+            {{- 'icon-close.svg' | inline_asset_content -}}
+          </span>
+        </button>
+      </div>
       <nav
         class="menu-drawer__navigation"
         style="
@@ -635,29 +638,32 @@
         </div>
       {% endif %}
 
-      {%- comment -%} Custom Extra Info for Mobile Menu {%- endcomment -%}
-      <div class="menu-drawer__extra-info reveal reveal--fade-up reveal--stagger-4">
-        <div class="menu-drawer__extra-header">
-          <div class="menu-drawer__extra-divider"></div>
-        </div>
+      <div class="menu-drawer__dotted-divider"></div>
+
+      <div class="menu-drawer__extra-info menu-drawer__animated-element" style="--menu-drawer-animation-index: {{ animation_index | plus: 1 }};">
         <div class="menu-drawer__contact-info">
-          <a href="mailto:studio@overlay.com">studio@overlay.com</a>
-          <span>Available worldwide</span>
+          <a href="/pages/contact">Contact us</a>
+          {%- if shop.customer_accounts_enabled -%}
+            <a href="{%- if customer -%}{{ routes.account_url }}{%- else -%}{{ routes.account_login_url }}{%- endif -%}" class="menu-drawer__account-link">
+              {%- if customer -%}Account{%- else -%}Account{%- endif -%}
+            </a>
+          {%- endif -%}
+          <a href="/pages/faq">FAQ</a>
         </div>
         <div class="menu-drawer__socials" aria-label="Social links">
-          <a href="https://example.com/instagram" aria-label="Instagram">
+          <a href="#" aria-label="Instagram">
             <svg viewBox="0 0 20 20" aria-hidden="true" focusable="false">
               {% render 'icon', icon: 'instagram' %}
             </svg>
           </a>
-          <a href="https://example.com/tiktok" aria-label="TikTok">
-            <svg viewBox="0 0 20 20" aria-hidden="true" focusable="false">
-              {% render 'icon', icon: 'tiktok' %}
-            </svg>
-          </a>
-          <a href="https://example.com/whatsapp" aria-label="WhatsApp">
+          <a href="#" aria-label="WhatsApp">
             <svg viewBox="0 0 20 20" aria-hidden="true" focusable="false">
               {% render 'icon', icon: 'whatsapp' %}
+            </svg>
+          </a>
+          <a href="#" aria-label="TikTok">
+            <svg viewBox="0 0 20 20" aria-hidden="true" focusable="false">
+              {% render 'icon', icon: 'tiktok' %}
             </svg>
           </a>
         </div>
@@ -731,30 +737,62 @@
 
   .menu-drawer {
     position: fixed;
-    transform: translate3d(-1.75rem, 0, 0);
+    transform: translate3d(-100%, 0, 0);
     visibility: hidden;
     opacity: 0;
-    height: var(--drawer-height);
-    width: var(--drawer-width);
-    max-width: var(--drawer-max-width);
+    height: 100dvh;
+    width: 90vw;
+    max-width: 90vw;
     z-index: var(--layer-menu-drawer);
     left: 0;
     top: 0;
     padding: 0;
-    background-color: var(--color-background);
-    overflow: auto;
+    background-color: #ffffff;
+    overflow-x: hidden;
+    overflow-y: auto;
     display: flex;
-    border-right: var(--style-border-drawer);
-    box-shadow: var(--shadow-drawer);
     flex-direction: column;
+    transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.6s ease, opacity 0.6s ease;
+  }
 
-    @media screen and (min-width: 750px) {
-      width: 25rem;
-    }
+  .menu-open > .menu-drawer {
+    transform: translate3d(0, 0, 0);
+    visibility: visible;
+    opacity: 1;
+  }
 
-    .header__drawer--desktop & {
-      height: 100vh;
-    }
+  .menu-drawer__header-overlay {
+    padding: 15px 25px 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+    border-bottom: 1px solid rgba(0,0,0,0.03);
+  }
+
+  .menu-drawer__logo {
+    font-family: var(--font-heading-family);
+    font-weight: 800;
+    font-size: 1.4rem;
+    letter-spacing: 0.1em;
+    color: #000;
+    text-transform: uppercase;
+    text-align: left;
+    margin: 0;
+  }
+
+  .menu-drawer__close-button {
+    color: #000 !important;
+    z-index: 10;
+    padding: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .menu-drawer__close-button svg {
+    width: 22px;
+    height: 22px;
   }
 
   .menu-drawer,
@@ -1228,94 +1266,115 @@
     font-size: 1.1rem;
   }
 
-  .menu-drawer__extra-info {
-    display: grid;
-    gap: 1.25rem;
-    padding: 2rem var(--padding-xl) calc(2rem + env(safe-area-inset-bottom, 0px));
-    margin-top: auto;
-    background: linear-gradient(180deg, rgba(0, 0, 0, 0.03), rgba(0, 0, 0, 0.08));
-    border-top: 1px solid rgba(var(--color-foreground-rgb) / 0.08);
+  .menu-drawer__navigation {
+    padding: 20px 0;
   }
 
-  .menu-drawer__extra-header {
-    display: grid;
-    gap: 0.75rem;
+  .menu-drawer__navigation {
+    padding: 10px 0;
   }
 
-  .menu-drawer__extra-divider {
-    height: 1px;
-    width: 100%;
-    background: linear-gradient(90deg, rgb(var(--color-foreground-rgb) / 0.22), transparent 85%);
-  }
-
-  .menu-drawer__brand-ethos h3 {
-    font-size: 0.95rem;
-    letter-spacing: 0.16em;
+  .menu-drawer__menu-item {
+    padding: 15px 25px !important;
+    color: #999 !important; /* Inactive links are grey */
+    font-family: var(--font-heading-family);
+    font-weight: 800;
+    letter-spacing: 0.02em;
+    font-size: 1.5rem;
     text-transform: uppercase;
-    margin: 0 0 0.75rem;
-    font-weight: 600;
-    line-height: 1.4;
+    border-bottom: none;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: color 0.3s ease;
   }
 
-  .menu-drawer__brand-ethos p {
-    font-size: 0.82rem;
-    line-height: 1.6;
-    color: rgb(var(--color-foreground-rgb) / 0.68);
-    margin: 0;
-    font-weight: 300;
+  .menu-drawer__menu-item--active {
+    color: #000 !important; /* Active link is black */
+  }
+
+  .menu-drawer__menu-item:hover {
+    color: #000 !important;
+  }
+
+  .menu-drawer__menu-item::after {
+    content: '';
+    width: 10px;
+    height: 10px;
+    border-top: 2px solid currentColor;
+    border-right: 2px solid currentColor;
+    transform: rotate(45deg);
+    opacity: 0.5;
+  }
+
+  .menu-drawer__animated-element {
+    opacity: 0;
+    transform: translateY(10px);
+    transition: none;
+  }
+
+  .menu-drawer-container[open] .menu-drawer__animated-element {
+    animation: menuFadeUp 0.5s ease forwards;
+    animation-delay: calc(0.1s + (var(--menu-drawer-animation-index) - 1) * 0.05s);
+  }
+
+  @keyframes menuFadeUp {
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .menu-drawer__dotted-divider {
+    border-top: 1px solid #eee;
+    margin: 20px 25px;
+  }
+
+  .menu-drawer__extra-info {
+    padding: 0 25px 40px;
   }
 
   .menu-drawer__contact-info {
     display: flex;
     flex-direction: column;
-    gap: 0.35rem;
+    gap: 12px;
   }
 
-  .menu-drawer__contact-info a,
-  .menu-drawer__contact-info span {
-    font-size: 0.76rem;
-    letter-spacing: 0.08em;
-    color: rgb(var(--color-foreground-rgb) / 0.78);
-    text-decoration: none;
-    font-weight: 400;
+  .menu-drawer__contact-info a {
+    color: #333;
+    font-weight: 700;
+    font-size: 1.1rem;
     text-transform: uppercase;
+    letter-spacing: 0.05em;
+    text-decoration: none;
   }
 
   .menu-drawer__socials {
+    margin-top: 30px;
     display: flex;
-    gap: 0.85rem;
-    align-items: center;
+    gap: 20px;
   }
 
   .menu-drawer__socials a {
-    display: inline-flex;
+    color: #000;
+    width: 35px;
+    height: 35px;
+    border: 1px solid #000;
+    border-radius: 50%;
+    display: flex;
     align-items: center;
     justify-content: center;
-    width: 2.5rem;
-    height: 2.5rem;
-    border-radius: 999px;
-    color: rgb(var(--color-foreground-rgb) / 0.88);
-    background-color: rgb(var(--color-foreground-rgb) / 0.06);
-    border: 1px solid rgb(var(--color-foreground-rgb) / 0.12);
-    text-decoration: none;
-    transition: transform 0.3s ease, background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
   }
 
-  .menu-drawer__socials a:hover {
-    transform: translateY(-1px);
-    background-color: rgb(var(--color-foreground-rgb) / 0.1);
-    border-color: rgb(var(--color-foreground-rgb) / 0.18);
-    color: rgb(var(--color-foreground-rgb));
-  }
-
-  .menu-drawer__socials svg {
-    width: 1rem;
-    height: 1rem;
+  .menu-drawer__socials a svg {
+    width: 16px;
+    height: 16px;
+    fill: currentColor;
   }
 
   @media screen and (max-width: 749px) {
     .menu-drawer__menu-item {
-      padding-block: 15px !important;
+      font-size: 1.8rem;
     }
   }
 {% endstylesheet %}

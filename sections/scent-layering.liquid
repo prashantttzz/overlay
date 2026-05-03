@@ -363,7 +363,7 @@
         <model-viewer
           id="sl-monolith-viewer-{{ section.id }}"
           src="https://cdn.shopify.com/3d/models/82bec4c659256fd0/Meshy_AI_Missing_Person_All_Bo_0429050554_texture.glb"
-          poster="{{ 'scent-model-poster.png' | asset_url }}"
+          poster="https://cdn.shopify.com/s/files/1/0774/2894/9215/files/Gemini_Generated_Image_q02iyzq02iyzq02i-Photoroom.png?v=1777402294"
           loading="eager"
           reveal="auto"
           seamless-poster
@@ -520,19 +520,19 @@
           const threshold = 1.0 / features.length; 
           let fOpacity = 0;
           let translateY = 0;
-          let blur = 10;
+          let blur = 0;
 
           if (absDist < threshold) {
             // Power of 4 creates a very steep transition that snaps to 100% focus
             fOpacity = Math.max(0, 1 - Math.pow(absDist / (threshold * 0.5), 4));
             translateY = dist * 100; 
-            blur = absDist * 15;
+            blur = 0;
           }
 
           const baseTranslateX = isMobile ? '-50%' : '0';
           f.style.opacity = fOpacity.toFixed(3);
           f.style.transform = `translate3d(${baseTranslateX}, ${translateY.toFixed(2)}px, 0)`;
-          f.style.filter = `blur(${blur.toFixed(2)}px)`;
+          f.style.filter = `none`;
           f.style.color = '#ffffff';
           f.style.zIndex = "40"; 
           
@@ -583,7 +583,7 @@
             
             c.style.opacity = labelOpacity.toFixed(3);
             c.style.transform = `translateX(${slide.toFixed(2)}px)`;
-            c.style.filter = `blur(${(1 - labelOpacity) * 12}px)`; 
+            c.style.filter = `none`; 
 
             const line = c.querySelector('.sl-monolith__callout-line');
             const text = c.querySelector('.sl-monolith__callout-text');
