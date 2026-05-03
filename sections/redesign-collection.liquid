@@ -171,19 +171,24 @@
                             </div>
                           {% endif %}
                         {%- when 'price_range' -%}
+                          {%- liquid
+                            assign range_max = filter.range_max | divided_by: 100
+                            assign min_val = filter.min_value.value | divided_by: 100 | default: 0
+                            assign max_val = filter.max_value.value | divided_by: 100 | default: range_max
+                          -%}
                           <div class="filter-price-range">
                             <div class="price-slider-container">
                               <div class="range-slider">
                                 <div class="slider-track"></div>
                                 <input type="range" class="min-range" 
                                   min="0" 
-                                  max="{{ filter.range_max | money_without_currency | replace: ',', '' }}" 
-                                  value="{{ filter.min_value.value | money_without_currency | replace: ',', '' | default: 0 }}"
+                                  max="{{ range_max }}" 
+                                  value="{{ min_val }}"
                                 >
                                 <input type="range" class="max-range" 
                                   min="0" 
-                                  max="{{ filter.range_max | money_without_currency | replace: ',', '' }}" 
-                                  value="{{ filter.max_value.value | money_without_currency | replace: ',', '' | default: filter.range_max | money_without_currency | replace: ',', '' }}"
+                                  max="{{ range_max }}" 
+                                  value="{{ max_val }}"
                                 >
                               </div>
                             </div>
@@ -324,19 +329,24 @@
                       {%- endfor -%}
                     </ul>
                   {%- when 'price_range' -%}
+                    {%- liquid
+                      assign range_max = filter.range_max | divided_by: 100
+                      assign min_val = filter.min_value.value | divided_by: 100 | default: 0
+                      assign max_val = filter.max_value.value | divided_by: 100 | default: range_max
+                    -%}
                     <div class="filter-price-range">
                       <div class="price-slider-container">
                         <div class="range-slider">
                           <div class="slider-track"></div>
                           <input type="range" class="min-range" 
                             min="0" 
-                            max="{{ filter.range_max | money_without_currency | replace: ',', '' }}" 
-                            value="{{ filter.min_value.value | money_without_currency | replace: ',', '' | default: 0 }}"
+                            max="{{ range_max }}" 
+                            value="{{ min_val }}"
                           >
                           <input type="range" class="max-range" 
                             min="0" 
-                            max="{{ filter.range_max | money_without_currency | replace: ',', '' }}" 
-                            value="{{ filter.max_value.value | money_without_currency | replace: ',', '' | default: filter.range_max | money_without_currency | replace: ',', '' }}"
+                            max="{{ range_max }}" 
+                            value="{{ max_val }}"
                           >
                         </div>
                       </div>

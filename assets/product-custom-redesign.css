@@ -299,10 +299,11 @@
   flex-direction: row;
   align-items: baseline;
   gap: 15px;
-  margin: 0;
+  margin: 15px  0 !important;
   justify-content: flex-start !important;
 }
-
+.price__container{
+}
 
 /* Add to Cart Button */
 .product-information--redesign .buy-buttons-block {
@@ -456,6 +457,20 @@ width: 100%;
 @media screen and (max-width: 1024px) {
   .product-information__grid.product-information--redesign .product-details > .group-block {
     max-width: none !important;
+  }
+}
+
+/* Ensure full width for description on mobile */
+.product-information--redesign .product-description,
+.product-information--redesign .rte,
+.product-information--redesign .product-details > * {
+  max-width: none !important;
+  width: 100% !important;
+}
+
+@media screen and (min-width: 1025px) {
+  .product-information--redesign .product-description {
+    max-width: 500px !important;
   }
 }
 

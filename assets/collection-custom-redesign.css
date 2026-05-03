@@ -31,13 +31,19 @@
   margin-top: 0 !important;
 }
 
-/* Fix Header for Collection Page */
 .template-collection .header-section {
   position: fixed !important;
   top: 0;
   left: 0;
   width: 100%;
-  z-index: 2000;
+  z-index: 99999 !important;
+}
+
+/* Global Mobile Menu Drawer Priority */
+.menu-drawer,
+.header-drawer,
+#Details-menu-drawer-container {
+  z-index: 99999 !important;
 }
 
 /* Dynamic Collection Header States */
