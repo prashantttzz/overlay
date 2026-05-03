@@ -243,50 +243,84 @@
 
 .media-gallery__engraving-overlay {
   font-family: var(--font-galderglynn);
-  font-size: 5px;
+  font-size: 9px;
   text-transform: uppercase;
   letter-spacing: 0.45em;
   font-weight: 400;
   white-space: nowrap;
   pointer-events: none;
-  color: transparent;
-  background-clip: text;
-  -webkit-background-clip: text;
-  background-image: linear-gradient(
-    180deg,
-    rgba(60,50,35,0.55) 0%,
-    rgba(20,15,8,0.85) 40%,
-    rgba(60,50,35,0.55) 100%
-  );
-  text-shadow:
-    0px 1px 0px rgba(255,255,255,0.35),
-    0px -1px 0px rgba(0,0,0,0.4),
-    1px 0px 0px rgba(255,255,255,0.1),
-    -1px 0px 0px rgba(0,0,0,0.15);
-  filter: contrast(1.2);
-  /* positioning preserved from original */
   position: absolute;
-  top: 62%;
-  left: 54%;
-  transform: translate(-50%, -50%) rotate(90deg);
-  transform-origin: center center;
+  top: 45%;
+  left: 50%;
+  transform: translate(-50%, -50%);
   z-index: 20;
-  display: none;
+
+  /* Engraved into silver — light from above */
+  color: transparent;
+  background: linear-gradient(
+    180deg,
+    rgba(80,80,80,0.9)  0%,
+    rgba(40,40,40,0.95) 40%,
+    rgba(120,120,120,0.6) 100%
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+
+  /* Inner shadow simulates depth of engraved groove */
+  filter: drop-shadow(0px 1px 0px rgba(255,255,255,0.55))
+          drop-shadow(0px -0.5px 0px rgba(0,0,0,0.3));
 }
 
-  .media-gallery:has(.product-media-container--image:first-child) .media-gallery__engraving-overlay {
-    /* Only show if the first item is an image */
-    display: block;
+@media screen and (min-width: 750px) {
+  .media-gallery__engraving-overlay {
+    font-size: 14px;
+    top: 44%;
   }
+}
 
-  /* Specific positioning for the first image in the grid/carousel */
-  @media screen and (min-width: 750px) {
-    .media-gallery--grid .media-gallery__engraving-overlay {
-      font-size: 10px;
-      top: 60%; /* Adjust based on large first image layout */
-      left: 55%;
-    }
+.engraving-preview-wrapper {
+  display: none;
+  width: 100%;
+  position: relative;
+  background: #fff;
+  border-radius: var(--media-radius, 0);
+  overflow: hidden;
+  margin-top: 20px;
+}
+
+media-gallery.is-engraving-active .engraving-preview-wrapper {
+  display: block;
+}
+
+.engraving-preview-container {
+  position: relative;
+  width: 100%;
+  padding-bottom: 100%; /* Square for the cap */
+}
+
+.engraving-preview-image {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+@media screen and (min-width: 1024px) {
+  media-gallery.is-engraving-active {
+    display: grid;
+    grid-template-columns: 1.2fr 0.8fr;
+    gap: 30px;
+    align-items: start;
   }
+  .engraving-preview-wrapper {
+    margin-top: 0;
+    position: sticky;
+    top: 20px;
+  }
+}
 {% endstyle %}
 
 {% liquid
@@ -339,7 +373,6 @@
   data-presentation="{{ block_settings.media_presentation }}"
   {{ block.shopify_attributes }}
 >
-  <div class="media-gallery__engraving-overlay" id="engraving-overlay-global"></div>
   {% capture slides %}
     {% for media in sorted_media %}
       {% capture children %}
@@ -424,6 +457,13 @@
     arrows_position: icons_position,
     controls: controls
   %}
+
+  <div class="engraving-preview-wrapper" id="engraving-preview-wrapper">
+    <div class="engraving-preview-container">
+      <img src="https://cdn.shopify.com/s/files/1/0774/2894/9215/files/WhatsApp_Image_2026-05-04_at_12.30.22_AM.jpg?v=1777837890" alt="Engraving Preview" class="engraving-preview-image" width="1000" height="1000">
+      <div class="media-gallery__engraving-overlay" id="engraving-overlay-global"></div>
+    </div>
+  </div>
 
   {% if block_settings.media_presentation == 'grid' %}
     <ul
@@ -637,19 +677,31 @@
   <script>
     (function() {
       const init = () => {
+        const gallery = document.querySelector('media-gallery');
         const overlay = document.getElementById('engraving-overlay-global');
         const input = document.querySelector('[data-engraving-input]');
         const toggle = document.querySelector('[data-engraving-toggle]');
         
-        if (!overlay || !input) return;
+        if (!gallery || !overlay || !input) return;
 
         const update = () => {
-          overlay.textContent = input.value.toUpperCase();
-          overlay.style.display = (toggle.checked && input.value.length > 0) ? 'block' : 'none';
+          if (input.value.length > 0) {
+            overlay.textContent = input.value.toUpperCase();
+            overlay.style.display = 'block';
+          } else {
+            overlay.style.display = 'none';
+          }
+          
+          if (toggle) {
+            gallery.classList.toggle('is-engraving-active', toggle.checked);
+          }
         };
 
         input.addEventListener('input', update);
         toggle?.addEventListener('change', update);
+        
+        // Check initial state if already interacted
+        update();
       };
       document.addEventListener('DOMContentLoaded', init);
       init();

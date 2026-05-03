@@ -190,7 +190,7 @@
     <div class="engraving-option__input-group">
       <label for="engraving-text-{{ block.id }}">
         Personalized Message
-        <span class="engraving-option__countdown" data-engraving-countdown>30 / 30</span>
+        <span class="engraving-option__countdown" data-engraving-countdown>12 / 12</span>
       </label>
       <div class="engraving-option__input-wrapper">
         <input
@@ -198,7 +198,7 @@
           id="engraving-text-{{ block.id }}"
           class="engraving-option__input"
           placeholder="ENTER YOUR TEXT"
-          maxlength="30"
+          maxlength="12"
           data-engraving-input
         >
         <button type="button" class="engraving-option__confirm" data-engraving-confirm>
@@ -221,7 +221,7 @@
     const confirmBtn = block.querySelector('[data-engraving-confirm]');
     let isConfirmed = false;
 
-    const MAX_CHARS = 30;
+    const MAX_CHARS = 12;
 
     // Find the global overlay in the media gallery (visual preview)
     const getGlobalOverlay = () => document.getElementById('engraving-overlay-global');
@@ -258,7 +258,7 @@
 
     toggle.addEventListener('change', async () => {
       block.classList.toggle('is-active', toggle.checked);
-      const overlay = getGlobalOverlay();
+      const gallery = document.querySelector('media-gallery');
 
       if (toggle.checked) {
         // Show the input, focus it
@@ -266,14 +266,13 @@
         errorEl.style.display = 'none';
         setConfirmed(false);
 
-        // Gallery preview (keep existing UX)
-        if (overlay) {
-          overlay.style.display = 'block';
-          const gallery = document.querySelector('media-gallery');
-          if (gallery && gallery.slideshow) {
+        // Gallery preview: trigger layout update
+        if (gallery) {
+          gallery.classList.add('is-engraving-active');
+          gallery.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          if (gallery.slideshow) {
             gallery.slideshow.select(0);
           }
-          gallery?.scrollIntoView({ behavior: 'smooth', block: 'center' });
         }
       } else {
         // Unchecked: remove engraving from cart if it exists
@@ -290,9 +289,8 @@
         updateCountdown();
 
         // Hide gallery preview
-        if (overlay) {
-          overlay.style.display = 'none';
-          overlay.textContent = '';
+        if (gallery) {
+          gallery.classList.remove('is-engraving-active');
         }
       }
     });
@@ -308,7 +306,8 @@
       // Update gallery preview
       const overlay = getGlobalOverlay();
       if (overlay) {
-        overlay.textContent = input.value;
+        overlay.textContent = input.value.toUpperCase();
+        overlay.style.display = input.value.length > 0 ? 'block' : 'none';
       }
     });
 
