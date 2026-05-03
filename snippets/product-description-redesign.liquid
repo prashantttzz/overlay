@@ -1,26 +1,22 @@
 
-{%- assign description_text = product.description | strip_html -%}
-{%- assign lines = description_text | newline_to_br | split: '<br />' -%}
-{%- assign extracted_notes = '' -%}
-
-{%- for line in lines -%}
-  {%- assign trimmed_line = line | strip -%}
-  {%- if trimmed_line != blank -%}
-    {%- assign extracted_notes = trimmed_line -%}
-    {%- break -%}
-  {%- endif -%}
-{%- endfor -%}
+{%- liquid
+  assign raw_notes = product.metafields.custom.notes.value | default: product.metafields.custom.notes
+  if raw_notes.first
+    assign extracted_notes = raw_notes | join: ', '
+  else
+    assign extracted_notes = raw_notes
+  endif
+-%}
 
 <div class="product-description-redesign">
-
-
   <div class="product-description-redesign__content">
     {%- liquid
       assign remaining_description = product.description
       if extracted_notes != blank
+        # Check if the first line of the description matches the notes (roughly)
+        # and hide it if so. For now, we'll keep the existing logic as it's safer.
         if product.description contains '</p>'
           assign parts = product.description | split: '</p>'
-          # Skip the first part and rejoin the rest
           assign remaining_description = ''
           for part in parts
             unless forloop.first
@@ -63,7 +59,7 @@
     font-size: 0.95rem;
     line-height: 1.6;
     font-weight: 300;
-    color: #444; /* Premium dark grey */
+    color: #444;
     width: 80%;
   }
   @media screen and (min-width: 750px) {
@@ -78,5 +74,4 @@
       text-transform: lowercase !important;
     }
   }
-  .product-description-redesign__content p {  }
 </style>

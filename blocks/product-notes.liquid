@@ -1,17 +1,15 @@
-{%- assign description_text = closest.product.description | strip_html -%}
-{%- assign lines = description_text | newline_to_br | split: '<br />' -%}
-{%- assign extracted_notes = '' -%}
-{%- for line in lines -%}
-  {%- assign trimmed_line = line | strip -%}
-  {%- if trimmed_line != blank -%}
-    {%- assign extracted_notes = trimmed_line -%}
-    {%- break -%}
-  {%- endif -%}
-{%- endfor -%}
+{%- liquid
+  assign raw_notes = closest.product.metafields.custom.notes.value | default: closest.product.metafields.custom.notes
+  if raw_notes.first
+    assign extracted_notes = raw_notes | join: ', '
+  else
+    assign extracted_notes = raw_notes
+  endif
+-%}
 
 {%- if extracted_notes != blank -%}
   <div class="product-description-redesign__tags spacing-style" style="{% render 'spacing-style', settings: block.settings %}">
-    {%- assign clean_notes = extracted_notes | replace: ', AND ', ', ' | replace: ', and ', ', ' | replace: ' AND ', ', ' | replace: ' and ', ', ' | replace: ' & ', ', ' -%}
+    {%- assign clean_notes = extracted_notes | replace: ' • ', ', ' | replace: '•', ', ' | replace: ', AND ', ', ' | replace: ', and ', ', ' | replace: ' AND ', ', ' | replace: ' and ', ', ' | replace: ' & ', ', ' -%}
     {%- assign tags_list = clean_notes | split: ',' -%}
     {%- for tag in tags_list -%}
       {%- assign clean_tag = tag | strip -%}

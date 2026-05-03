@@ -613,20 +613,16 @@
     {%- liquid
       assign essence_value = block_settings.core_essence_value
       if essence_value == blank or essence_value == 'Cold Iron / Concrete'
-        # Try to extract from description
-        assign description_text = selected_product.description | strip_html
-        assign lines = description_text | newline_to_br | split: '<br />'
-        for line in lines
-          assign trimmed_line = line | strip
-          if trimmed_line != blank
-            assign essence_value = trimmed_line
-            break
-          endif
-        endfor
+        assign raw_notes = selected_product.metafields.custom.notes.value | default: selected_product.metafields.custom.notes
+        if raw_notes.first
+          assign essence_value = raw_notes | join: ', '
+        else
+          assign essence_value = raw_notes
+        endif
       endif
 
       if essence_value == blank
-        assign essence_value = selected_product.metafields.custom.core_essence
+        assign essence_value = selected_product.metafields.custom.core_essence.value | default: selected_product.metafields.custom.core_essence
       endif
     -%}
     
