@@ -458,12 +458,14 @@ media-gallery.is-engraving-active .engraving-preview-wrapper {
     controls: controls
   %}
 
+  {%- unless selected_product.tags contains 'no-engraving' -%}
   <div class="engraving-preview-wrapper" id="engraving-preview-wrapper">
     <div class="engraving-preview-container">
       <img src="https://cdn.shopify.com/s/files/1/0774/2894/9215/files/WhatsApp_Image_2026-05-04_at_12.30.22_AM.jpg?v=1777837890" alt="Engraving Preview" class="engraving-preview-image" width="1000" height="1000">
       <div class="media-gallery__engraving-overlay" id="engraving-overlay-global"></div>
     </div>
   </div>
+  {%- endunless -%}
 
   {% if block_settings.media_presentation == 'grid' %}
     <ul
@@ -674,6 +676,7 @@ media-gallery.is-engraving-active .engraving-preview-wrapper {
     {%- endif -%}
   {%- endif -%}
 
+  {%- unless selected_product.tags contains 'no-engraving' -%}
   <script>
     (function() {
       const init = () => {
@@ -707,6 +710,7 @@ media-gallery.is-engraving-active .engraving-preview-wrapper {
       init();
     })();
   </script>
+  {%- endunless -%}
 </media-gallery>
 
 {% stylesheet %}

@@ -1,77 +1,35 @@
-
-{%- liquid
-  assign raw_notes = product.metafields.custom.notes.value | default: product.metafields.custom.notes
-  if raw_notes.first
-    assign extracted_notes = raw_notes | join: ', '
-  else
-    assign extracted_notes = raw_notes
-  endif
--%}
-
-<div class="product-description-redesign">
-  <div class="product-description-redesign__content">
-    {%- liquid
-      assign remaining_description = product.description
-      if extracted_notes != blank
-        # Check if the first line of the description matches the notes (roughly)
-        # and hide it if so. For now, we'll keep the existing logic as it's safer.
-        if product.description contains '</p>'
-          assign parts = product.description | split: '</p>'
-          assign remaining_description = ''
-          for part in parts
-            unless forloop.first
-              if part != blank
-                assign remaining_description = remaining_description | append: part | append: '</p>'
-              endif
-            endunless
-          endfor
-        elsif product.description contains '<br'
-          assign parts = product.description | split: '<br'
-          assign remaining_description = ''
-          for part in parts
-            unless forloop.first
-              assign remaining_description = remaining_description | append: '<br' | append: part
-            endunless
-          endfor
-        endif
-      endif
-    -%}
-    {{ remaining_description | default: product.description }}
+{%- if product.description != blank -%}
+<div class="product-description-redesign" id="desc-redesign-{{ product.id }}">
+  <div class="product-description-redesign__content rte">
+    {{ product.description }}
   </div>
 </div>
+{%- endif -%}
 
 <style>
-  .product-description-redesign__tags {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 15px;
+  .product-description-redesign {
+    display: block !important;
+    width: 100% !important;
+    margin-bottom: 2rem;
   }
-  .product-description-redesign__tag {
-    font-size: 0.75rem;
-    font-weight: 300;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    color: #000;
-    border-bottom: 1px solid #000;
-    padding-bottom: 2px;
-  }
+  
   .product-description-redesign__content {
     font-size: 0.95rem;
     line-height: 1.6;
     font-weight: 300;
     color: #444;
-    width: 80%;
+    width: 100% !important;
   }
-  @media screen and (min-width: 750px) {
+  
+  @media screen and (min-width: 1025px) {
     .product-description-redesign__content {
       font-size: 0.85rem;
-      font-weight: 300;
-      padding-bottom:20px;
       color: #777;
-      text-transform: lowercase !important;
     }
-    .product-description-redesign__content p {
-      text-transform: lowercase !important;
-    }
+  }
+
+  /* Force lowercase for redesign aesthetic if requested previously */
+  .product-description-redesign__content p {
+    text-transform: lowercase;
   }
 </style>
