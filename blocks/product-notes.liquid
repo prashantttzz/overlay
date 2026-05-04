@@ -1,24 +1,6 @@
-{%- liquid
-  assign raw_notes = closest.product.metafields.custom.notes.value | default: closest.product.metafields.custom.notes
-  if raw_notes.first
-    assign extracted_notes = raw_notes | join: ', '
-  else
-    assign extracted_notes = raw_notes
-  endif
--%}
-
-{%- if extracted_notes != blank -%}
-  <div class="product-description-redesign__tags spacing-style" style="{% render 'spacing-style', settings: block.settings %}">
-    {%- assign clean_notes = extracted_notes | replace: ' • ', ', ' | replace: '•', ', ' | replace: ', AND ', ', ' | replace: ', and ', ', ' | replace: ' AND ', ', ' | replace: ' and ', ', ' | replace: ' & ', ', ' -%}
-    {%- assign tags_list = clean_notes | split: ',' -%}
-    {%- for tag in tags_list -%}
-      {%- assign clean_tag = tag | strip -%}
-      {%- if clean_tag != blank -%}
-        <span class="product-description-redesign__tag">{{ clean_tag }}</span>
-      {%- endif -%}
-    {%- endfor -%}
-  </div>
-{%- endif -%}
+{%- comment -%}
+  Functionality moved to product-title.liquid to appear directly below the title.
+{%- endcomment -%}
 
 {% schema %}
 {
