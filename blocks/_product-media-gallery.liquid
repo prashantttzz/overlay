@@ -448,15 +448,17 @@ media-gallery.is-engraving-active .engraving-preview-wrapper {
     {% endcapture %}
   {% endif %}
 
-  {% render 'slideshow',
-    ref: 'slideshow',
-    class: slideshow_class,
-    slides: slides,
-    slide_count: sorted_media.size,
-    slideshow_arrows: slideshow_arrows,
-    arrows_position: icons_position,
-    controls: controls
-  %}
+  <div class="mobile:hidden">
+    {% render 'slideshow',
+      ref: 'slideshow',
+      class: slideshow_class,
+      slides: slides,
+      slide_count: sorted_media.size,
+      slideshow_arrows: slideshow_arrows,
+      arrows_position: icons_position,
+      controls: controls
+    %}
+  </div>
 
   {%- unless selected_product.tags contains 'no-engraving' -%}
   <div class="engraving-preview-wrapper" id="engraving-preview-wrapper">
@@ -467,7 +469,7 @@ media-gallery.is-engraving-active .engraving-preview-wrapper {
   </div>
   {%- endunless -%}
 
-  {% if block_settings.media_presentation == 'grid' %}
+  <div class="{% unless block_settings.media_presentation == 'grid' %}desktop:hidden{% endunless %}">
     <ul
       class="media-gallery__grid list-unstyled"
       data-testid="media-gallery-grid"
@@ -508,7 +510,7 @@ media-gallery.is-engraving-active .engraving-preview-wrapper {
         </li>
       {% endfor %}
     </ul>
-  {% endif %}
+  </div>
 
   {%- if block_settings.zoom -%}
     <zoom-dialog
