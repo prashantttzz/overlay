@@ -101,12 +101,17 @@
               {%- if item.variant_id == 48572858400991 -%}
                 {%- continue -%}
               {%- endif -%}
+              {%- assign engraving_text_prop = item.properties['Engraving Text'] -%}
               <tr
                 role="row"
                 class="cart-items__table-row{% if item.parent_relationship.parent != null %} cart-items__nested-line{% endif %}"
                 ref="cartItemRows[]"
                 data-parent-key="{{ item.parent_relationship.parent.key }}"
                 data-key="{{ item.key }}"
+                {% if engraving_text_prop != blank %}
+                  data-has-engraving="true"
+                  data-engraving-text="{{ engraving_text_prop | escape }}"
+                {% endif %}
               >
                 <td
                   class="cart-items__media"

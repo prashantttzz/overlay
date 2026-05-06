@@ -150,14 +150,24 @@
      * 
      * @param {boolean} [forceRefresh=false] - Whether to force a UI refresh.
      * @param {Object} [providedCart=null] - Optional cart data to use.
+     * @param {Object} [pendingUpdates=null] - Optional pending updates to bundle.
      */
-    async manageEngravings(forceRefresh = false, providedCart = null) {
-      const cart = providedCart || await this.getCart();
+    async manageEngravings(forceRefresh = false, providedCart = null, pendingUpdates = null) {
+      let cart = providedCart || await this.getCart();
       const requiredQuantities = {};
-      const updates = {};
-      let changed = false;
+      const updates = pendingUpdates || {};
+      let changed = !!pendingUpdates;
 
       if (!cart || !cart.items) return;
+
+      // Apply pending updates locally for calculation
+      if (pendingUpdates) {
+        cart.items.forEach(item => {
+          if (pendingUpdates[item.key] !== undefined) {
+            item.quantity = pendingUpdates[item.key];
+          }
+        });
+      }
 
       // Pass 1: Collect required quantities from main products
       cart.items.forEach((item) => {
@@ -189,14 +199,14 @@
 
       if (changed || forceRefresh) {
         // Collect sections to refresh
-        const sectionIds = [];
+        const sectionIds = new Set();
         document.querySelectorAll('cart-items-component').forEach(el => {
-          if (el.dataset.sectionId) sectionIds.push(el.dataset.sectionId);
+          if (el.dataset.sectionId) sectionIds.add(el.dataset.sectionId);
         });
 
         const body = { updates };
-        if (sectionIds.length > 0) {
-          body.sections = sectionIds.join(',');
+        if (sectionIds.size > 0) {
+          body.sections = Array.from(sectionIds).join(',');
           body.sections_url = window.location.pathname;
         }
 
@@ -217,9 +227,6 @@
               visibleCount += item.quantity;
             }
           });
-        } else {
-          // Fallback if items not in response (though update.js should have it)
-          visibleCount = responseData.item_count;
         }
 
         // Notify other components
@@ -237,16 +244,17 @@
         // Handle empty cart state visually
         const dialog = document.querySelector('.cart-drawer__dialog');
         if (dialog) {
-          if (responseData.item_count === 0) {
+          if (visibleCount === 0) {
             dialog.classList.add('cart-drawer--empty');
           } else {
             dialog.classList.remove('cart-drawer--empty');
           }
         }
 
-        // Let the theme's cart listeners morph the returned sections.
-        // Only fall back to a manual refresh if the response didn't include them.
-        if (!responseData.sections) {
+        // Render sections immediately if returned
+        if (responseData.sections) {
+          this.renderSections(responseData.sections);
+        } else {
           await this.refreshCartDrawer();
         }
       } else {

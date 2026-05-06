@@ -1,0 +1,274 @@
+{%- liquid
+  assign section_id = 'section-' | append: section.id
+-%}
+
+<style>
+  #{{ section_id }} {
+    background-color: #ffffff;
+    color: #000000;
+    padding-top: {{ section.settings.padding_top }}px;
+    padding-bottom: {{ section.settings.padding_bottom }}px;
+    font-family: var(--font-body--family), sans-serif;
+    overflow: hidden;
+  }
+
+  .about-split {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+  }
+
+  @media screen and (min-width: 990px) {
+    .about-split {
+      flex-direction: row;
+      align-items: center;
+      gap: 100px;
+    }
+  }
+
+  /* Left Column: Image with Reveal Animation */
+  .about-split__image-column {
+    flex: 1;
+    position: relative;
+    width: 100%;
+    transform: translateY(40px);
+    opacity: 0;
+    animation: fadeInUp 1s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+  }
+
+  .about-split__image-wrapper {
+    position: relative;
+    width: 100%;
+    padding-bottom: 90%; /* Slight taller Aspect Ratio for elegance */
+    overflow: hidden;
+    background-color: #f5f5f5;
+    border-radius: 4px;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.06);
+  }
+
+  .about-split__image {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 1.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
+
+  .about-split__image-wrapper:hover .about-split__image {
+    transform: scale(1.05);
+  }
+
+  /* Right Column: Text with Staggered Animation */
+  .about-split__text-column {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .about-split__text-column > * {
+    opacity: 0;
+    transform: translateY(30px);
+    animation: fadeInUp 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+  }
+
+  .about-split__text-column > *:nth-child(1) { animation-delay: 0.2s; }
+  .about-split__text-column > *:nth-child(2) { animation-delay: 0.4s; }
+  .about-split__text-column > *:nth-child(3) { animation-delay: 0.6s; }
+  .about-split__text-column > *:nth-child(4) { animation-delay: 0.8s; }
+
+  @keyframes fadeInUp {
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .about-split__eyebrow {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #000000;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+  }
+
+  .about-split__eyebrow::before {
+    content: '';
+    display: block;
+    width: 30px;
+    height: 1px;
+    background-color: #000;
+    margin-right: 15px;
+  }
+
+  .about-split__heading {
+    font-family: var(--font-heading--family), sans-serif;
+    font-size: clamp(2.5rem, 4vw, 4rem);
+    line-height: 1.05;
+    font-weight: 600;
+    color: #000000;
+    margin: 0 0 30px 0;
+    letter-spacing: -0.02em;
+  }
+
+  .about-split__description {
+    font-size: 1.1rem;
+    line-height: 1.7;
+    color: #444444;
+    font-weight: 300;
+    margin-bottom: 40px;
+  }
+  
+  .about-split__description p {
+    margin-top: 0;
+    margin-bottom: 20px;
+  }
+  .about-split__description p:last-child {
+    margin-bottom: 0;
+  }
+
+  .about-split__button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #000000;
+    color: #ffffff;
+    font-size: 0.85rem;
+    font-weight: 600;
+    padding: 16px 40px;
+    border-radius: 50px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    text-decoration: none;
+    transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    align-self: flex-start;
+    border: 1px solid #000;
+  }
+
+  .about-split__button:hover {
+    background-color: #ffffff;
+    color: #000000;
+    transform: translateY(-2px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.08);
+  }
+
+  @media screen and (max-width: 749px) {
+    .about-split {
+      padding: 0 2rem;
+    }
+  }
+</style>
+
+<section id="{{ section_id }}">
+  <div class="about-split">
+    
+    <div class="about-split__image-column">
+      <div class="about-split__image-wrapper">
+        {%- if section.settings.image != blank -%}
+          {{ section.settings.image | image_url: width: 1200 | image_tag: class: 'about-split__image', loading: 'lazy' }}
+        {%- else -%}
+          <img src="https://cdn.shopify.com/s/files/1/0774/2894/9215/files/wew.jpg?v=1777636205" alt="Overlay Architecture" class="about-split__image" loading="lazy">
+        {%- endif -%}
+      </div>
+    </div>
+
+    <div class="about-split__text-column">
+      {%- if section.settings.eyebrow != blank -%}
+        <span class="about-split__eyebrow">{{ section.settings.eyebrow }}</span>
+      {%- endif -%}
+
+      {%- if section.settings.heading != blank -%}
+        <h2 class="about-split__heading">{{ section.settings.heading | newline_to_br }}</h2>
+      {%- endif -%}
+
+      {%- if section.settings.text != blank -%}
+        <div class="about-split__description">
+          {{ section.settings.text }}
+        </div>
+      {%- endif -%}
+
+      {%- if section.settings.button_label != blank -%}
+        <a href="{{ section.settings.button_link }}" class="about-split__button">
+          {{ section.settings.button_label }}
+        </a>
+      {%- endif -%}
+    </div>
+
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "About Us Split",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Image"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow Text",
+      "default": "The Foundation"
+    },
+    {
+      "type": "textarea",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Scents Built Like\nArchitecture"
+    },
+    {
+      "type": "richtext",
+      "id": "text",
+      "label": "Description",
+      "default": "<p>We approach fragrance as a structural art form. By dissecting traditional notes and isolating their purest molecules, we empower you to layer, build, and interact with scent.</p><p>Overlay is not just a perfume; it's a foundation for your personal olfactory architecture. Discover infinite combinations that reveal themselves across hours of wear.</p>"
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Button Label",
+      "default": "Discover The Method"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Button Link",
+      "default": "/"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 200,
+      "step": 10,
+      "unit": "px",
+      "label": "Padding Top",
+      "default": 120
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 200,
+      "step": 10,
+      "unit": "px",
+      "label": "Padding Bottom",
+      "default": 120
+    }
+  ],
+  "presets": [
+    {
+      "name": "About Us Split"
+    }
+  ]
+}
+{% endschema %}

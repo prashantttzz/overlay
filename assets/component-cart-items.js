@@ -124,6 +124,26 @@ class CartItemsComponent extends Component {
       }
     });
 
+    const lineItemRow = this.refs.cartItemRows[line - 1];
+    const hasEngraving = lineItemRow?.dataset.hasEngraving === 'true';
+    const engravingText = lineItemRow?.dataset.engravingText;
+
+    // ── Optimized: If item has engraving, let EngravingCart handle the bundled update ──
+    if (hasEngraving && engravingText && window.EngravingCart) {
+      cartTotal?.shimmer();
+      
+      // We call manageEngravings which will fetch current cart, calculate needed changes,
+      // and send a single /cart/update.js request with all necessary updates + sections.
+      // We pass the pending update to manageEngravings so it can be bundled.
+      window.EngravingCart.manageEngravings(true, null, {
+        [lineItemRow.dataset.key]: quantity
+      }).finally(() => {
+        this.#enableCartItems();
+        resetShimmer(this);
+      });
+      return;
+    }
+
     const body = JSON.stringify({
       line: line,
       quantity: quantity,
@@ -157,7 +177,7 @@ class CartItemsComponent extends Component {
         const newCartItemCount = newCartHiddenItemCount ? parseInt(newCartHiddenItemCount, 10) : 0;
 
         this.dispatchEvent(
-          new CartUpdateEvent({}, this.sectionId, {
+          new CartUpdateEvent(parsedResponseText.cart || parsedResponseText, this.sectionId, {
             itemCount: newCartItemCount,
             source: 'cart-items-component',
             sections: parsedResponseText.sections,

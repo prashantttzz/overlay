@@ -686,7 +686,7 @@
   }
 
   #header-component.is-scrolled:not(.is-on-home-hero) {
-    background-color: rgba(255, 255, 255, 0.1) !important;
+    background-color: rgba(0, 0, 0, 0.4) !important;
     backdrop-filter: blur(30px) saturate(180%);
     -webkit-backdrop-filter: blur(30px) saturate(180%);
     border-bottom: 1px solid rgba(255, 255, 255, 0.15) !important;
@@ -701,9 +701,9 @@
   /* Default State */
   .header-logo__image {
     filter: invert(1); /* Default to black logo */
-    height: 30px !important;
+    height: 45px !important;
     width: auto !important;
-    transition: filter 0.4s ease;
+    transition: filter 0.4s ease, height 0.3s ease;
   }
 
   .menu-list__link {
@@ -774,11 +774,34 @@
     stroke: currentColor !important;
   }
 
-  /* Scrolled State & Non-Home Pages (Implicitly black via defaults) */
+  /* Scrolled State & Non-Home Pages (Black glassmorphism) */
   #header-component.is-scrolled:not(.is-on-home-hero) {
-    background-color: rgba(255, 255, 255, 0.6) !important;
+    background-color: rgba(0, 0, 0, 0.5) !important;
     backdrop-filter: blur(15px) saturate(180%);
     -webkit-backdrop-filter: blur(15px) saturate(180%);
+    color: #fff !important;
+  }
+  #header-component.is-scrolled:not(.is-on-home-hero) .header__row,
+  #header-component.is-scrolled:not(.is-on-home-hero) .header__column,
+  #header-component.is-scrolled:not(.is-on-home-hero) .header-logo,
+  #header-component.is-scrolled:not(.is-on-home-hero) header-actions,
+  #header-component.is-scrolled:not(.is-on-home-hero) .menu-list {
+    color: #fff !important;
+  }
+  #header-component.is-scrolled:not(.is-on-home-hero) .header-logo__image {
+    filter: none !important;
+  }
+  #header-component.is-scrolled:not(.is-on-home-hero) .menu-list__link {
+    color: #fff !important;
+  }
+  #header-component.is-scrolled:not(.is-on-home-hero) .menu-list__link--active::after {
+    background-color: #fff !important;
+  }
+  #header-component.is-scrolled:not(.is-on-home-hero) .header-actions__action svg,
+  #header-component.is-scrolled:not(.is-on-home-hero) .header__icon--menu svg {
+    color: #fff !important;
+    fill: none !important;
+    stroke: currentColor !important;
   }
   .header__columns {
     padding-block: 0.75rem !important;
@@ -789,7 +812,7 @@
       padding-block: 0.5rem !important;
     }
     .header-logo__image {
-      height: 22px !important;
+      height: 35px !important;
     }
   }
 

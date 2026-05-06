@@ -49,45 +49,7 @@
     {{ accent_font_bold_italic | font_face: font_display: 'swap' }}
   {% endif %}
 
-  @font-face {
-    font-family: 'Galderglynn';
-    src: url("{{ 'galderglynn-titling-bd.ttf' | asset_url }}") format('truetype');
-    font-weight: bold;
-    font-style: normal;
-    font-display: swap;
-  }
-
-  @font-face {
-    font-family: 'Galderglynn';
-    src: url("{{ 'galderglynn-titling.regular.otf' | asset_url }}") format('opentype');
-    font-weight: normal;
-    font-style: normal;
-    font-display: swap;
-  }
-
-  @font-face {
-    font-family: 'Galderglynn';
-    src: url("{{ 'galderglynn-titling.light.otf' | asset_url }}") format('opentype');
-    font-weight: 300;
-    font-style: normal;
-    font-display: swap;
-  }
-
-  @font-face {
-    font-family: 'Galderglynn';
-    src: url("{{ 'galderglynn-titling.extra-light.otf' | asset_url }}") format('opentype');
-    font-weight: 200;
-    font-style: normal;
-    font-display: swap;
-  }
-
-  @font-face {
-    font-family: 'Galderglynn';
-    src: url("{{ 'galderglynn-titling-bd-it.ttf' | asset_url }}") format('truetype');
-    font-weight: bold;
-    font-style: italic;
-    font-display: swap;
-  }
+  /* Removed Galderglynn font-faces, using Google Fonts Inter */
 
   :root {
     /* Branding Colors */
@@ -108,7 +70,7 @@
     --color-border-rgb: 128 128 128 !important;
 
     /* Branding Fonts */
-    --font-galderglynn: 'Galderglynn', sans-serif;
+    --font-galderglynn: 'Inter', sans-serif;
 
     /* Page Layout */
     --sidebar-width: 25rem;
@@ -628,7 +590,7 @@
 
   /* ========================================
      GLOBAL BRANDING OVERRIDES
-     Font: Galderglynn | BG: White | Accent: Black
+     Font: Inter | BG: White | Accent: Black
   ======================================== */
 
   *, *::before, *::after,
@@ -636,7 +598,7 @@
   h1, h2, h3, h4, h5, h6,
   .h1, .h2, .h3, .h4, .h5, .h6,
   p, span, a, li, button, input, textarea, select, label {
-    font-family: 'Galderglynn', sans-serif !important;
+    font-family: 'Inter', sans-serif !important;
   }
 
   body {

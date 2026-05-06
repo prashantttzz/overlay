@@ -1,12 +1,3 @@
-/*
- * ------------------------------------------------------------
- * IMPORTANT: The contents of this file are auto-generated.
- *
- * This file may be updated by the Shopify admin theme editor
- * or related systems. Please exercise caution as any changes
- * made to this file may be overwritten.
- * ------------------------------------------------------------
- */
 {
   "sections": {
     "overlay_hero": {
@@ -37,7 +28,7 @@
         "note_3"
       ],
       "settings": {
-        "heading": "ALL OVER\nSPRAY HOUSE",
+        "heading": "ALL OVER SPRAY HOUSE",
         "description": "Made to be mixed, find your mix.",
         "button_label": "EXPLORE COLLECTION",
         "button_link": "shopify://collections/all",
@@ -51,14 +42,6 @@
         "eyebrow": "CURATED SELECTION",
         "heading": "THE CURATION",
         "collection": "all"
-      }
-    },
-    "promo_banner": {
-      "type": "parallax-promo-banner",
-      "settings": {
-        "subheading": "COLLECT THE SERIES",
-        "heading": "COMPLETE THE SET: BUY THREE AND GET 40% OFF",
-        "banner_height": 450
       }
     },
     "engraving_expansion": {
@@ -87,22 +70,15 @@
         "feature_4_text": "Experience how different layers reveal themselves across hours of wear."
       }
     },
-    "editorial_mood_gallery": {
-      "type": "editorial-mood-gallery",
-      "settings": {
-        "eyebrow": "THE ARCHIVE",
-        "heading": "REFRACTED VISIONS",
-        "collection": "all",
-        "button_label": "EXPLORE ALL ARCHIVES"
-      }
+    "about_us": {
+      "type": "about-us"
     }
   },
   "order": [
     "overlay_hero",
     "curated_selection",
-    "promo_banner",
     "engraving_expansion",
     "scent_layering",
-    "editorial_mood_gallery"
+    "about_us"
   ]
 }
