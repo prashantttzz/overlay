@@ -309,7 +309,7 @@
 
 /* Small Hero Banner */
 .collection-small-banner {
-  height: 100vh; /* Full screen desktop view */
+  height: 50vh; /* Half screen desktop view */
   margin: 0px 0 10px;
   border-radius: 0;
   overflow: hidden;
