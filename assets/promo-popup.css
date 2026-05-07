@@ -96,9 +96,9 @@
 }
 
 .promo-popup__title {
-  font-size: 48px;
-  line-height: 1;
-  margin: 0 0 24px;
+  font-size: clamp(24px, 4vw, 36px);
+  line-height: 1.1;
+  margin: 0 0 16px;
   font-family: var(--font-galderglynn);
   font-weight: 700;
   color: #000;
@@ -108,15 +108,15 @@
 .promo-popup__title .highlight {
   color: #000;
   display: block;
-  font-size: 80px;
-  line-height: 0.9;
+  font-size: clamp(32px, 5vw, 55px);
+  line-height: 1;
   margin-top: 10px;
 }
 
 .promo-popup__text {
-  font-size: 18px;
+  font-size: 15px;
   color: #444;
-  margin-bottom: 48px;
+  margin-bottom: 32px;
   line-height: 1.5;
   font-weight: 400;
 }
@@ -216,14 +216,10 @@
     color: white;
   }
   .promo-popup__title {
-    font-size: 20px;
     margin-bottom: 10px;
   }
   .promo-popup__text {
-    font-size: 11px;
+    font-size: 12px;
     margin-bottom: 18px;
-  }
-  .promo-popup__title .highlight {
-    font-size: 40px;
   }
 }

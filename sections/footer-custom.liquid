@@ -6,7 +6,13 @@
       
       <!-- Brand Column -->
       <div class="footer-custom__column footer-custom__column--brand">
-        <h2 class="footer-custom__brand-name">{{ section.settings.brand_name }}</h2>
+        {%- if settings.logo != blank -%}
+          <a href="{{ routes.root_url }}" class="footer-custom__logo-link" style="display: inline-block; margin-bottom: 15px;">
+            {{ settings.logo | image_url: width: 200 | image_tag: class: 'footer-custom__logo', loading: 'lazy', style: 'max-width: 150px; height: auto;' }}
+          </a>
+        {%- else -%}
+          <h2 class="footer-custom__brand-name">{{ section.settings.brand_name }}</h2>
+        {%- endif -%}
         <div class="footer-custom__brand-desc">{{ section.settings.brand_desc }}</div>
       </div>
 

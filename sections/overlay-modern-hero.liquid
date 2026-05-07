@@ -86,7 +86,7 @@
   }
 
   .overlay-hero__heading {
-    font-size: clamp(2.5rem, 8vw, 6rem);
+    font-size: clamp(12px, 5vw, 6rem);
     line-height: 0.5; /* Aggressively tightened to remove vertical gap */
     font-weight: 300;
     text-transform: uppercase;
@@ -132,11 +132,9 @@
 
   @media (max-width: 768px) {
     .overlay-hero__heading {
-      font-size: clamp(2.5rem, 10vw, 3.5rem);
+      font-size: clamp(10px, 6vw, 3.5rem);
       line-height: 1.1;
-      display: flex;
-      flex-direction: column;
-      gap: 0.2rem;
+      display: block;
       white-space: nowrap; /* Force each line to stay whole */
     }
     
@@ -351,7 +349,7 @@
       "type": "textarea",
       "id": "marquee_text",
       "label": "Marquee Text",
-      "default": "NEW ARCHIVE DROP / STUDIO EXCLUSIVE • SENSE & ARCHITECTURE • REFRACTED ART COLLECTION AVAILABLE NOW • LIMITED EDITION SCENTS"
+      "default": "DISCOVER THE ART OF LAYERING  • CRAFT YOUR SIGNATURE SCENT • MODERN FRAGRANCE HOUSE"
     },
     {
       "type": "header",

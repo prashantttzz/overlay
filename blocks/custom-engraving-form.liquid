@@ -191,7 +191,7 @@
     <div class="engraving-option__input-group">
       <label for="engraving-text-{{ block.id }}">
         Personalized Message
-        <span class="engraving-option__countdown" data-engraving-countdown>12 / 12</span>
+        <span class="engraving-option__countdown" data-engraving-countdown>20 / 20</span>
       </label>
       <div class="engraving-option__input-wrapper">
         <input
@@ -199,7 +199,7 @@
           id="engraving-text-{{ block.id }}"
           class="engraving-option__input"
           placeholder="ENTER YOUR TEXT"
-          maxlength="12"
+          maxlength="20"
           data-engraving-input
         >
         <button type="button" class="engraving-option__confirm" data-engraving-confirm>
@@ -224,7 +224,7 @@
     const confirmBtn = block.querySelector('[data-engraving-confirm]');
     let isConfirmed = false;
 
-    const MAX_CHARS = 12;
+    const MAX_CHARS = 20;
 
     // Find the global overlay in the media gallery (visual preview)
     const getGlobalOverlay = () => document.getElementById('engraving-overlay-global');
@@ -269,8 +269,8 @@
         errorEl.style.display = 'none';
         setConfirmed(false);
 
-        // Gallery preview: trigger layout update
-        if (gallery) {
+        // Gallery preview: trigger layout update only if text exists
+        if (gallery && input.value.trim().length > 0) {
           gallery.classList.add('is-engraving-active');
           gallery.scrollIntoView({ behavior: 'smooth', block: 'center' });
           if (gallery.slideshow) {
@@ -308,9 +308,16 @@
 
       // Update gallery preview
       const overlay = getGlobalOverlay();
+      const gallery = document.querySelector('media-gallery');
+      const hasText = input.value.trim().length > 0;
+
       if (overlay) {
         overlay.textContent = input.value.toUpperCase();
-        overlay.style.display = input.value.length > 0 ? 'block' : 'none';
+        overlay.style.display = hasText ? 'block' : 'none';
+      }
+
+      if (gallery) {
+        gallery.classList.toggle('is-engraving-active', toggle.checked && hasText);
       }
     });
 

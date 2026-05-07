@@ -53,7 +53,7 @@
 
     <div class="cart__total-container">
       <span class="cart__total-label{% if has_discounts %} is-total{% endif %}">{% if has_discounts %}TOTAL{% else %}SUBTOTAL{% endif %}</span>
-      <span class="cart__total-value">{{ total_price }}</span>
+      <text-component ref="cartTotal" class="cart__total-value">{{ total_price }}</text-component>
     </div>
 
 </div>

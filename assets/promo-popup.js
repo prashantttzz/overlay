@@ -5,7 +5,7 @@
   'use strict';
 
   const POPUP_ID = 'PromoPopup';
-  const SHOW_DELAY = 10000; // 10 seconds
+  const SHOW_DELAY = 5000; // 5 seconds
   const STORAGE_KEY = 'promo_popup_shown';
 
 
@@ -88,17 +88,17 @@
         let cardText = '';
         
         if (count === 0) {
-          text = 'Add 3 more products to avail 40% discount';
+          text = 'Add 3 more products to unlock an exclusive deal';
           cardText = 'Add 3 more to unlock';
         } else if (count === 1) {
-          text = 'Add 2 more products to avail 40% discount';
+          text = 'Add 2 more products to unlock an exclusive deal';
           cardText = 'Add 2 more to unlock';
         } else if (count === 2) {
-          text = 'Add only 1 more product to avail 40% discount!';
+          text = 'Add only 1 more product to unlock an exclusive deal!';
           cardText = 'Add 1 more to unlock';
         } else {
-          text = 'You have unlocked the 40% discount! Checkout now.';
-          cardText = '40% discount unlocked';
+          text = 'You have unlocked an exclusive special deal! Checkout now.';
+          cardText = 'Reward unlocked';
         }
 
         if (this.popupTextEl) this.popupTextEl.textContent = text;

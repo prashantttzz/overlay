@@ -7,16 +7,15 @@
   grid-template-columns: 1fr 1fr !important;
   gap: 0 !important;
   background-color: #ffffff !important;
-  align-items: center !important;
+  align-items: flex-start !important;
   flex-grow: 1;
-  height: 100%;
   overflow: hidden;
 }
 
 .product-information--redesign,
 .product-information.section {
   padding-top: 0 !important;
-  min-height: 100vh !important;
+  min-height: auto !important;
   display: flex !important;
   flex-direction: column;
 }
@@ -183,19 +182,19 @@
 
 
 .product-information--redesign .product-information__media {
-  background-color: #ffffff !important; /* Subtle grey for image side */
+  background-color: white !important; /* Subtle grey for image side */
   height: auto !important;
   min-height: 50vh;
   display: flex;
-  align-items: center; 
+  align-items: flex-start; 
   justify-content: center;
-  padding: 5% !important;
+  padding:0  !important;
   position: relative;
 }
 
 @media screen and (min-width: 1025px) {
   .product-information--redesign .product-information__media {
-    padding: 10% !important;
+    padding:5% 10% 10% 10% !important;
   }
 }
 
@@ -249,8 +248,8 @@
 
 @media screen and (min-width: 1025px) {
   .product-information--redesign .product-details {
-    padding: 15% 12% !important;
-    padding-top: 10% !important;
+    padding: 8% 12% !important;
+    padding-top: 4% !important;
     width: 50vw;
   }
 }
@@ -486,8 +485,8 @@ width: 100%;
 
   .product-information__grid.product-information--redesign .product-information__media {
     position: relative;
-    height: 100%;
-    min-height: 800px;
+    height: auto;
+    min-height: 0;
   }
 }
 
@@ -520,4 +519,26 @@ width: 100%;
 /* Clean up Shopify default spacings */
 .product-information--redesign .product-form-buttons {
   gap: 0 !important;
+}
+/* Engraving Active State - Hide Main Media Globally in PDP */
+.product-information--redesign:has(.is-engraving-active) .product-information__media > *:not(media-gallery),
+.product-information--redesign:has(.is-engraving-active) .mobile\:hidden,
+.product-information--redesign:has(.is-engraving-active) .desktop\:hidden,
+.product-information--redesign:has(.is-engraving-active) .media-gallery__grid,
+.product-information--redesign:has(.is-engraving-active) .product-media-container,
+.product-information--redesign:has(.is-engraving-active) .slideshow,
+.product-information--redesign:has(.is-engraving-active) .product-media img:not(.engraving-preview-image) {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+  height: 0 !important;
+  overflow: hidden !important;
+}
+
+.product-information--redesign:has(.is-engraving-active) .engraving-preview-wrapper {
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  height: auto !important;
 }
