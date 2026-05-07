@@ -173,6 +173,45 @@
     content: ' ✓';
     margin-left: 4px;
   }
+
+  .engraving-font-selector {
+    display: flex;
+    gap: 8px;
+    margin-top: 15px;
+  }
+
+  .engraving-font-option {
+    flex: 1;
+  }
+
+  .engraving-font-option input {
+    display: none;
+  }
+
+  .engraving-font-option label {
+    display: block;
+    padding: 8px 4px;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    text-align: center;
+    font-size: 9px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    background: #fff;
+    color: #000;
+  }
+
+  .engraving-font-option input:checked + label {
+    border-color: #000;
+    background: #000;
+    color: #fff;
+  }
+
+  /* Font Preview Styles */
+  .preview-font-normal { font-style: normal; }
+  .preview-font-italic { font-style: italic; }
+  .preview-font-arabic { font-family: "Traditional Arabic", "Amiri", serif !important; font-size: 1.2em; }
 {% endstylesheet %}
 
 {%- unless product.tags contains 'no-engraving' -%}
@@ -198,7 +237,7 @@
           type="text"
           id="engraving-text-{{ block.id }}"
           class="engraving-option__input"
-          placeholder="ENTER YOUR TEXT"
+          placeholder="Enter your text"
           maxlength="20"
           data-engraving-input
         >
@@ -207,6 +246,21 @@
         </button>
       </div>
       <p class="engraving-option__error" data-engraving-error>Please enter and confirm engraving text</p>
+      
+      <div class="engraving-font-selector">
+        <div class="engraving-font-option">
+          <input type="radio" name="engraving-font-{{ block.id }}" id="font-normal-{{ block.id }}" value="Normal" checked data-engraving-font>
+          <label for="font-normal-{{ block.id }}">Normal</label>
+        </div>
+        <div class="engraving-font-option">
+          <input type="radio" name="engraving-font-{{ block.id }}" id="font-italic-{{ block.id }}" value="Italic" data-engraving-font>
+          <label for="font-italic-{{ block.id }}">Italic</label>
+        </div>
+        <div class="engraving-font-option">
+          <input type="radio" name="engraving-font-{{ block.id }}" id="font-arabic-{{ block.id }}" value="Arabic" data-engraving-font>
+          <label for="font-arabic-{{ block.id }}">Arabic</label>
+        </div>
+      </div>
     </div>
     <p class="engraving-option__hint">Engraving is permanent and adds 2-3 business days to processing.</p>
   </div>
@@ -222,6 +276,7 @@
     const countdown = block.querySelector('[data-engraving-countdown]');
     const errorEl = block.querySelector('[data-engraving-error]');
     const confirmBtn = block.querySelector('[data-engraving-confirm]');
+    const fontOptions = block.querySelectorAll('[data-engraving-font]');
     let isConfirmed = false;
 
     const MAX_CHARS = 20;
@@ -312,13 +367,39 @@
       const hasText = input.value.trim().length > 0;
 
       if (overlay) {
-        overlay.textContent = input.value.toUpperCase();
+        overlay.textContent = input.value;
         overlay.style.display = hasText ? 'block' : 'none';
+        
+        // Apply font style to preview
+        const selectedFont = block.querySelector('[data-engraving-font]:checked').value;
+        overlay.className = 'media-gallery__engraving-overlay preview-font-' + selectedFont.toLowerCase();
       }
 
       if (gallery) {
-        gallery.classList.toggle('is-engraving-active', toggle.checked && hasText);
+        // Mobile: Swap on toggle check. Desktop: Swap when text exists.
+        const isMobile = window.innerWidth <= 1024;
+        gallery.classList.toggle('is-engraving-active', toggle.checked && (hasText || isMobile));
       }
+    });
+
+    fontOptions.forEach(opt => {
+      opt.addEventListener('change', () => {
+        const overlay = getGlobalOverlay();
+        const selectedFont = opt.value.toLowerCase();
+        
+        if (overlay) {
+          overlay.className = 'media-gallery__engraving-overlay preview-font-' + selectedFont;
+        }
+
+        // Toggle RTL for input field if Arabic is selected
+        if (selectedFont === 'arabic') {
+          input.setAttribute('dir', 'rtl');
+          input.placeholder = 'أدخل النص الخاص بك'; // Arabic for "Enter your text"
+        } else {
+          input.setAttribute('dir', 'ltr');
+          input.placeholder = 'Enter your text';
+        }
+      });
     });
 
     input.addEventListener('keydown', (e) => {

@@ -243,14 +243,13 @@
 
 .media-gallery__engraving-overlay {
   font-family: var(--font-galderglynn);
-  font-size: 9px;
-  text-transform: uppercase;
-  letter-spacing: 0.2em;
+  font-size: 22px;
+  letter-spacing: 0.1em;
   font-weight: 400;
   white-space: nowrap;
   pointer-events: none;
   position: absolute;
-  top: 45%;
+  top: 44%;
   left: 50%;
   transform: translate(-50%, -50%);
   z-index: 20;
@@ -272,10 +271,19 @@
           drop-shadow(0px -0.5px 0px rgba(0,0,0,0.3));
 }
 
-.media-gallery__engraving-overlay {
-    font-size: 14px;
-    top: 44%;
-  }
+
+
+/* Font Preview Styles */
+.preview-font-normal { font-style: normal; }
+.preview-font-italic { font-style: italic; }
+.preview-font-arabic { 
+  font-family: "Amiri", "Scheherazade New", "Traditional Arabic", "Noto Sans Arabic", serif !important; 
+  font-size: 24px !important; 
+  text-transform: none !important;
+  letter-spacing: 0 !important;
+  line-height: 1 !important;
+  direction: rtl !important;
+  text-align: center !important;
 }
 
 /* Engraving Replacement Styles */
@@ -700,7 +708,7 @@ media-gallery.is-engraving-active .engraving-preview-wrapper {
           const isEnabled = toggle ? toggle.checked : false;
 
           if (hasText) {
-            overlay.textContent = input.value.toUpperCase();
+            overlay.textContent = input.value;
             overlay.style.display = 'block';
           } else {
             overlay.style.display = 'none';

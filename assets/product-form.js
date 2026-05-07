@@ -194,6 +194,8 @@ class ProductFormComponent extends Component {
       }
       if (engravingError) engravingError.style.display = 'none';
     }
+    
+    const engravingStyle = engravingBlock?.querySelector('[data-engraving-font]:checked')?.value || 'Normal';
     // ── End engraving validation ─────────────────────────────────────────
 
     // Send the add to cart information to the cart
@@ -222,6 +224,7 @@ class ProductFormComponent extends Component {
         quantity: addedQty,
         properties: {
           'Engraving Text': engravingText,
+          'Engraving Style': engravingStyle,
           '_engraving_id': Date.now().toString()
         }
       };
@@ -238,7 +241,10 @@ class ProductFormComponent extends Component {
       const engravingItem = {
         id: 48572858400991, // ENGRAVING_VARIANT_ID
         quantity: addedQty,
-        properties: { 'Engraving Text': engravingText }
+        properties: { 
+          'Engraving Text': engravingText,
+          'Engraving Style': engravingStyle
+        }
       };
 
       requestBody = JSON.stringify({
