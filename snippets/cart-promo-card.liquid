@@ -8,7 +8,7 @@
   endfor
 %}
 
-<div class="cart-promo-card is-loading{% if count >= 3 %} is-unlocked{% endif %}" id="CartPromoCard">
+<div class="cart-promo-card{% if count >= 3 %} is-unlocked{% endif %}" id="CartPromoCard">
   <!-- Locked Content State -->
   <div class="cart-promo-card__content locked-state">
     <div class="cart-promo-card__image">

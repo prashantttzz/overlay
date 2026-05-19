@@ -63,6 +63,7 @@
             this.successPopup.close();
             this.successPopup.showModal();
           }
+          this.updateText();
         }
       });
 
