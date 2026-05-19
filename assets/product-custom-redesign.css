@@ -216,7 +216,7 @@
 
 @media screen and (min-width: 1025px) {
   .product-information--redesign .product-information__media {
-    padding:5% 10% 10% 10% !important;
+    padding:10% 10% 10% 10% !important;
   }
 }
 
@@ -270,7 +270,7 @@
 
 @media screen and (min-width: 1025px) {
   .product-information--redesign .product-details {
-    padding: 8% 12% !important;
+    padding: 15% 12% !important;
     width: 50vw;
   }
 }

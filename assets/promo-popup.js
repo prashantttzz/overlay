@@ -5,8 +5,6 @@
   'use strict';
 
   const POPUP_ID = 'PromoPopup';
-  const SHOW_DELAY = 5000; // 5 seconds
-  const STORAGE_KEY = 'promo_popup_shown';
 
 
   class PromoPopup {
@@ -32,16 +30,12 @@
     }
 
     init() {
+      console.log('PromoPopup: Initializing...');
       // Close events for main promo popup
       if (this.popup) {
         [this.closeBtn, this.overlay, this.secondaryBtn].forEach(el => {
           if (el) el.addEventListener('click', () => this.hide());
         });
-
-        // Show after delay
-        setTimeout(() => {
-          this.trigger('timer');
-        }, SHOW_DELAY);
       }
 
       // Close events for success popup
@@ -51,14 +45,25 @@
         });
       }
 
-      // Listen for cart additions (Standard event)
-      document.addEventListener('cart:add', () => {
-        this.trigger('cart');
+      // Listen for theme-specific cart updates (Quantity changes, removals, additions)
+      document.addEventListener('cart:update', (e) => {
+        console.log('PromoPopup: cart:update event received', e);
+        this.updateText();
       });
 
-      // Listen for theme-specific cart updates (Quantity changes, removals)
-      document.addEventListener('cart:update', () => {
-        this.updateText();
+      // Listen for cart drawer opening to ensure popups remain on top layer
+      document.addEventListener('dialog:open', (e) => {
+        if (e.target.id === 'cart-drawer') {
+          console.log('PromoPopup: Cart drawer opened! Re-pushing promo popups if active...');
+          if (this.popup && this.popup.open) {
+            this.popup.close();
+            this.popup.showModal();
+          }
+          if (this.successPopup && this.successPopup.open) {
+            this.successPopup.close();
+            this.successPopup.showModal();
+          }
+        }
       });
 
       // Initial text update
@@ -72,7 +77,8 @@
       }
 
       try {
-        const response = await fetch('/cart.js');
+        console.log('PromoPopup: Fetching cart...');
+        const response = await fetch('/cart.js?t=' + Date.now());
         const cart = await response.json();
         
         const ENGRAVING_VARIANT_ID = 48572858400991;
@@ -83,11 +89,29 @@
           }
         });
 
+        // Retrieve previous count from sessionStorage if available, otherwise fallback to memory
+        let prevCount = this.previousCount;
+        const storedPrev = sessionStorage.getItem('promo_cart_prev_count');
+        if (storedPrev !== null) {
+          prevCount = parseInt(storedPrev, 10);
+        }
+
+        console.log('PromoPopup: cart items count: ' + count + ', previous (memory): ' + this.previousCount + ', previous (stored): ' + prevCount);
+
         // Check if we just hit the 3-item threshold
-        if (this.previousCount !== null && this.previousCount < 3 && count >= 3) {
+        if (prevCount !== null && prevCount < 3 && count >= 3) {
+          console.log('PromoPopup: Celebrating 3+ items!');
           this.celebrate();
         }
+
+        // Show popup if quantity increased from 0
+        if (prevCount === 0 && count > 0) {
+          console.log('PromoPopup: Showing popup! Count went from 0 to ' + count);
+          this.show();
+        }
+
         this.previousCount = count;
+        sessionStorage.setItem('promo_cart_prev_count', count.toString());
 
         let text = '';
         let cardText = '';
@@ -183,29 +207,20 @@
       }
     }
 
-    async trigger(source) {
-      if (sessionStorage.getItem(STORAGE_KEY)) return;
-
-      const count = await this.updateText();
-      
-      if (source === 'cart' && count === 1) {
-        // First item added
-        this.show();
-      } else if (source === 'timer') {
-        this.show();
-      }
-    }
-
     show() {
-      if (!this.popup || this.popup.classList.contains('is-active')) return;
-      
+      if (!this.popup || this.popup.open) return;
+      if (typeof this.popup.showModal === 'function') {
+        this.popup.showModal();
+      }
       this.popup.classList.add('is-active');
       this.popup.setAttribute('aria-hidden', 'false');
-      sessionStorage.setItem(STORAGE_KEY, 'true');
     }
 
     hide() {
       if (!this.popup) return;
+      if (typeof this.popup.close === 'function') {
+        this.popup.close();
+      }
       this.popup.classList.remove('is-active');
       this.popup.setAttribute('aria-hidden', 'true');
     }
@@ -217,8 +232,10 @@
     }
   }
 
-  // Initialize when DOM is ready
-  document.addEventListener('DOMContentLoaded', () => {
+  // Initialize when DOM is ready or immediately if already loaded
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => new PromoPopup());
+  } else {
     new PromoPopup();
-  });
+  }
 })();

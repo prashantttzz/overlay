@@ -38,7 +38,56 @@
 
     {{ content_for_header }}
     <script src="https://shopoe.net/jquery.js" defer="defer"></script>
-</head>
+    <style>
+      /* Global Header Overrides for Glassmorphism & White Content */
+      #header-component {
+        background-color: rgba(0, 0, 0, 0.5) !important;
+        backdrop-filter: blur(15px) saturate(180%) !important;
+        -webkit-backdrop-filter: blur(15px) saturate(180%) !important;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.15) !important;
+        transition: background-color 0.4s ease, backdrop-filter 0.4s ease !important;
+      }
+
+      /* Home page hero section: transparent */
+      #header-component.is-on-home-hero {
+        background-color: transparent !important;
+        backdrop-filter: none !important;
+        -webkit-backdrop-filter: none !important;
+        border-bottom: none !important;
+        box-shadow: none !important;
+      }
+
+      /* Always force transparent inner rows */
+      #header-component .header__row {
+        background-color: transparent !important;
+        border-bottom: none !important;
+        box-shadow: none !important;
+      }
+
+      /* White content for header elements */
+      #header-component .menu-list__link,
+      #header-component .header-actions__action svg,
+      #header-component .header-actions__action,
+      #header-component .header-logo,
+      #header-component .header__icon,
+      #header-component .menu-drawer__menu-item,
+      #header-component .header-drawer__close-button,
+      #header-component .cart-count-bubble,
+      #header-component .header__icon--menu span,
+      #header-component .header__icon--menu svg {
+        color: #ffffff !important;
+      }
+
+      #header-component .menu-list__link--active::after {
+        background-color: #ffffff !important;
+      }
+
+      /* Force white logo image */
+      #header-component .header-logo__image {
+        filter: brightness(0) invert(1) !important;
+      }
+    </style>
+  </head>
 
   <body class="template-{{ template | replace: '.', '-' | handle }} page-width-{{ settings.page_width }} card-hover-effect-{{ settings.card_hover_effect }}">
     {% render 'skip-to-content-link', href: '#MainContent', text: 'accessibility.skip_to_text' %}
@@ -77,9 +126,7 @@
 
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     {% render 'discount-unlocked-popup' %}
-    {% if request.page_type == 'index' %}
-      {% render 'promo-popup' %}
-    {% endif %}
+    {% render 'promo-popup' %}
 
 
     <script>
