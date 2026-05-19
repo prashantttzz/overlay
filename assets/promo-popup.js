@@ -66,6 +66,11 @@
     }
 
     async updateText() {
+      const activeCard = document.getElementById('CartPromoCard');
+      if (activeCard) {
+        activeCard.classList.add('is-loading');
+      }
+
       try {
         const response = await fetch('/cart.js');
         const cart = await response.json();
@@ -101,12 +106,24 @@
           cardText = 'Reward unlocked';
         }
 
-        if (this.popupTextEl) this.popupTextEl.textContent = text;
-        if (this.cardTextEl) this.cardTextEl.textContent = cardText.toUpperCase();
+        // Dynamically query DOM on each update to ensure references aren't stale after morphing
+        const activePopupTextEl = document.querySelector('#PromoPopup [data-promo-text]');
+        const activeCardTextEl = document.querySelector('#CartPromoCard [data-cart-promo-text]');
+
+        if (activePopupTextEl) activePopupTextEl.textContent = text;
+        if (activeCardTextEl) activeCardTextEl.textContent = cardText.toUpperCase();
         
         return count;
       } catch (e) {
         console.error('Failed to update promo text', e);
+      } finally {
+        if (activeCard) {
+          // A tiny delay makes the loading transition feel smoother and more deliberate
+          setTimeout(() => {
+            const currentCard = document.getElementById('CartPromoCard');
+            if (currentCard) currentCard.classList.remove('is-loading');
+          }, 300);
+        }
       }
     }
 
@@ -118,23 +135,51 @@
       
       // Fire Confetti!
       if (window.confetti) {
-        const duration = 3 * 1000;
-        const animationEnd = Date.now() + duration;
-        const defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 20001 };
+        const canvas = document.getElementById('DiscountSuccessConfettiCanvas');
+        if (canvas) {
+          // Initialize canvas-confetti on the custom top-layer dialog canvas
+          const myConfetti = confetti.create(canvas, {
+            resize: true,
+            useWorker: true
+          });
 
-        const randomInRange = (min, max) => Math.random() * (max - min) + min;
+          const duration = 3 * 1000;
+          const animationEnd = Date.now() + duration;
+          const defaults = { startVelocity: 30, spread: 360, ticks: 60 };
 
-        const interval = setInterval(() => {
-          const timeLeft = animationEnd - Date.now();
+          const randomInRange = (min, max) => Math.random() * (max - min) + min;
 
-          if (timeLeft <= 0) {
-            return clearInterval(interval);
-          }
+          const interval = setInterval(() => {
+            const timeLeft = animationEnd - Date.now();
 
-          const particleCount = 50 * (timeLeft / duration);
-          confetti({ ...defaults, particleCount, origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 } });
-          confetti({ ...defaults, particleCount, origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 } });
-        }, 250);
+            if (timeLeft <= 0) {
+              return clearInterval(interval);
+            }
+
+            const particleCount = 50 * (timeLeft / duration);
+            myConfetti({ ...defaults, particleCount, origin: { x: randomInRange(0.1, 0.3), y: 0.3 } });
+            myConfetti({ ...defaults, particleCount, origin: { x: randomInRange(0.7, 0.9), y: 0.3 } });
+          }, 250);
+        } else {
+          // Fallback to standard global confetti if canvas element is not present
+          const duration = 3 * 1000;
+          const animationEnd = Date.now() + duration;
+          const defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 20001 };
+
+          const randomInRange = (min, max) => Math.random() * (max - min) + min;
+
+          const interval = setInterval(() => {
+            const timeLeft = animationEnd - Date.now();
+
+            if (timeLeft <= 0) {
+              return clearInterval(interval);
+            }
+
+            const particleCount = 50 * (timeLeft / duration);
+            confetti({ ...defaults, particleCount, origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 } });
+            confetti({ ...defaults, particleCount, origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 } });
+          }, 250);
+        }
       }
     }
 

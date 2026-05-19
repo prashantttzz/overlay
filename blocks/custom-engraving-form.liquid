@@ -209,9 +209,9 @@
   }
 
   /* Font Preview Styles */
-  .preview-font-normal { font-style: normal; }
-  .preview-font-italic { font-style: italic; }
-  .preview-font-arabic { font-family: "Traditional Arabic", "Amiri", serif !important; font-size: 1.2em; }
+  .preview-font-normal { font-family: 'Roboto Mono', monospace !important; font-style: normal !important; }
+  .preview-font-italic { font-family: 'Kapakana', cursive !important; font-style: italic !important; }
+  .preview-font-arabic { font-family: 'The Year of Handicraft Regular', sans-serif !important; font-style: normal !important; font-size: 1.2em !important; text-transform: none !important; letter-spacing: 0 !important; }
 {% endstylesheet %}
 
 {%- unless product.tags contains 'no-engraving' -%}
@@ -236,7 +236,7 @@
         <input
           type="text"
           id="engraving-text-{{ block.id }}"
-          class="engraving-option__input"
+          class="engraving-option__input preview-font-normal"
           placeholder="Enter your text"
           maxlength="20"
           data-engraving-input
@@ -372,7 +372,9 @@
         
         // Apply font style to preview
         const selectedFont = block.querySelector('[data-engraving-font]:checked').value;
-        overlay.className = 'media-gallery__engraving-overlay preview-font-' + selectedFont.toLowerCase();
+        const fontClass = 'preview-font-' + selectedFont.toLowerCase();
+        overlay.className = 'media-gallery__engraving-overlay ' + fontClass;
+        input.className = 'engraving-option__input ' + fontClass;
       }
 
       if (gallery) {
@@ -390,6 +392,7 @@
         if (overlay) {
           overlay.className = 'media-gallery__engraving-overlay preview-font-' + selectedFont;
         }
+        input.className = 'engraving-option__input preview-font-' + selectedFont;
 
         // Toggle RTL for input field if Arabic is selected
         if (selectedFont === 'arabic') {

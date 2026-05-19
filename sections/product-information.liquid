@@ -46,6 +46,20 @@
   {{ closest.product | structured_data }}
 </script>
 
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Kapakana&family=Roboto+Mono:ital,wght@0,300..700;1,300..700&display=swap" rel="stylesheet">
+
+<style>
+  @font-face {
+    font-family: 'The Year of Handicraft Regular';
+    src: url({{ 'TheYearofHandicrafts-Regular.otf' | asset_url }}) format('opentype');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+  }
+</style>
+
 {{ 'product-custom-redesign.css' | asset_url | stylesheet_tag }}
 
 <div class="section-background color-{{ section.settings.color_scheme }}"></div>

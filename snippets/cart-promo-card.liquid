@@ -1,6 +1,16 @@
+{% liquid
+  assign count = 0
+  assign engraving_id = 48572858400991
+  for item in cart.items
+    if item.variant_id != engraving_id
+      assign count = count | plus: item.quantity
+    endif
+  endfor
+%}
 
-<div class="cart-promo-card" id="CartPromoCard">
-  <div class="cart-promo-card__content">
+<div class="cart-promo-card is-loading{% if count >= 3 %} is-unlocked{% endif %}" id="CartPromoCard">
+  <!-- Locked Content State -->
+  <div class="cart-promo-card__content locked-state">
     <div class="cart-promo-card__image">
       <img src="https://cdn.shopify.com/s/files/1/0774/2894/9215/files/h.jpg?v=1777629694" alt="Promo Image" loading="lazy">
     </div>
@@ -8,6 +18,23 @@
     <div class="cart-promo-card__info">
       <h3 class="cart-promo-card__title">BUY 3, UNLOCK REWARD</h3>
       <p class="cart-promo-card__text" data-cart-promo-text>Add 3 more to unlock.</p>
+    </div>
+  </div>
+
+  <!-- Unlocked Content State -->
+  <div class="cart-promo-card__content unlocked-state">
+    <div class="cart-promo-card__icon">
+      <svg class="gift-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="20 12 20 22 4 22 4 12"></polyline>
+        <rect x="2" y="7" width="20" height="5"></rect>
+        <line x1="12" y1="22" x2="12" y2="7"></line>
+        <path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"></path>
+        <path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"></path>
+      </svg>
+    </div>
+    <div class="cart-promo-card__info">
+      <h3 class="cart-promo-card__title success-title">REWARD UNLOCKED</h3>
+      <p class="cart-promo-card__text success-text">Your exclusive special reward is ready! Claim at checkout.</p>
     </div>
   </div>
 </div>
@@ -24,6 +51,111 @@
     display: none; 
     box-shadow: 0 10px 25px rgba(0,0,0,0.04), 0 2px 5px rgba(0,0,0,0.02);
     position: relative;
+    transition: all 0.3s ease;
+  }
+
+  .cart-promo-card.is-loading {
+    pointer-events: none;
+  }
+
+  .cart-promo-card.is-loading .cart-promo-card__title,
+  .cart-promo-card.is-loading .cart-promo-card__text {
+    color: transparent !important;
+    background: #f1f5f9;
+    border-radius: 4px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .cart-promo-card.is-loading .cart-promo-card__title {
+    width: 120px;
+    height: 13px;
+    margin-bottom: 6px;
+  }
+
+  .cart-promo-card.is-loading .cart-promo-card__text {
+    width: 80px;
+    height: 10px;
+  }
+
+  .cart-promo-card.is-loading .cart-promo-card__image img {
+    opacity: 0.25;
+  }
+
+  .cart-promo-card.is-loading::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(
+      90deg,
+      rgba(255, 255, 255, 0) 0%,
+      rgba(255, 255, 255, 0.75) 50%,
+      rgba(255, 255, 255, 0) 100%
+    );
+    animation: promoCardShimmer 1.4s infinite linear;
+    z-index: 5;
+  }
+
+  @keyframes promoCardShimmer {
+    0% {
+      transform: translateX(-100%);
+    }
+    100% {
+      transform: translateX(100%);
+    }
+  }
+
+  /* Unlocked State Styling */
+  .cart-promo-card .unlocked-state {
+    display: none !important;
+  }
+
+  .cart-promo-card.is-unlocked .locked-state {
+    display: none !important;
+  }
+
+  .cart-promo-card.is-unlocked .unlocked-state {
+    display: flex !important;
+    background: linear-gradient(135deg, #f0fdf4, #ffffff);
+    border: 1px solid rgba(34, 197, 94, 0.15);
+  }
+
+  .cart-promo-card__icon {
+    flex: 0 0 80px;
+    height: 80px;
+    background: #000;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .cart-promo-card__icon svg {
+    width: 28px;
+    height: 28px;
+    animation: bounceIcon 2s infinite ease-in-out;
+  }
+
+  @keyframes bounceIcon {
+    0%, 100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-4px);
+    }
+  }
+
+  .cart-promo-card.is-unlocked .success-title {
+    color: #166534;
+    font-weight: 700;
+  }
+
+  .cart-promo-card.is-unlocked .success-text {
+    color: #15803d;
+    font-weight: 500;
   }
 
   .cart-promo-card::before {
@@ -107,7 +239,8 @@
       min-height: 0;
     }
 
-    .cart-promo-card__image {
+    .cart-promo-card__image,
+    .cart-promo-card__icon {
       flex-basis: 72px;
       height: auto;
       min-height: 72px;
