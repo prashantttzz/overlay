@@ -7,6 +7,12 @@
     transition: background-color 0.8s cubic-bezier(0.4, 0, 0.2, 1), color 0.8s ease;
   }
 
+  @media (max-width: 768px) {
+    #scent-layering-{{ section.id }} {
+      display: none !important;
+    }
+  }
+
   #scent-layering-{{ section.id }}.is-dark {
     background-color: #000;
     color: #fff;

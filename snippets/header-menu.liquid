@@ -44,7 +44,25 @@
         {%- endif -%}
         ref="menuitem"
       >
-        <span class="menu-list__link-title">{{- link.title -}}</span>
+        <span class="menu-list__link-title">
+          {%- assign downcased_title = link.title | downcase -%}
+          {%- if downcased_title == 'overlay' -%}
+            {% liquid
+              assign logo_image = settings.logo
+              if images['overlogo.webp'] != blank
+                assign logo_image = images['overlogo.webp']
+              endif
+            %}
+            {% render 'image',
+              image: logo_image,
+              class: 'header-logo__image navbar-logo-image',
+              height: 30,
+              text_fallback: link.title
+            %}
+          {%- else -%}
+            {{- link.title -}}
+          {%- endif -%}
+        </span>
       </a>
       {%- if link.links != blank -%}
         <div class="menu-list__submenu{{ color_scheme_classes }}" ref="submenu[]">

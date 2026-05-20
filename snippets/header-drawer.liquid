@@ -75,7 +75,16 @@
       "
     >
       <div class="menu-drawer__header-overlay">
-        <span class="menu-drawer__logo">OVERLAY</span>
+        <span class="menu-drawer__logo">
+          <img
+            src="https://cdn.shopify.com/s/files/1/0774/2894/9215/files/logo_overlay_blk.png?v=1770912433"
+            alt="Overlay Logo"
+            class="menu-drawer__logo-image"
+            width="100"
+            height="25"
+            loading="lazy"
+          >
+        </span>
         <button
           class="button button-unstyled close-button menu-drawer__close-button"
           type="button"
@@ -753,6 +762,32 @@
     display: flex;
     flex-direction: column;
     transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.6s ease, opacity 0.6s ease;
+
+    /* Override transparent/inverse header variables to ensure black drawer menu items on white background */
+    --menu-top-level-font-color: #000000 !important;
+    --menu-top-level-font-color-rgb: 0 0 0 !important;
+    --menu-parent-font-color: #000000 !important;
+    --menu-parent-active-font-color: #000000 !important;
+    --menu-child-font-color: #000000 !important;
+    --menu-child-active-font-color: #000000 !important;
+    --color-foreground: #000000 !important;
+    --color-foreground-rgb: 0 0 0 !important;
+    color: #000000 !important;
+  }
+
+  .menu-drawer a,
+  .menu-drawer summary,
+  .menu-drawer span,
+  .menu-drawer details,
+  .menu-drawer button {
+    color: #000000 !important;
+  }
+
+  .menu-drawer svg,
+  .menu-drawer svg * {
+    color: #000000 !important;
+    fill: currentColor !important;
+    stroke: currentColor !important;
   }
 
   .menu-open > .menu-drawer {
@@ -779,6 +814,13 @@
     text-transform: uppercase;
     text-align: left;
     margin: 0;
+  }
+
+  .menu-drawer__logo-image {
+    height: 25px;
+    width: auto;
+    object-fit: contain;
+    display: block;
   }
 
   .menu-drawer__close-button {
