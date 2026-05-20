@@ -838,6 +838,13 @@
   .template-product .header-section {
     background-color: #fff !important;
   }
+
+  @media screen and (max-width: 749px) {
+    .template-product #MainContent {
+      margin-top: calc(var(--header-height, 70px) + 20px) !important;
+    }
+  }
+
   .template-product #header-component .header-logo__image {
     filter: invert(1) !important;
   }
