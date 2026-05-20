@@ -284,15 +284,20 @@
 .engraving-text-user {
   font-family: var(--font-galderglynn);
   font-size: 26px; /* slightly larger from original 22px */
-  letter-spacing: 0.1em;
+  letter-spacing: 0.02em; /* reduced letter-spacing for premium normal style */
   font-weight: 400;
   line-height: 1.2;
-  margin-top: 0;
+  margin-top: 10px;
+  max-width: 160px; /* restrict width so it wraps on mobile cap */
+  white-space: normal; /* allow text wrapping */
+  word-break: break-word; /* break long words if needed */
+  text-align: center;
 }
 
 @media screen and (min-width: 750px) {
   .engraving-text-user {
     margin-top: 8px; /* subtle extra push down on larger devices */
+    max-width: 280px; /* larger max-width on desktop cap */
   }
 }
 
