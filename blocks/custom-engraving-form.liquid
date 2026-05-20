@@ -282,27 +282,41 @@
 
     const MAX_CHARS = 20;
     const PREVIEW_CONFIG = {
-      default: {
-        maxFontMobile: 26,
-        minFontMobile: 16,
-        maxFontDesktop: 34,
-        minFontDesktop: 20,
-        shrinkStart: 6,
-        shrinkEnd: 18,
-        lineBreakStart: 12,
-        lineCharsMobile: 9,
-        lineCharsDesktop: 14,
+      normal: {
+        maxFontMobile: 34,
+        minFontMobile: 20,
+        maxFontDesktop: 56,
+        minFontDesktop: 26,
+        shrinkStart: 3,
+        shrinkEnd: 16,
+        lineBreakStartMobile: 10,
+        lineBreakStartDesktop: 14,
+        lineCharsMobile: 8,
+        lineCharsDesktop: 18,
+      },
+      italic: {
+        maxFontMobile: 38,
+        minFontMobile: 22,
+        maxFontDesktop: 60,
+        minFontDesktop: 28,
+        shrinkStart: 3,
+        shrinkEnd: 16,
+        lineBreakStartMobile: 10,
+        lineBreakStartDesktop: 14,
+        lineCharsMobile: 8,
+        lineCharsDesktop: 18,
       },
       arabic: {
-        maxFontMobile: 30,
-        minFontMobile: 18,
-        maxFontDesktop: 36,
-        minFontDesktop: 24,
-        shrinkStart: 5,
-        shrinkEnd: 18,
-        lineBreakStart: 10,
-        lineCharsMobile: 8,
-        lineCharsDesktop: 12,
+        maxFontMobile: 28,
+        minFontMobile: 14,
+        maxFontDesktop: 48,
+        minFontDesktop: 26,
+        shrinkStart: 3,
+        shrinkEnd: 16,
+        lineBreakStartMobile: 8,
+        lineBreakStartDesktop: 12,
+        lineCharsMobile: 7,
+        lineCharsDesktop: 16,
       }
     };
 
@@ -311,7 +325,7 @@
     const getSelectedFont = () => block.querySelector('[data-engraving-font]:checked')?.value.toLowerCase() || 'normal';
 
     function getPreviewConfig(selectedFont) {
-      return selectedFont === 'arabic' ? PREVIEW_CONFIG.arabic : PREVIEW_CONFIG.default;
+      return PREVIEW_CONFIG[selectedFont] || PREVIEW_CONFIG.normal;
     }
 
     function getPreviewFontSize(textLength, selectedFont) {
@@ -333,7 +347,17 @@
       const isDesktop = window.innerWidth >= 750;
       const lineChars = isDesktop ? config.lineCharsDesktop : config.lineCharsMobile;
 
-      if (normalized.length <= config.lineBreakStart || !normalized.includes(' ')) {
+      const lineBreakStart = isDesktop ? config.lineBreakStartDesktop : config.lineBreakStartMobile;
+
+      if (normalized.length <= lineBreakStart || !normalized.includes(' ')) {
+        if (normalized.length > lineBreakStart && !normalized.includes(' ')) {
+          /* No spaces — force break the single long word */
+          const lines = [];
+          for (let i = 0; i < normalized.length; i += lineChars) {
+            lines.push(normalized.substring(i, i + lineChars));
+          }
+          return lines.join('\n');
+        }
         return normalized;
       }
 
@@ -376,6 +400,9 @@
         userOverlay.className = 'engraved-text-effect engraving-text-user ' + fontClass;
         userOverlay.textContent = formatPreviewText(rawValue, selectedFont);
         userOverlay.style.fontSize = hasText ? getPreviewFontSize(trimmedValue.length, selectedFont).toFixed(2) + 'px' : '';
+        /* Tighten letter-spacing as text grows longer */
+        const letterSpacing = trimmedValue.length <= 4 ? '0.04em' : trimmedValue.length <= 10 ? '0.01em' : '-0.01em';
+        userOverlay.style.letterSpacing = hasText ? letterSpacing : '';
         overlay.style.display = hasText ? 'flex' : 'none';
       }
 
