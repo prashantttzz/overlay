@@ -56,13 +56,14 @@
 
   .engraving-option__label {
     font-family: var(--font-galderglynn);
-    font-size: 13px;
+    font-size: 15px;
     text-transform: uppercase;
     letter-spacing: 0.1em;
     font-weight: 500;
   }
 
   .engraving-option__price {
+    font-size: 14px;
     font-weight: 300;
     opacity: 0.6;
     margin-left: auto;
@@ -76,7 +77,7 @@
   }
 
   .engraving-option.is-active .engraving-option__content {
-    max-height: 200px;
+    max-height: 220px;
     opacity: 1;
     margin-top: 1.5rem;
   }
@@ -88,7 +89,7 @@
   }
 
   .engraving-option__input-group label {
-    font-size: 10px;
+    font-size: 12px;
     text-transform: uppercase;
     letter-spacing: 0.1em;
     opacity: 0.5;
@@ -99,10 +100,10 @@
 
   .engraving-option__input {
     width: 100%;
-    padding: 12px;
+    padding: 14px 12px;
     border: 1px solid rgba(0, 0, 0, 0.1);
     font-family: var(--font-galderglynn);
-    font-size: 14px;
+    font-size: 16px;
     background: transparent;
     outline: none;
     transition: border-color 0.3s ease;
@@ -128,7 +129,7 @@
   }
 
   .engraving-option__hint {
-    font-size: 10px;
+    font-size: 11px;
     margin-top: 10px;
     opacity: 0.4;
     font-style: italic;
@@ -144,9 +145,9 @@
     background: #000;
     color: #fff;
     border: 1px solid #000;
-    padding: 0 15px;
+    padding: 0 18px;
     font-family: var(--font-galderglynn);
-    font-size: 10px;
+    font-size: 11px;
     text-transform: uppercase;
     letter-spacing: 0.1em;
     cursor: pointer;
@@ -190,10 +191,10 @@
 
   .engraving-font-option label {
     display: block;
-    padding: 8px 4px;
+    padding: 10px 6px;
     border: 1px solid rgba(0, 0, 0, 0.1);
     text-align: center;
-    font-size: 9px;
+    font-size: 11px;
     text-transform: uppercase;
     letter-spacing: 0.05em;
     cursor: pointer;
@@ -211,7 +212,7 @@
   /* Font Preview Styles */
   .preview-font-normal { font-family: 'Roboto Mono', monospace !important; font-style: normal !important; }
   .preview-font-italic { font-family: 'Kapakana', cursive !important; font-style: italic !important; }
-  .preview-font-arabic { font-family: 'The Year of Handicraft Regular', sans-serif !important; font-style: normal !important; font-size: 1.2em !important; text-transform: none !important; letter-spacing: 0 !important; }
+  .preview-font-arabic { font-family: 'The Year of Handicraft Regular', sans-serif !important; font-style: normal !important; font-size: 1.4em !important; text-transform: none !important; letter-spacing: 0 !important; }
 {% endstylesheet %}
 
 {%- unless product.tags contains 'no-engraving' -%}
@@ -363,17 +364,18 @@
 
       // Update gallery preview
       const overlay = getGlobalOverlay();
+      const userOverlay = overlay ? overlay.querySelector('#engraving-overlay-user') : null;
       const gallery = document.querySelector('media-gallery');
       const hasText = input.value.trim().length > 0;
 
-      if (overlay) {
-        overlay.textContent = input.value;
-        overlay.style.display = hasText ? 'block' : 'none';
+      if (overlay && userOverlay) {
+        userOverlay.textContent = input.value;
+        overlay.style.display = hasText ? 'flex' : 'none';
         
-        // Apply font style to preview
+        // Apply font style to preview (specifically on the userOverlay)
         const selectedFont = block.querySelector('[data-engraving-font]:checked').value;
         const fontClass = 'preview-font-' + selectedFont.toLowerCase();
-        overlay.className = 'media-gallery__engraving-overlay ' + fontClass;
+        userOverlay.className = 'engraved-text-effect engraving-text-user ' + fontClass;
         input.className = 'engraving-option__input ' + fontClass;
       }
 
@@ -387,12 +389,14 @@
     fontOptions.forEach(opt => {
       opt.addEventListener('change', () => {
         const overlay = getGlobalOverlay();
+        const userOverlay = overlay ? overlay.querySelector('#engraving-overlay-user') : null;
         const selectedFont = opt.value.toLowerCase();
+        const fontClass = 'preview-font-' + selectedFont;
         
-        if (overlay) {
-          overlay.className = 'media-gallery__engraving-overlay preview-font-' + selectedFont;
+        if (overlay && userOverlay) {
+          userOverlay.className = 'engraved-text-effect engraving-text-user ' + fontClass;
         }
-        input.className = 'engraving-option__input preview-font-' + selectedFont;
+        input.className = 'engraving-option__input ' + fontClass;
 
         // Toggle RTL for input field if Arabic is selected
         if (selectedFont === 'arabic') {

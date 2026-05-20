@@ -242,18 +242,28 @@
   {% endif %}
 
 .media-gallery__engraving-overlay {
-  font-family: var(--font-galderglynn);
-  font-size: 22px;
-  letter-spacing: 0.1em;
-  font-weight: 400;
-  white-space: nowrap;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
   pointer-events: none;
   position: absolute;
-  top: 44%;
+  top: 44%; /* perfect vertical alignment on mobile bottle cap */
   left: 50%;
   transform: translate(-50%, -50%);
   z-index: 20;
+  white-space: nowrap;
+  width: 100%;
+}
 
+@media screen and (min-width: 750px) {
+  .media-gallery__engraving-overlay {
+    top: 49%; /* shift the entire engraving area down on larger devices */
+  }
+}
+
+.engraved-text-effect {
   /* Engraved into silver — light from above */
   color: transparent;
   background: linear-gradient(
@@ -271,7 +281,37 @@
           drop-shadow(0px -0.5px 0px rgba(0,0,0,0.3));
 }
 
+.engraving-text-user {
+  font-family: var(--font-galderglynn);
+  font-size: 26px; /* slightly larger from original 22px */
+  letter-spacing: 0.1em;
+  font-weight: 400;
+  line-height: 1.2;
+  margin-top: 0;
+}
 
+@media screen and (min-width: 750px) {
+  .engraving-text-user {
+    margin-top: 8px; /* subtle extra push down on larger devices */
+  }
+}
+
+.engraving-text-permanent {
+  font-family: var(--font-galderglynn);
+  font-size: 13px; /* elegantly smaller signature */
+  letter-spacing: 0.25em; /* beautiful high spacing */
+  font-weight: 500;
+  text-transform: uppercase;
+  opacity: 0.85;
+  line-height: 1;
+  margin-top: 24px; /* shifted slightly more below on mobile */
+}
+
+@media screen and (min-width: 750px) {
+  .engraving-text-permanent {
+    margin-top: 55px; /* shift much lower to match desktop cap height */
+  }
+}
 
 /* Font Preview Styles */
 .preview-font-normal {
@@ -284,7 +324,7 @@
 }
 .preview-font-arabic { 
   font-family: 'The Year of Handicraft Regular', sans-serif !important; 
-  font-size: 24px !important; 
+  font-size: 30px !important; /* increased slightly */
   text-transform: none !important;
   letter-spacing: 0 !important;
   line-height: 1.1 !important;
@@ -484,7 +524,10 @@ media-gallery.is-engraving-active .engraving-preview-wrapper {
   <div class="engraving-preview-wrapper" id="engraving-preview-wrapper">
     <div class="engraving-preview-container">
       <img src="https://cdn.shopify.com/s/files/1/0774/2894/9215/files/WhatsApp_Image_2026-05-04_at_12.30.22_AM.jpg?v=1777837890" alt="Engraving Preview" class="engraving-preview-image" width="1000" height="1000">
-      <div class="media-gallery__engraving-overlay" id="engraving-overlay-global"></div>
+      <div class="media-gallery__engraving-overlay" id="engraving-overlay-global">
+        <div class="engraved-text-effect engraving-text-user" id="engraving-overlay-user"></div>
+        <div class="engraved-text-effect engraving-text-permanent">overlay</div>
+      </div>
     </div>
   </div>
   {%- endunless -%}
@@ -714,8 +757,9 @@ media-gallery.is-engraving-active .engraving-preview-wrapper {
           const isEnabled = toggle ? toggle.checked : false;
 
           if (hasText) {
-            overlay.textContent = input.value;
-            overlay.style.display = 'block';
+            const userOverlay = overlay.querySelector('#engraving-overlay-user') || overlay;
+            userOverlay.textContent = input.value;
+            overlay.style.display = 'flex';
           } else {
             overlay.style.display = 'none';
           }
