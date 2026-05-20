@@ -769,7 +769,7 @@ media-gallery.is-engraving-active .engraving-preview-wrapper {
             /* Per-font sizing: desktop gets much bigger fonts since cap image is larger */
             const configs = {
               arabic:  { maxFont: isDesktop ? 48 : 28, minFont: isDesktop ? 26 : 14, shrinkStart: 3, shrinkEnd: 16, lineBreakStart: isDesktop ? 12 : 8, lineChars: isDesktop ? 16 : 7 },
-              italic:  { maxFont: isDesktop ? 60 : 38, minFont: isDesktop ? 28 : 22, shrinkStart: 3, shrinkEnd: 16, lineBreakStart: isDesktop ? 14 : 10, lineChars: isDesktop ? 18 : 8 },
+              italic:  { maxFont: isDesktop ? 60 : 38, minFont: isDesktop ? 28 : 26, shrinkStart: 3, shrinkEnd: 16, lineBreakStart: isDesktop ? 14 : 10, lineChars: isDesktop ? 18 : 8 },
               normal:  { maxFont: isDesktop ? 56 : 34, minFont: isDesktop ? 26 : 20, shrinkStart: 3, shrinkEnd: 16, lineBreakStart: isDesktop ? 14 : 10, lineChars: isDesktop ? 18 : 8 },
             };
             const config = configs[selectedFont] || configs.normal;
