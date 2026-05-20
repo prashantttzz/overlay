@@ -1,4 +1,26 @@
 
+
+/* Font Preview Styles for Engraving */
+.preview-font-normal {
+  font-family: 'Roboto Mono', monospace !important;
+  font-style: normal !important;
+}
+
+.preview-font-italic {
+  font-family: 'Kapakana', cursive !important;
+  font-style: italic !important;
+}
+
+.preview-font-arabic {
+  font-family: 'The Year of Handicraft Regular', sans-serif !important;
+  font-style: normal !important;
+  text-transform: none !important;
+  letter-spacing: 0 !important;
+  line-height: 1.1 !important;
+  direction: rtl !important;
+  text-align: center !important;
+}
+
 /* Product Page Redesign Styles - Final Polish */
 
 .product-information__grid.product-information--redesign {
@@ -194,7 +216,7 @@
 
 @media screen and (min-width: 1025px) {
   .product-information--redesign .product-information__media {
-    padding:5% 10% 10% 10% !important;
+    padding:10% 10% 10% 10% !important;
   }
 }
 
@@ -236,8 +258,8 @@
 
 .product-information--redesign .product-details {
   padding: 5% !important;
-  padding-top: 0 !important;
   display: flex;
+  background-color: rgb(255, 255, 255);
   flex-direction: column;
   width: 100vw;
   justify-content: flex-start;
@@ -248,8 +270,7 @@
 
 @media screen and (min-width: 1025px) {
   .product-information--redesign .product-details {
-    padding: 8% 12% !important;
-    padding-top: 4% !important;
+    padding: 15% 12% !important;
     width: 50vw;
   }
 }
@@ -542,3 +563,23 @@ width: 100%;
   opacity: 1 !important;
   height: auto !important;
 }
+
+/* Layout Polish: Make add to collection button and engraving option full-width on desktop */
+@media screen and (min-width: 1025px) {
+  .product-information--redesign .engraving-option {
+    width: 100% !important;
+    max-width: none !important;
+  }
+
+  .product-information--redesign .buy-buttons-block,
+  .product-information--redesign product-form-component,
+  .product-information--redesign product-form-component form,
+  .product-information--redesign .product-form-buttons,
+  .product-information--redesign .product-form-buttons > span:not(.product-form-text__error),
+  .product-information--redesign .add-to-cart-button {
+    width: 100% !important;
+    max-width: none !important;
+    flex: 1 1 100% !important;
+  }
+}
+

@@ -5,8 +5,6 @@
   'use strict';
 
   const POPUP_ID = 'PromoPopup';
-  const SHOW_DELAY = 5000; // 5 seconds
-  const STORAGE_KEY = 'promo_popup_shown';
 
 
   class PromoPopup {
@@ -32,16 +30,12 @@
     }
 
     init() {
+      console.log('PromoPopup: Initializing...');
       // Close events for main promo popup
       if (this.popup) {
         [this.closeBtn, this.overlay, this.secondaryBtn].forEach(el => {
           if (el) el.addEventListener('click', () => this.hide());
         });
-
-        // Show after delay
-        setTimeout(() => {
-          this.trigger('timer');
-        }, SHOW_DELAY);
       }
 
       // Close events for success popup
@@ -51,14 +45,26 @@
         });
       }
 
-      // Listen for cart additions (Standard event)
-      document.addEventListener('cart:add', () => {
-        this.trigger('cart');
+      // Listen for theme-specific cart updates (Quantity changes, removals, additions)
+      document.addEventListener('cart:update', (e) => {
+        console.log('PromoPopup: cart:update event received', e);
+        this.updateText();
       });
 
-      // Listen for theme-specific cart updates (Quantity changes, removals)
-      document.addEventListener('cart:update', () => {
-        this.updateText();
+      // Listen for cart drawer opening to ensure popups remain on top layer
+      document.addEventListener('dialog:open', (e) => {
+        if (e.target.id === 'cart-drawer') {
+          console.log('PromoPopup: Cart drawer opened! Re-pushing promo popups if active...');
+          if (this.popup && this.popup.open) {
+            this.popup.close();
+            this.popup.showModal();
+          }
+          if (this.successPopup && this.successPopup.open) {
+            this.successPopup.close();
+            this.successPopup.showModal();
+          }
+          this.updateText();
+        }
       });
 
       // Initial text update
@@ -66,8 +72,14 @@
     }
 
     async updateText() {
+      const activeCard = document.getElementById('CartPromoCard');
+      if (activeCard) {
+        activeCard.classList.add('is-loading');
+      }
+
       try {
-        const response = await fetch('/cart.js');
+        console.log('PromoPopup: Fetching cart...');
+        const response = await fetch('/cart.js?t=' + Date.now());
         const cart = await response.json();
         
         const ENGRAVING_VARIANT_ID = 48572858400991;
@@ -78,11 +90,29 @@
           }
         });
 
+        // Retrieve previous count from sessionStorage if available, otherwise fallback to memory
+        let prevCount = this.previousCount;
+        const storedPrev = sessionStorage.getItem('promo_cart_prev_count');
+        if (storedPrev !== null) {
+          prevCount = parseInt(storedPrev, 10);
+        }
+
+        console.log('PromoPopup: cart items count: ' + count + ', previous (memory): ' + this.previousCount + ', previous (stored): ' + prevCount);
+
         // Check if we just hit the 3-item threshold
-        if (this.previousCount !== null && this.previousCount < 3 && count >= 3) {
+        if (prevCount !== null && prevCount < 3 && count >= 3) {
+          console.log('PromoPopup: Celebrating 3+ items!');
           this.celebrate();
         }
+
+        // Show popup if quantity increased from 0
+        if (prevCount === 0 && count > 0) {
+          console.log('PromoPopup: Showing popup! Count went from 0 to ' + count);
+          this.show();
+        }
+
         this.previousCount = count;
+        sessionStorage.setItem('promo_cart_prev_count', count.toString());
 
         let text = '';
         let cardText = '';
@@ -101,12 +131,24 @@
           cardText = 'Reward unlocked';
         }
 
-        if (this.popupTextEl) this.popupTextEl.textContent = text;
-        if (this.cardTextEl) this.cardTextEl.textContent = cardText.toUpperCase();
+        // Dynamically query DOM on each update to ensure references aren't stale after morphing
+        const activePopupTextEl = document.querySelector('#PromoPopup [data-promo-text]');
+        const activeCardTextEl = document.querySelector('#CartPromoCard [data-cart-promo-text]');
+
+        if (activePopupTextEl) activePopupTextEl.textContent = text;
+        if (activeCardTextEl) activeCardTextEl.textContent = cardText.toUpperCase();
         
         return count;
       } catch (e) {
         console.error('Failed to update promo text', e);
+      } finally {
+        if (activeCard) {
+          // A tiny delay makes the loading transition feel smoother and more deliberate
+          setTimeout(() => {
+            const currentCard = document.getElementById('CartPromoCard');
+            if (currentCard) currentCard.classList.remove('is-loading');
+          }, 300);
+        }
       }
     }
 
@@ -118,49 +160,68 @@
       
       // Fire Confetti!
       if (window.confetti) {
-        const duration = 3 * 1000;
-        const animationEnd = Date.now() + duration;
-        const defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 20001 };
+        const canvas = document.getElementById('DiscountSuccessConfettiCanvas');
+        if (canvas) {
+          // Initialize canvas-confetti on the custom top-layer dialog canvas
+          const myConfetti = confetti.create(canvas, {
+            resize: true,
+            useWorker: true
+          });
 
-        const randomInRange = (min, max) => Math.random() * (max - min) + min;
+          const duration = 3 * 1000;
+          const animationEnd = Date.now() + duration;
+          const defaults = { startVelocity: 30, spread: 360, ticks: 60 };
 
-        const interval = setInterval(() => {
-          const timeLeft = animationEnd - Date.now();
+          const randomInRange = (min, max) => Math.random() * (max - min) + min;
 
-          if (timeLeft <= 0) {
-            return clearInterval(interval);
-          }
+          const interval = setInterval(() => {
+            const timeLeft = animationEnd - Date.now();
 
-          const particleCount = 50 * (timeLeft / duration);
-          confetti({ ...defaults, particleCount, origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 } });
-          confetti({ ...defaults, particleCount, origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 } });
-        }, 250);
-      }
-    }
+            if (timeLeft <= 0) {
+              return clearInterval(interval);
+            }
 
-    async trigger(source) {
-      if (sessionStorage.getItem(STORAGE_KEY)) return;
+            const particleCount = 50 * (timeLeft / duration);
+            myConfetti({ ...defaults, particleCount, origin: { x: randomInRange(0.1, 0.3), y: 0.3 } });
+            myConfetti({ ...defaults, particleCount, origin: { x: randomInRange(0.7, 0.9), y: 0.3 } });
+          }, 250);
+        } else {
+          // Fallback to standard global confetti if canvas element is not present
+          const duration = 3 * 1000;
+          const animationEnd = Date.now() + duration;
+          const defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 20001 };
 
-      const count = await this.updateText();
-      
-      if (source === 'cart' && count === 1) {
-        // First item added
-        this.show();
-      } else if (source === 'timer') {
-        this.show();
+          const randomInRange = (min, max) => Math.random() * (max - min) + min;
+
+          const interval = setInterval(() => {
+            const timeLeft = animationEnd - Date.now();
+
+            if (timeLeft <= 0) {
+              return clearInterval(interval);
+            }
+
+            const particleCount = 50 * (timeLeft / duration);
+            confetti({ ...defaults, particleCount, origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 } });
+            confetti({ ...defaults, particleCount, origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 } });
+          }, 250);
+        }
       }
     }
 
     show() {
-      if (!this.popup || this.popup.classList.contains('is-active')) return;
-      
+      if (!this.popup || this.popup.open) return;
+      if (typeof this.popup.showModal === 'function') {
+        this.popup.showModal();
+      }
       this.popup.classList.add('is-active');
       this.popup.setAttribute('aria-hidden', 'false');
-      sessionStorage.setItem(STORAGE_KEY, 'true');
     }
 
     hide() {
       if (!this.popup) return;
+      if (typeof this.popup.close === 'function') {
+        this.popup.close();
+      }
       this.popup.classList.remove('is-active');
       this.popup.setAttribute('aria-hidden', 'true');
     }
@@ -172,8 +233,10 @@
     }
   }
 
-  // Initialize when DOM is ready
-  document.addEventListener('DOMContentLoaded', () => {
+  // Initialize when DOM is ready or immediately if already loaded
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => new PromoPopup());
+  } else {
     new PromoPopup();
-  });
+  }
 })();

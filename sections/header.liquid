@@ -665,8 +665,7 @@
     }
   }
   /* Custom Header Overrides */
-  .template-index .header-section,
-  .template-collection .header-section {
+  .header-section {
     position: fixed !important;
     top: 0;
     left: 0;
@@ -675,22 +674,33 @@
     z-index: 1000;
   }
 
-  #header-component {
-    --color-foreground: 255 255 255;
-    --color-background: 0 0 0;
-    background-color: transparent !important;
-    backdrop-filter: blur(0px) saturate(100%);
-    -webkit-backdrop-filter: blur(0px) saturate(100%);
-    transition: background-color 0.4s ease, backdrop-filter 0.4s ease;
-    border-bottom: none !important;
+  #header-component,
+  #header-component .header__row {
+    --color-foreground: 255 255 255 !important;
+    --color-background: 0 0 0 !important;
+    --color-button: 255 255 255 !important;
+    --color-button-text: 0 0 0 !important;
+    --color-secondary-button-text: 255 255 255 !important;
+    --color-heading: 255 255 255 !important;
+    --color-link: 255 255 255 !important;
+    --color-border: 255 255 255 !important;
+    color: #fff !important;
   }
 
-  #header-component.is-scrolled:not(.is-on-home-hero) {
-    background-color: rgba(0, 0, 0, 0.4) !important;
-    backdrop-filter: blur(30px) saturate(180%);
-    -webkit-backdrop-filter: blur(30px) saturate(180%);
+  #header-component {
+    background-color: rgba(0, 0, 0, 0.5) !important;
+    backdrop-filter: blur(15px) saturate(180%) !important;
+    -webkit-backdrop-filter: blur(15px) saturate(180%) !important;
+    transition: background-color 0.4s ease, backdrop-filter 0.4s ease;
     border-bottom: 1px solid rgba(255, 255, 255, 0.15) !important;
-    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  }
+  
+  #header-component .header__row,
+  #header-component .header__column,
+  #header-component .header-logo,
+  #header-component header-actions,
+  #header-component .menu-list {
+    color: #fff !important;
   }
 
   .header__row {
@@ -698,9 +708,9 @@
     border-bottom: none !important;
   }
 
-  /* Default State */
+  /* Default State (White logo) */
   .header-logo__image {
-    filter: invert(1); /* Default to black logo */
+    filter: brightness(0) invert(1) !important;
     height: 45px !important;
     width: auto !important;
     transition: filter 0.4s ease, height 0.3s ease;
@@ -712,7 +722,7 @@
     letter-spacing: 0.12em !important;
     text-transform: uppercase !important;
     font-size: 0.7rem !important;
-    color: #000 !important; /* Default to black */
+    color: #fff !important;
     padding: 0 0.75rem !important;
     position: relative;
     transition: color 0.4s ease, opacity 0.3s ease;
@@ -725,7 +735,7 @@
     left: 0.75rem;
     right: 0.75rem;
     height: 1px;
-    background-color: #000; /* Default to black */
+    background-color: #fff !important;
     transition: background-color 0.4s ease;
   }
 
@@ -751,75 +761,20 @@
   .header__icon--menu svg {
     width: 22px !important;
     height: 22px !important;
-    color: #000 !important; /* Default to black */
+    color: #fff !important;
+    fill: none !important;
+    stroke: currentColor !important;
     stroke-width: 1.2px !important;
     transition: color 0.4s ease;
   }
 
-  /* White header only while overlapping the home hero */
+  /* Transparent header only while overlapping the home hero */
   #header-component.is-on-home-hero {
-    --color-foreground: 255 255 255;
-    --color-foreground-rgb: 255 255 255;
-    --menu-top-level-font-color: #fff;
-    --menu-top-level-font-color-rgb: 255 255 255;
-    color: #fff !important;
-  }
-
-  #header-component.is-on-home-hero .header__row,
-  #header-component.is-on-home-hero .header__column,
-  #header-component.is-on-home-hero .header-logo,
-  #header-component.is-on-home-hero header-actions,
-  #header-component.is-on-home-hero .menu-list {
-    color: #fff !important;
-  }
-
-  #header-component.is-on-home-hero .header-logo__image {
-    filter: none !important;
-  }
-
-  #header-component.is-on-home-hero .menu-list__link {
-    color: #fff !important;
-  }
-
-  #header-component.is-on-home-hero .menu-list__link--active::after {
-    background-color: #fff !important;
-  }
-
-  #header-component.is-on-home-hero .header-actions__action svg,
-  #header-component.is-on-home-hero .header__icon--menu svg {
-    color: #fff !important;
-    fill: none !important;
-    stroke: currentColor !important;
-  }
-
-  /* Scrolled State & Non-Home Pages (Black glassmorphism) */
-  #header-component.is-scrolled:not(.is-on-home-hero) {
-    background-color: rgba(0, 0, 0, 0.5) !important;
-    backdrop-filter: blur(15px) saturate(180%);
-    -webkit-backdrop-filter: blur(15px) saturate(180%);
-    color: #fff !important;
-  }
-  #header-component.is-scrolled:not(.is-on-home-hero) .header__row,
-  #header-component.is-scrolled:not(.is-on-home-hero) .header__column,
-  #header-component.is-scrolled:not(.is-on-home-hero) .header-logo,
-  #header-component.is-scrolled:not(.is-on-home-hero) header-actions,
-  #header-component.is-scrolled:not(.is-on-home-hero) .menu-list {
-    color: #fff !important;
-  }
-  #header-component.is-scrolled:not(.is-on-home-hero) .header-logo__image {
-    filter: none !important;
-  }
-  #header-component.is-scrolled:not(.is-on-home-hero) .menu-list__link {
-    color: #fff !important;
-  }
-  #header-component.is-scrolled:not(.is-on-home-hero) .menu-list__link--active::after {
-    background-color: #fff !important;
-  }
-  #header-component.is-scrolled:not(.is-on-home-hero) .header-actions__action svg,
-  #header-component.is-scrolled:not(.is-on-home-hero) .header__icon--menu svg {
-    color: #fff !important;
-    fill: none !important;
-    stroke: currentColor !important;
+    background-color: transparent !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    border-bottom: none !important;
+    box-shadow: none !important;
   }
   .header__columns {
     padding-block: 0.75rem !important;
@@ -834,9 +789,17 @@
     }
   }
 
-  /* Force Black Header for Product Page */
-  .template-product .header-section {
-    background-color: #fff !important;
+  /* Force Dark Glassmorphism Header for Product, Contact, and General Pages */
+  .template-product .header-section,
+  .template-page-contact .header-section,
+  [class*="template-page-contact"] .header-section,
+  body:has(#contact-redesign) .header-section,
+  body:has(.contact-discovery) .header-section,
+  .template-page .header-section {
+       background-color: rgba(0, 0, 0, 0.5) !important;
+    backdrop-filter: blur(15px) saturate(180%) !important;
+    -webkit-backdrop-filter: blur(15px) saturate(180%) !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.15) !important;
   }
 
   @media screen and (max-width: 749px) {
@@ -845,19 +808,71 @@
     }
   }
 
-  .template-product #header-component .header-logo__image {
-    filter: invert(1) !important;
+  .template-product #header-component,
+  .template-page-contact #header-component,
+  [class*="template-page-contact"] #header-component,
+  body:has(#contact-redesign) #header-component,
+  body:has(.contact-discovery) #header-component,
+  .template-page #header-component {
+    background-color: rgba(0, 0, 0, 0.5) !important;
+    backdrop-filter: blur(15px) saturate(180%) !important;
+    -webkit-backdrop-filter: blur(15px) saturate(180%) !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.15) !important;
   }
-  .template-product #header-component .menu-list__link {
-    color: #000 !important;
+
+  .template-product #header-component .header__row,
+  .template-page-contact #header-component .header__row,
+  [class*="template-page-contact"] #header-component .header__row,
+  body:has(#contact-redesign) #header-component .header__row,
+  body:has(.contact-discovery) #header-component .header__row,
+  .template-page #header-component .header__row {
+    background-color: transparent !important;
   }
-  .template-product #header-component .menu-list__link--active::after {
-    background-color: #000 !important;
+
+  .template-product .menu-list__link,
+  .template-page-contact .menu-list__link,
+  [class*="template-page-contact"] .menu-list__link,
+  body:has(#contact-redesign) .menu-list__link,
+  body:has(.contact-discovery) .menu-list__link,
+  .template-page .menu-list__link,
+  .template-product .header-actions__action svg,
+  .template-page-contact .header-actions__action svg,
+  [class*="template-page-contact"] .header-actions__action svg,
+  body:has(#contact-redesign) .header-actions__action svg,
+  body:has(.contact-discovery) .header-actions__action svg,
+  .template-page .header-actions__action svg,
+  .template-product .header__icon--menu svg,
+  .template-page-contact .header__icon--menu svg,
+  [class*="template-page-contact"] .header__icon--menu svg,
+  body:has(#contact-redesign) .header__icon--menu svg,
+  body:has(.contact-discovery) .header__icon--menu svg,
+  .template-page .header__icon--menu svg,
+  .template-product .header__heading,
+  .template-page-contact .header__heading,
+  [class*="template-page-contact"] .header__heading,
+  body:has(#contact-redesign) .header__heading,
+  body:has(.contact-discovery) .header__heading,
+  .template-page .header__heading {
+    color: #fff !important;
+    stroke: #fff !important;
   }
-  .template-product #header-component .header-actions__action svg,
-  .template-product #header-component .header__icon--menu svg {
-    color: #000 !important;
-    stroke: #000 !important;
+
+  .template-product .header-logo__image,
+  .template-page-contact .header-logo__image,
+  [class*="template-page-contact"] .header-logo__image,
+  body:has(#contact-redesign) .header-logo__image,
+  body:has(.contact-discovery) .header-logo__image,
+  .template-page .header-logo__image {
+    filter: brightness(0) invert(1) !important;
+  }
+
+  .template-product .menu-list__link--active::after,
+  .template-page-contact .menu-list__link--active::after,
+  [class*="template-page-contact"] .menu-list__link--active::after,
+  body:has(#contact-redesign) .menu-list__link--active::after,
+  body:has(.contact-discovery) .menu-list__link--active::after,
+  .template-page .menu-list__link--active::after {
+    background-color: #fff !important;
   }
 
   /* Account Popover & Drawer Noir Redesign */
@@ -993,27 +1008,7 @@
     border-radius: 0 !important;
   }
 
-  /* Product Page Header Override */
-  .template-product #header-component {
-    background-color: rgba(0, 0, 0, 0.8) !important;
-    backdrop-filter: blur(25px) saturate(10%) !important;
-    -webkit-backdrop-filter: blur(25px) saturate(150%) !important;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
-  }
 
-  .template-product .menu-list__link,
-  .template-product .header-actions__action svg,
-  .template-product .header__icon--menu svg {
-    color: #fff !important;
-  }
-
-  .template-product .header-logo__image {
-    filter: none !important;
-  }
-
-  .template-product .menu-list__link--active::after {
-    background-color: #fff !important;
-  }
 {% endstylesheet %}
 
 {% unless request.design_mode %}

@@ -210,9 +210,9 @@
   }
 
   /* Font Preview Styles */
-  .preview-font-normal { font-style: normal; }
-  .preview-font-italic { font-style: italic; }
-  .preview-font-arabic { font-family: "Traditional Arabic", "Amiri", serif !important; font-size: 1.4em !important; }
+  .preview-font-normal { font-family: 'Roboto Mono', monospace !important; font-style: normal !important; }
+  .preview-font-italic { font-family: 'Kapakana', cursive !important; font-style: italic !important; }
+  .preview-font-arabic { font-family: 'The Year of Handicraft Regular', sans-serif !important; font-style: normal !important; font-size: 1.4em !important; text-transform: none !important; letter-spacing: 0 !important; }
 {% endstylesheet %}
 
 {%- unless product.tags contains 'no-engraving' -%}
@@ -237,7 +237,7 @@
         <input
           type="text"
           id="engraving-text-{{ block.id }}"
-          class="engraving-option__input"
+          class="engraving-option__input preview-font-normal"
           placeholder="Enter your text"
           maxlength="20"
           data-engraving-input

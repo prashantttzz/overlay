@@ -46,79 +46,7 @@
   z-index: 99999 !important;
 }
 
-/* Dynamic Collection Header States */
-.template-collection #header-component.is-on-home-hero {
-  background-color: transparent !important;
-  border-bottom: none !important;
-}
 
-.template-collection #header-component.is-on-home-hero .menu-list__link,
-.template-collection #header-component.is-on-home-hero .header-actions__action svg,
-.template-collection #header-component.is-on-home-hero .header__icon--menu svg,
-.template-collection #header-component.is-on-home-hero .header__icon svg,
-.template-collection #header-component.is-on-home-hero .menu-drawer__menu-item {
-  color: #fff !important;
-  stroke: #fff !important;
-  fill: none !important;
-}
-
-.template-collection #header-component.is-on-home-hero .header-logo__image {
-  filter: brightness(0) invert(1) !important;
-}
-
-/* Force Black Mobile Menu Drawer Content on Collection Page - COMPREHENSIVE */
-.template-collection .menu-drawer,
-.template-collection .menu-drawer__inner-container,
-.template-collection .menu-drawer__menu-item,
-.template-collection .menu-drawer__menu-item a,
-.template-collection .menu-drawer__menu-item span,
-.template-collection .menu-drawer__close-button,
-.template-collection .menu-drawer__close-button svg,
-.template-collection .menu-drawer__account-link,
-.template-collection .menu-drawer__social-link svg,
-.template-collection .menu-drawer__localization-form,
-.template-collection .menu-drawer .header__icon svg {
-  color: #000 !important;
-  stroke: #000 !important;
-  fill: none !important;
-  --color-foreground: 0 0 0 !important;
-}
-
-.template-collection .menu-drawer__menu-item[aria-expanded="true"] {
-  color: #000 !important;
-}
-
-.template-collection #header-component.is-on-home-hero .header-logo__image {
-  filter: brightness(0) invert(1) !important;
-} /* White logo on banner */
-
-.template-collection #header-component.is-on-home-hero .header-actions__action svg,
-.template-collection #header-component.is-on-home-hero .header__icon--menu svg {
-  color: #fff !important;
-  stroke: #fff !important;
-}
-
-/* Scrolled State: Black text with Glass effect */
-.template-collection #header-component.is-scrolled:not(.is-on-home-hero) {
-  background-color: rgba(255, 255, 255, 0.7) !important;
-  backdrop-filter: blur(15px) saturate(180%);
-  -webkit-backdrop-filter: blur(15px) saturate(180%);
-  border-bottom: 1px solid rgba(0, 0, 0, 0.05) !important;
-}
-
-.template-collection #header-component.is-scrolled:not(.is-on-home-hero) .menu-list__link {
-  color: #000 !important;
-}
-
-.template-collection #header-component.is-scrolled:not(.is-on-home-hero) .header-logo__image {
-  filter: invert(1) !important; /* Black logo on white glass */
-}
-
-.template-collection #header-component.is-scrolled:not(.is-on-home-hero) .header-actions__action svg,
-.template-collection #header-component.is-scrolled:not(.is-on-home-hero) .header__icon--menu svg {
-  color: #000 !important;
-  stroke: #000 !important;
-}
 
 /* Top Navigation Bar */
 .collection-top-nav-bar {

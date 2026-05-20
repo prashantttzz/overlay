@@ -5,13 +5,24 @@
   left: 0;
   width: 100%;
   height: 100%;
-  z-index: 10000;
-  display: flex;
+  z-index: 99999;
+  display: none;
   align-items: center;
   justify-content: center;
+  background: transparent;
+  border: none;
+  padding: 0;
+  margin: 0;
+  max-width: none;
+  max-height: none;
+  overflow: visible;
   opacity: 0;
   pointer-events: none;
   transition: opacity 0.5s ease;
+}
+
+.promo-popup[open] {
+  display: flex;
 }
 
 .promo-popup.is-active {
@@ -34,7 +45,7 @@
   position: relative;
   background: #fff;
   width: 95%;
-  max-width: 900px;
+  max-width: 500px;
   display: flex;
   flex-direction: column;
   box-shadow: 0 30px 60px rgba(0,0,0,0.4);
@@ -50,37 +61,18 @@
 
 .promo-popup__content {
   display: flex;
-  min-height: 500px;
+  min-height: 350px;
 }
 
 .promo-popup__left {
-  flex: 4;
-  padding: 80px 60px;
+  flex: 1;
+  padding: 60px 40px;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  text-align: left;
+  align-items: center;
+  text-align: center;
   background: white;
-}
-
-.promo-popup__right {
-  flex: 6;
-  background: #000;
-  position: relative;
-  overflow: hidden;
-}
-
-.promo-popup__right img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: right;
-  transition: transform 2s ease;
-  filter: brightness(0.9);
-}
-
-.promo-popup.is-active .promo-popup__right img {
-  transform: scale(1.1);
 }
 
 .promo-popup__badge {
@@ -124,7 +116,7 @@
 .promo-popup__actions {
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
+  align-items: center;
 }
 
 .promo-popup__btn {
@@ -194,10 +186,6 @@
     flex-direction: column;
     justify-content: center;
     min-height: 280px;
-  }
-  .promo-popup__right {
-    height: 250px;
-    flex: none;
   }
   .promo-popup__actions {
     align-items: center;
