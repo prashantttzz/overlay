@@ -281,9 +281,109 @@
     let isConfirmed = false;
 
     const MAX_CHARS = 20;
+    const PREVIEW_CONFIG = {
+      default: {
+        maxFontMobile: 26,
+        minFontMobile: 16,
+        maxFontDesktop: 34,
+        minFontDesktop: 20,
+        shrinkStart: 6,
+        shrinkEnd: 18,
+        lineBreakStart: 12,
+        lineCharsMobile: 9,
+        lineCharsDesktop: 14,
+      },
+      arabic: {
+        maxFontMobile: 30,
+        minFontMobile: 18,
+        maxFontDesktop: 36,
+        minFontDesktop: 24,
+        shrinkStart: 5,
+        shrinkEnd: 18,
+        lineBreakStart: 10,
+        lineCharsMobile: 8,
+        lineCharsDesktop: 12,
+      }
+    };
 
     // Find the global overlay in the media gallery (visual preview)
     const getGlobalOverlay = () => document.getElementById('engraving-overlay-global');
+    const getSelectedFont = () => block.querySelector('[data-engraving-font]:checked')?.value.toLowerCase() || 'normal';
+
+    function getPreviewConfig(selectedFont) {
+      return selectedFont === 'arabic' ? PREVIEW_CONFIG.arabic : PREVIEW_CONFIG.default;
+    }
+
+    function getPreviewFontSize(textLength, selectedFont) {
+      const config = getPreviewConfig(selectedFont);
+      const isDesktop = window.innerWidth >= 750;
+      const maxFont = isDesktop ? config.maxFontDesktop : config.maxFontMobile;
+      const minFont = isDesktop ? config.minFontDesktop : config.minFontMobile;
+
+      if (textLength <= config.shrinkStart) return maxFont;
+      if (textLength >= config.shrinkEnd) return minFont;
+
+      const progress = (textLength - config.shrinkStart) / (config.shrinkEnd - config.shrinkStart);
+      return maxFont - ((maxFont - minFont) * progress);
+    }
+
+    function formatPreviewText(text, selectedFont) {
+      const normalized = text.replace(/\s+/g, ' ').trim();
+      const config = getPreviewConfig(selectedFont);
+      const isDesktop = window.innerWidth >= 750;
+      const lineChars = isDesktop ? config.lineCharsDesktop : config.lineCharsMobile;
+
+      if (normalized.length <= config.lineBreakStart || !normalized.includes(' ')) {
+        return normalized;
+      }
+
+      const words = normalized.split(' ');
+      const lines = [];
+      let currentLine = '';
+
+      words.forEach((word) => {
+        const nextLine = currentLine ? currentLine + ' ' + word : word;
+
+        if (!currentLine || nextLine.length <= lineChars) {
+          currentLine = nextLine;
+          return;
+        }
+
+        lines.push(currentLine);
+        currentLine = word;
+      });
+
+      if (currentLine) {
+        lines.push(currentLine);
+      }
+
+      return lines.join('\n');
+    }
+
+    function applyPreviewState() {
+      const overlay = getGlobalOverlay();
+      const userOverlay = overlay ? overlay.querySelector('#engraving-overlay-user') : null;
+      const gallery = document.querySelector('media-gallery');
+      const selectedFont = getSelectedFont();
+      const fontClass = 'preview-font-' + selectedFont;
+      const rawValue = input.value;
+      const trimmedValue = rawValue.trim();
+      const hasText = trimmedValue.length > 0;
+
+      input.className = 'engraving-option__input ' + fontClass;
+
+      if (overlay && userOverlay) {
+        userOverlay.className = 'engraved-text-effect engraving-text-user ' + fontClass;
+        userOverlay.textContent = formatPreviewText(rawValue, selectedFont);
+        userOverlay.style.fontSize = hasText ? getPreviewFontSize(trimmedValue.length, selectedFont).toFixed(2) + 'px' : '';
+        overlay.style.display = hasText ? 'flex' : 'none';
+      }
+
+      if (gallery) {
+        const isMobile = window.innerWidth <= 1024;
+        gallery.classList.toggle('is-engraving-active', toggle.checked && (hasText || isMobile));
+      }
+    }
 
     // Live character countdown
     function updateCountdown() {
@@ -362,41 +462,12 @@
         errorEl.style.display = 'none';
       }
 
-      // Update gallery preview
-      const overlay = getGlobalOverlay();
-      const userOverlay = overlay ? overlay.querySelector('#engraving-overlay-user') : null;
-      const gallery = document.querySelector('media-gallery');
-      const hasText = input.value.trim().length > 0;
-
-      if (overlay && userOverlay) {
-        userOverlay.textContent = input.value;
-        overlay.style.display = hasText ? 'flex' : 'none';
-        
-        // Apply font style to preview (specifically on the userOverlay)
-        const selectedFont = block.querySelector('[data-engraving-font]:checked').value;
-        const fontClass = 'preview-font-' + selectedFont.toLowerCase();
-        userOverlay.className = 'engraved-text-effect engraving-text-user ' + fontClass;
-        input.className = 'engraving-option__input ' + fontClass;
-      }
-
-      if (gallery) {
-        // Mobile: Swap on toggle check. Desktop: Swap when text exists.
-        const isMobile = window.innerWidth <= 1024;
-        gallery.classList.toggle('is-engraving-active', toggle.checked && (hasText || isMobile));
-      }
+      applyPreviewState();
     });
 
     fontOptions.forEach(opt => {
       opt.addEventListener('change', () => {
-        const overlay = getGlobalOverlay();
-        const userOverlay = overlay ? overlay.querySelector('#engraving-overlay-user') : null;
         const selectedFont = opt.value.toLowerCase();
-        const fontClass = 'preview-font-' + selectedFont;
-        
-        if (overlay && userOverlay) {
-          userOverlay.className = 'engraved-text-effect engraving-text-user ' + fontClass;
-        }
-        input.className = 'engraving-option__input ' + fontClass;
 
         // Toggle RTL for input field if Arabic is selected
         if (selectedFont === 'arabic') {
@@ -406,6 +477,8 @@
           input.setAttribute('dir', 'ltr');
           input.placeholder = 'Enter your text';
         }
+
+        applyPreviewState();
       });
     });
 
@@ -417,6 +490,8 @@
     });
 
     updateCountdown();
+    applyPreviewState();
+    window.addEventListener('resize', applyPreviewState);
   })();
 </script>
 {%- endunless -%}

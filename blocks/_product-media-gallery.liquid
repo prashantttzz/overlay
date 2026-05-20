@@ -289,8 +289,9 @@
   line-height: 1.2;
   margin-top: 10px;
   max-width: 160px; /* restrict width so it wraps on mobile cap */
-  white-space: normal; /* allow text wrapping */
-  word-break: break-word; /* break long words if needed */
+  white-space: pre-line; /* preserve JS-inserted line breaks */
+  overflow-wrap: anywhere; /* break long words if needed */
+  word-break: break-word;
   text-align: center;
 }
 
@@ -763,7 +764,45 @@ media-gallery.is-engraving-active .engraving-preview-wrapper {
 
           if (hasText) {
             const userOverlay = overlay.querySelector('#engraving-overlay-user') || overlay;
-            userOverlay.textContent = input.value;
+            const selectedFont = document.querySelector('[data-engraving-font]:checked')?.value.toLowerCase() || 'normal';
+            const isDesktop = window.innerWidth >= 750;
+            const config = selectedFont === 'arabic'
+              ? { maxFont: isDesktop ? 36 : 30, minFont: isDesktop ? 24 : 18, shrinkStart: 5, shrinkEnd: 18, lineBreakStart: 10, lineChars: isDesktop ? 12 : 8 }
+              : { maxFont: isDesktop ? 34 : 26, minFont: isDesktop ? 20 : 16, shrinkStart: 6, shrinkEnd: 18, lineBreakStart: 12, lineChars: isDesktop ? 14 : 9 };
+            const normalized = input.value.replace(/\s+/g, ' ').trim();
+            let previewText = normalized;
+
+            if (normalized.length > config.lineBreakStart && normalized.includes(' ')) {
+              const words = normalized.split(' ');
+              const lines = [];
+              let currentLine = '';
+
+              words.forEach((word) => {
+                const nextLine = currentLine ? currentLine + ' ' + word : word;
+
+                if (!currentLine || nextLine.length <= config.lineChars) {
+                  currentLine = nextLine;
+                  return;
+                }
+
+                lines.push(currentLine);
+                currentLine = word;
+              });
+
+              if (currentLine) lines.push(currentLine);
+              previewText = lines.join('\n');
+            }
+
+            let fontSize = config.maxFont;
+            if (normalized.length >= config.shrinkEnd) {
+              fontSize = config.minFont;
+            } else if (normalized.length > config.shrinkStart) {
+              const progress = (normalized.length - config.shrinkStart) / (config.shrinkEnd - config.shrinkStart);
+              fontSize = config.maxFont - ((config.maxFont - config.minFont) * progress);
+            }
+
+            userOverlay.textContent = previewText;
+            userOverlay.style.fontSize = fontSize.toFixed(2) + 'px';
             overlay.style.display = 'flex';
           } else {
             overlay.style.display = 'none';
