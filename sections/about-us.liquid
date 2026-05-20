@@ -25,47 +25,137 @@
     .about-split {
       flex-direction: row;
       align-items: center;
-      gap: 100px;
+      gap: 90px;
+    }
+    .about-split__image-column {
+      flex: 0.85;
+    }
+    .about-split__text-column {
+      flex: 1.15;
     }
   }
 
-  /* Left Column: Image with Reveal Animation */
+  /* ── Image Column ── */
   .about-split__image-column {
-    flex: 1;
+    flex: 1.1;
     position: relative;
     width: 100%;
-    transform: translateY(40px);
     opacity: 0;
-    animation: fadeInUp 1s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+    transform: translateY(30px);
+    animation: aboutFadeIn 0.8s ease 0.1s forwards;
   }
 
-  .about-split__image-wrapper {
+  @keyframes aboutFadeIn {
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ── Carousel ── */
+  .about-carousel {
     position: relative;
     width: 100%;
-    padding-bottom: 90%; /* Slight taller Aspect Ratio for elegance */
+    border-radius: 6px;
     overflow: hidden;
-    background-color: #f5f5f5;
-    border-radius: 4px;
-    box-shadow: 0 20px 40px rgba(0,0,0,0.06);
   }
 
-  .about-split__image {
+  .about-carousel__viewport {
+    position: relative;
+    width: 100%;
+    padding-bottom: 115%;
+    background: #f2f2f2;
+  }
+
+  /* Stacked crossfade slides */
+  .about-carousel__slide {
     position: absolute;
-    top: 0;
-    left: 0;
+    inset: 0;
+    opacity: 0;
+    transition: opacity 0.8s ease;
+    z-index: 1;
+  }
+
+  .about-carousel__slide.is-active {
+    opacity: 1;
+    z-index: 2;
+  }
+
+  .about-carousel__slide img {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    transition: transform 1.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    display: block;
   }
 
-  .about-split__image-wrapper:hover .about-split__image {
-    transform: scale(1.05);
+  /* ── Arrows ── */
+  .about-carousel__arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 5;
+    width: 40px;
+    height: 40px;
+    border: none;
+    background: rgba(255,255,255,0.85);
+    backdrop-filter: blur(4px);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    opacity: 0;
+    transition: opacity 0.3s ease, background 0.2s ease;
+    color: #000;
   }
 
-  /* Right Column: Text with Staggered Animation */
+  .about-carousel:hover .about-carousel__arrow {
+    opacity: 1;
+  }
+
+  .about-carousel__arrow:hover {
+    background: #000;
+    color: #fff;
+  }
+
+  .about-carousel__arrow svg {
+    width: 14px;
+    height: 14px;
+  }
+
+  .about-carousel__arrow--prev { left: 14px; }
+  .about-carousel__arrow--next { right: 14px; }
+
+  /* ── Counter ── */
+  .about-carousel__footer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    padding-top: 18px;
+  }
+
+  .about-carousel__dots {
+    display: flex;
+    gap: 5px;
+  }
+
+  .about-carousel__dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    border: none;
+    padding: 0;
+    background: #d9d9d9;
+    cursor: pointer;
+    transition: background 0.3s ease, transform 0.3s ease;
+  }
+
+  .about-carousel__dot.is-active {
+    background: #000;
+    transform: scale(1.3);
+  }
+
+  /* ── Text Column ── */
   .about-split__text-column {
-    flex: 1;
+    flex: 0.9;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -73,141 +163,150 @@
 
   .about-split__text-column > * {
     opacity: 0;
-    transform: translateY(30px);
-    animation: fadeInUp 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+    transform: translateY(25px);
+    animation: aboutFadeIn 0.7s ease forwards;
   }
 
   .about-split__text-column > *:nth-child(1) { animation-delay: 0.2s; }
-  .about-split__text-column > *:nth-child(2) { animation-delay: 0.4s; }
-  .about-split__text-column > *:nth-child(3) { animation-delay: 0.6s; }
-  .about-split__text-column > *:nth-child(4) { animation-delay: 0.8s; }
-
-  @keyframes fadeInUp {
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-
-  .about-split__eyebrow {
-    font-size: 0.9rem;
-    font-weight: 600;
-    color: #000000;
-    margin-bottom: 20px;
-    display: flex;
-    align-items: center;
-    text-transform: uppercase;
-    letter-spacing: 0.15em;
-  }
-
-  .about-split__eyebrow::before {
-    content: '';
-    display: block;
-    width: 30px;
-    height: 1px;
-    background-color: #000;
-    margin-right: 15px;
-  }
+  .about-split__text-column > *:nth-child(2) { animation-delay: 0.35s; }
+  .about-split__text-column > *:nth-child(3) { animation-delay: 0.5s; }
 
   .about-split__heading {
     font-family: var(--font-heading--family), sans-serif;
-    font-size: clamp(2.5rem, 4vw, 4rem);
+    font-size: clamp(2.4rem, 4vw, 3.8rem);
     line-height: 1.05;
     font-weight: 600;
-    color: #000000;
-    margin: 0 0 30px 0;
+    color: #000;
+    margin: 0 0 28px 0;
     letter-spacing: -0.02em;
+    text-transform: uppercase;
   }
 
   .about-split__description {
-    font-size: 1.1rem;
-    line-height: 1.7;
-    color: #444444;
+    font-size: 1.05rem;
+    line-height: 1.8;
+    color: #555;
     font-weight: 300;
-    margin-bottom: 40px;
-  }
-  
-  .about-split__description p {
-    margin-top: 0;
-    margin-bottom: 20px;
-  }
-  .about-split__description p:last-child {
-    margin-bottom: 0;
+    margin-bottom: 0px;
   }
 
-  .about-split__button {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    background-color: #000000;
-    color: #ffffff;
-    font-size: 0.85rem;
-    font-weight: 600;
-    padding: 16px 40px;
-    border-radius: 0;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    text-decoration: none;
-    transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-    align-self: flex-start;
-    border: 1px solid #000;
-  }
-
-  .about-split__button:hover {
-    background-color: #ffffff;
-    color: #000000;
-    transform: translateY(-2px);
-    box-shadow: 0 10px 20px rgba(0,0,0,0.08);
-  }
+  .about-split__description p { margin: 0 0 16px; }
+  .about-split__description p:last-child { margin-bottom: 0; }
 
   @media screen and (max-width: 749px) {
-    .about-split {
-      padding: 0 2rem;
-    }
-    .about-split__button {
-      width: 100%;
-      text-align: center;
-    }
+    .about-split { padding: 0 2rem; gap: 30px; }
+    .about-carousel__arrow { opacity: 1; width: 34px; height: 34px; }
+    .about-carousel__arrow--prev { left: 10px; }
+    .about-carousel__arrow--next { right: 10px; }
   }
 </style>
 
 <section id="{{ section_id }}">
   <div class="about-split">
-    
+
     <div class="about-split__image-column">
-      <div class="about-split__image-wrapper">
-        {%- if section.settings.image != blank -%}
-          {{ section.settings.image | image_url: width: 1200 | image_tag: class: 'about-split__image', loading: 'lazy' }}
-        {%- else -%}
-          <img src="https://cdn.shopify.com/s/files/1/0774/2894/9215/files/wew.jpg?v=1777636205" alt="Overlay Architecture" class="about-split__image" loading="lazy">
+      <div class="about-carousel" id="ac-{{ section.id }}">
+        <div class="about-carousel__viewport">
+          {%- assign image_count = 0 -%}
+
+          {%- if section.settings.image != blank -%}
+            {%- assign image_count = image_count | plus: 1 -%}
+            <div class="about-carousel__slide is-active">
+              {{ section.settings.image | image_url: width: 1200 | image_tag: loading: 'lazy' }}
+            </div>
+          {%- endif -%}
+
+          {%- for block in section.blocks -%}
+            {%- if block.settings.image != blank -%}
+              {%- assign image_count = image_count | plus: 1 -%}
+              <div class="about-carousel__slide{% if image_count == 1 %} is-active{% endif %}" {{ block.shopify_attributes }}>
+                {{ block.settings.image | image_url: width: 1200 | image_tag: loading: 'lazy' }}
+              </div>
+            {%- endif -%}
+          {%- endfor -%}
+
+          {%- if image_count == 0 -%}
+            {%- assign fallback_images = "https://cdn.shopify.com/s/files/1/0774/2894/9215/files/WhatsApp_Image_2026-05-20_at_12.10.37_PM_1.jpg?v=1779303417,https://cdn.shopify.com/s/files/1/0774/2894/9215/files/WhatsApp_Image_2026-05-20_at_12.10.36_PM.jpg?v=1779303417,https://cdn.shopify.com/s/files/1/0774/2894/9215/files/WhatsApp_Image_2026-05-20_at_12.10.37_PM.jpg?v=1779303417,https://cdn.shopify.com/s/files/1/0774/2894/9215/files/WhatsApp_Image_2026-05-20_at_12.10.36_PM_1.jpg?v=1779303416" | split: "," -%}
+            {%- for img in fallback_images -%}
+              <div class="about-carousel__slide{% if forloop.first %} is-active{% endif %}">
+                <img src="{{ img }}" alt="Overlay {{ forloop.index }}" loading="lazy">
+              </div>
+            {%- endfor -%}
+            {%- assign image_count = fallback_images.size -%}
+          {%- endif -%}
+        </div>
+
+        {%- if image_count > 1 -%}
+          <button class="about-carousel__arrow about-carousel__arrow--prev" aria-label="Previous">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+          </button>
+          <button class="about-carousel__arrow about-carousel__arrow--next" aria-label="Next">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 6 15 12 9 18"/></svg>
+          </button>
         {%- endif -%}
       </div>
+
+      {%- if image_count > 1 -%}
+        <div class="about-carousel__footer">
+          <div class="about-carousel__dots" id="dots-{{ section.id }}">
+            {%- for i in (1..image_count) -%}
+              <button class="about-carousel__dot{% if forloop.first %} is-active{% endif %}" data-i="{{ forloop.index0 }}" aria-label="Slide {{ forloop.index }}"></button>
+            {%- endfor -%}
+          </div>
+        </div>
+      {%- endif -%}
     </div>
 
     <div class="about-split__text-column">
-      {%- if section.settings.eyebrow != blank -%}
-        <span class="about-split__eyebrow">{{ section.settings.eyebrow }}</span>
-      {%- endif -%}
-
       {%- if section.settings.heading != blank -%}
         <h2 class="about-split__heading">{{ section.settings.heading | newline_to_br }}</h2>
       {%- endif -%}
-
       {%- if section.settings.text != blank -%}
-        <div class="about-split__description">
-          {{ section.settings.text }}
-        </div>
-      {%- endif -%}
-
-      {%- if section.settings.button_label != blank -%}
-        <a href="{{ section.settings.button_link }}" class="about-split__button">
-          {{ section.settings.button_label }}
-        </a>
+        <div class="about-split__description">{{ section.settings.text }}</div>
       {%- endif -%}
     </div>
 
   </div>
 </section>
+
+<script>
+(function(){
+  function init(){
+    var root = document.getElementById('ac-{{ section.id }}');
+    if(!root) return;
+    var slides = root.querySelectorAll('.about-carousel__slide');
+    var dots = document.querySelectorAll('#dots-{{ section.id }} .about-carousel__dot');
+    if(slides.length<2) return;
+    var cur=0, auto;
+
+    function go(i){
+      cur=((i%slides.length)+slides.length)%slides.length;
+      slides.forEach(function(s,j){s.classList.toggle('is-active',j===cur);});
+      dots.forEach(function(d,j){d.classList.toggle('is-active',j===cur);});
+      restart();
+    }
+
+    function restart(){clearInterval(auto);auto=setInterval(function(){go(cur+1);},2000);}
+
+    root.querySelector('.about-carousel__arrow--prev')?.addEventListener('click',function(){go(cur-1);});
+    root.querySelector('.about-carousel__arrow--next')?.addEventListener('click',function(){go(cur+1);});
+    dots.forEach(function(d,i){d.addEventListener('click',function(){go(i);});});
+
+    var sx=0,sw=false;
+    root.addEventListener('touchstart',function(e){sx=e.touches[0].clientX;sw=true;},{passive:true});
+    root.addEventListener('touchmove',function(e){if(!sw)return;var dx=e.touches[0].clientX-sx;if(Math.abs(dx)>40){dx>0?go(cur-1):go(cur+1);sw=false;}},{passive:true});
+    root.addEventListener('touchend',function(){sw=false;});
+
+    root.closest('.about-split__image-column')?.addEventListener('mouseenter',function(){clearInterval(auto);});
+    root.closest('.about-split__image-column')?.addEventListener('mouseleave',restart);
+
+    restart();
+  }
+  document.addEventListener('DOMContentLoaded',init);
+  if(document.readyState!=='loading') init();
+  if(window.Shopify?.designMode) document.addEventListener('shopify:section:load',function(e){if(e.detail.sectionId==='{{ section.id }}')init();});
+})();
+</script>
 
 {% schema %}
 {
@@ -216,37 +315,19 @@
     {
       "type": "image_picker",
       "id": "image",
-      "label": "Image"
-    },
-    {
-      "type": "text",
-      "id": "eyebrow",
-      "label": "Eyebrow Text",
-      "default": "The Foundation"
+      "label": "First Image"
     },
     {
       "type": "textarea",
       "id": "heading",
       "label": "Heading",
-      "default": "Scents Built Like\nArchitecture"
+      "default": "about us"
     },
     {
       "type": "richtext",
       "id": "text",
       "label": "Description",
-      "default": "<p>We approach fragrance as a structural art form. By dissecting traditional notes and isolating their purest molecules, we empower you to layer, build, and interact with scent.</p><p>Overlay is not just a perfume; it's a foundation for your personal olfactory architecture. Discover infinite combinations that reveal themselves across hours of wear.</p>"
-    },
-    {
-      "type": "text",
-      "id": "button_label",
-      "label": "Button Label",
-      "default": "Discover The Method"
-    },
-    {
-      "type": "url",
-      "id": "button_link",
-      "label": "Button Link",
-      "default": "/"
+      "default": "<p>OVERLAY is an all over spray house built around layering and everyday wear. Designed for skin, clothes, hair, and space, each scent is made to be worn freely, mixed naturally, and used without limits.</p><p>We don't believe in having one signature scent or wearing fragrance the same way every day. Some stay soft, others leave a trace, but all of them are made to live with you.</p>"
     },
     {
       "type": "range",
@@ -269,9 +350,23 @@
       "default": 120
     }
   ],
+  "blocks": [
+    {
+      "type": "image",
+      "name": "Carousel Image",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        }
+      ]
+    }
+  ],
   "presets": [
     {
-      "name": "About Us Split"
+      "name": "About Us Split",
+      "blocks": []
     }
   ]
 }

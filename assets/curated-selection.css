@@ -19,16 +19,7 @@
   flex-direction: column;
 }
 
-.curated-selection__eyebrow {
-  font-size: 12px;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  color: var(--color-foreground);
-  font-weight: 500;
-  margin-bottom: 8px;
-  font-family: var(--font-body--family), sans-serif;
-  opacity: 0.6;
-}
+
 
 .curated-selection__heading {
   font-size: 1.5rem;
@@ -49,7 +40,6 @@
   width: 48px;
   height: 48px;
   border-radius: 50%;
-  border: 1px solid var(--color-foreground);
   background: transparent;
   display: flex;
   align-items: center;
@@ -81,9 +71,12 @@
   gap: 20px;
   overflow-x: auto;
   scroll-snap-type: x mandatory;
-  scrollbar-width: none !important; /* Firefox */
-  -ms-overflow-style: none !important; /* IE/Edge */
-  padding-bottom: 20px; /* Optional: Space for potential shadows */
+  scrollbar-width: none !important;
+  /* Firefox */
+  -ms-overflow-style: none !important;
+  /* IE/Edge */
+  padding-bottom: 20px;
+  /* Optional: Space for potential shadows */
   width: 100%;
   max-width: 100%;
   min-width: 0;
@@ -91,13 +84,15 @@
 }
 
 .curated-selection__carousel::-webkit-scrollbar {
-  display: none !important; /* Chrome/Safari */
+  display: none !important;
+  /* Chrome/Safari */
   width: 0 !important;
   height: 0 !important;
 }
 
 .curated-selection__item {
-  flex: 0 0 100%; /* 1 on mobile */
+  flex: 0 0 100%;
+  /* 1 on mobile */
   scroll-snap-align: start;
   display: flex;
   flex-direction: column;
@@ -107,7 +102,8 @@
 
 @media (min-width: 1024px) {
   .curated-selection__item {
-    flex: 0 0 calc(25% - 15px); /* 4 on large display */
+    flex: 0 0 calc(25% - 15px);
+    /* 4 on large display */
   }
 }
 
@@ -184,16 +180,19 @@
 
 @media (max-width: 767px) {
   .curated-selection__item {
-    flex: 0 0 85%; /* Slightly peek the next item */
+    flex: 0 0 85%;
+    /* Slightly peek the next item */
   }
 
   .curated-selection__image-wrapper {
-    aspect-ratio: 3 / 4; /* Taller on mobile */
+    aspect-ratio: 3 / 4;
+    /* Taller on mobile */
   }
-  
+
   .curated-selection__heading {
     font-size: 1rem;
-    font-weight: 600; /* Semibold */
+    font-weight: 600;
+    /* Semibold */
   }
 }
 

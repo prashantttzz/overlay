@@ -650,15 +650,7 @@
       <div class="menu-drawer__dotted-divider"></div>
 
       <div class="menu-drawer__extra-info menu-drawer__animated-element" style="--menu-drawer-animation-index: {{ animation_index | plus: 1 }};">
-        <div class="menu-drawer__contact-info">
-          <a href="/pages/contact">Contact us</a>
-          {%- if shop.customer_accounts_enabled -%}
-            <a href="{%- if customer -%}{{ routes.account_url }}{%- else -%}{{ routes.account_login_url }}{%- endif -%}" class="menu-drawer__account-link">
-              {%- if customer -%}Account{%- else -%}Account{%- endif -%}
-            </a>
-          {%- endif -%}
-          <a href="/pages/faq">FAQ</a>
-        </div>
+        <span class="menu-drawer__socials-heading">connect with us</span>
         <div class="menu-drawer__socials" aria-label="Social links">
           <a href="#" aria-label="Instagram">
             <svg viewBox="0 0 20 20" aria-hidden="true" focusable="false">
@@ -1112,7 +1104,7 @@
 
   .menu-drawer__menu-item {
     display: flex;
-    padding: var(--padding-2xs) 0;
+    padding: 0 0;
     position: relative;
     text-decoration: none;
     justify-content: space-between;
@@ -1335,9 +1327,9 @@
     }
   }
   .menu-drawer__menu-item-text {
-    font-weight: 300 !important;
-    letter-spacing: 0.1em;
-    font-size: 1.1rem;
+    font-weight: 400 !important;
+    letter-spacing: 0.02em;
+    font-size: inherit;
   }
 
   .menu-drawer__navigation {
@@ -1349,18 +1341,17 @@
   }
 
   .menu-drawer__menu-item {
-    padding: 15px 25px !important;
-    color: #999 !important; /* Inactive links are grey */
+    padding: 2px 25px !important;
+    color: #999 !important;
     font-family: var(--font-heading-family);
-    font-weight: 800;
+    font-weight: 400;
     letter-spacing: 0.02em;
-    font-size: 1.5rem;
+    font-size: 0.95rem;
     text-transform: uppercase;
     border-bottom: none;
     display: flex;
-    justify-content: space-between;
     align-items: center;
-    transition: color 0.3s ease;
+    transition: color 0.3s ease, padding 0.3s ease, transform 0.3s ease;
   }
 
   .menu-drawer__menu-item--active {
@@ -1416,39 +1407,63 @@
 
   .menu-drawer__contact-info a {
     color: #333;
-    font-weight: 700;
+    font-weight: 500;
     font-size: 1.1rem;
     text-transform: uppercase;
     letter-spacing: 0.05em;
     text-decoration: none;
   }
 
+  .menu-drawer__socials-heading {
+    display: block;
+    font-family: var(--font-body-family);
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: #777;
+    margin-top: 25px;
+    margin-bottom: 10px;
+  }
+
   .menu-drawer__socials {
-    margin-top: 30px;
     display: flex;
     gap: 20px;
   }
 
   .menu-drawer__socials a {
-    color: #000;
-    width: 35px;
-    height: 35px;
-    border: 1px solid #000;
-    border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
+    transition: transform 0.3s ease;
+  }
+
+  .menu-drawer__socials a:hover {
+    transform: scale(1.15);
   }
 
   .menu-drawer__socials a svg {
-    width: 16px;
-    height: 16px;
-    fill: currentColor;
+    width: 26px;
+    height: 26px;
+  }
+
+  .menu-drawer__socials a svg,
+  .menu-drawer__socials a svg * {
+    color: #555555 !important;
+    fill: currentColor !important;
+    stroke: none !important;
+    transition: color 0.3s ease;
+  }
+
+  .menu-drawer__socials a:hover svg,
+  .menu-drawer__socials a:hover svg * {
+    color: #000000 !important;
   }
 
   @media screen and (max-width: 749px) {
     .menu-drawer__menu-item {
-      font-size: 1.8rem;
+      font-size: 1.2rem;
+      padding: 0px 25px !important;
     }
   }
 {% endstylesheet %}
