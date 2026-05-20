@@ -66,8 +66,7 @@
   .about-carousel__viewport {
     position: relative;
     width: 100%;
-    padding-bottom: 100%;
-    height:60%
+    padding-bottom: 115%;
     background: #f2f2f2;
   }
 
@@ -178,25 +177,6 @@
   .about-split__text-column > *:nth-child(2) { animation-delay: 0.35s; }
   .about-split__text-column > *:nth-child(3) { animation-delay: 0.5s; }
 
-  .about-split__eyebrow {
-    font-size: 0.8rem;
-    font-weight: 600;
-    color: #000;
-    margin-bottom: 20px;
-    display: flex;
-    align-items: center;
-    text-transform: uppercase;
-    letter-spacing: 0.15em;
-  }
-
-  .about-split__eyebrow::before {
-    content: '';
-    width: 28px;
-    height: 1px;
-    background: #000;
-    margin-right: 14px;
-  }
-
   .about-split__heading {
     font-family: var(--font-heading--family), sans-serif;
     font-size: clamp(2.4rem, 4vw, 3.8rem);
@@ -213,7 +193,7 @@
     line-height: 1.8;
     color: #555;
     font-weight: 300;
-    margin-bottom: 0px; /* removed button spacing */
+    margin-bottom: 0px;
   }
 
   .about-split__description p { margin: 0 0 16px; }
@@ -284,9 +264,6 @@
     </div>
 
     <div class="about-split__text-column">
-      {%- if section.settings.eyebrow != blank -%}
-        <span class="about-split__eyebrow">{{ section.settings.eyebrow }}</span>
-      {%- endif -%}
       {%- if section.settings.heading != blank -%}
         <h2 class="about-split__heading">{{ section.settings.heading | newline_to_br }}</h2>
       {%- endif -%}
@@ -315,7 +292,7 @@
       restart();
     }
 
-    function restart(){clearInterval(auto);auto=setInterval(function(){go(cur+1);},5000);}
+    function restart(){clearInterval(auto);auto=setInterval(function(){go(cur+1);},2000);}
 
     root.querySelector('.about-carousel__arrow--prev')?.addEventListener('click',function(){go(cur-1);});
     root.querySelector('.about-carousel__arrow--next')?.addEventListener('click',function(){go(cur+1);});
