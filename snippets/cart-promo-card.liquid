@@ -11,10 +11,6 @@
 <div class="cart-promo-card{% if count >= 3 %} is-unlocked{% endif %}" id="CartPromoCard">
   <!-- Locked Content State -->
   <div class="cart-promo-card__content locked-state">
-    <div class="cart-promo-card__image">
-      <img src="https://cdn.shopify.com/s/files/1/0774/2894/9215/files/h.jpg?v=1777629694" alt="Promo Image" loading="lazy">
-    </div>
-
     <div class="cart-promo-card__info">
       <h3 class="cart-promo-card__title">BUY 3, UNLOCK REWARD</h3>
       <p class="cart-promo-card__text" data-cart-promo-text>Add 3 more to unlock.</p>
@@ -183,21 +179,23 @@
   }
 
   .cart-promo-card__image {
-    flex: 0 0 80px;
-    height: 80px;
+    height: 0px;
     background: #000;
     min-width: 0;
+    weight:0;
+    display:hidden
   }
 
   .cart-promo-card__image img {
-    width: 100%;
-    height: 100%;
+    width: 0%;
+    height: 0%;
     object-fit: cover;
+    display:hidden;
   }
 
   .cart-promo-card__info {
     flex: 1;
-    min-width: 0;
+    min-width: 0;   
     max-width: calc(100% - 80px);
     padding: 12px 15px;
     display: flex;

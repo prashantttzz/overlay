@@ -39,8 +39,7 @@
     "curated_selection": {
       "type": "curated-selection",
       "settings": {
-        "eyebrow": "CURATED SELECTION",
-        "heading": "THE CURATION",
+        "heading": "THE COLLECTION",
         "collection": "all"
       }
     },
@@ -57,17 +56,17 @@
     "scent_layering": {
       "type": "scent-layering",
       "settings": {
-        "eyebrow": "THE METHODOLOGY",
-        "heading": "SCENT LAYERING",
-        "description": "Layering the scents together: all of our sprays are designed to be mixed, so you can do more than a combo to mix your perfumes.",
-        "feature_1_title": "INFINITE COMBINATIONS",
-        "feature_1_text": "Craft a signature that is uniquely yours by blending distinct base foundations.",
-        "feature_2_title": "OLFACTORY HARMONY",
-        "feature_2_text": "Shared molecular bonds allow for seamless transitions between different scents.",
-        "feature_3_title": "LIQUID INTERACTION",
-        "feature_3_text": "Our formula ensures that overlapping sprays enhance rather than compete.",
-        "feature_4_title": "DYNAMIC EVOLUTION",
-        "feature_4_text": "Experience how different layers reveal themselves across hours of wear."
+        "eyebrow": "THE ART OF SCENT",
+        "heading": "THE ART OF LAYERING",
+        "description": "Every scent we create is designed to play beautifully with the others. Spray, layer, and mix them on your skin to find your own signature trail.",
+        "feature_1_title": "YOUR PERSONAL BLEND",
+        "feature_1_text": "Create a signature scent that is entirely yours. Blend different notes together directly on your skin to match your mood.",
+        "feature_2_title": "NATURAL HARMONY",
+        "feature_2_text": "Our fragrances flow together naturally. Each note melts into the next, creating a soft, warm aura that never feels overpowering.",
+        "feature_3_title": "SENSORY DEPTH",
+        "feature_3_text": "Instead of competing, overlapping sprays enrich each other. They settle beautifully on the skin, unveiling a deeper, more intimate scent.",
+        "feature_4_title": "LONG-LASTING TRAIL",
+        "feature_4_text": "Watch the fragrance evolve from a bright, fresh morning breeze into a cozy, skin-like warmth that stays with you all day and night."
       }
     },
     "about_us": {

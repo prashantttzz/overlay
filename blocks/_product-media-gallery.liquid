@@ -246,10 +246,10 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 12px;
+  gap: 10px;
   pointer-events: none;
   position: absolute;
-  top: 44%; /* perfect vertical alignment on mobile bottle cap */
+  top: 46%; /* shifted slightly below on mobile for all font styles */
   left: 50%;
   transform: translate(-50%, -50%);
   z-index: 20;
@@ -283,12 +283,12 @@
 
 .engraving-text-user {
   font-family: var(--font-galderglynn);
-  font-size: 26px; /* slightly larger from original 22px */
-  letter-spacing: 0.02em; /* reduced letter-spacing for premium normal style */
+  font-size: 32px; /* large default for few chars — JS overrides dynamically */
+  letter-spacing: 0.01em; /* tight letter-spacing for normal font */
   font-weight: 400;
-  line-height: 1.2;
-  margin-top: 10px;
-  max-width: 160px; /* restrict width so it wraps on mobile cap */
+  line-height: 1.15;
+  margin-top: 12px; /* shifted slightly below on mobile */
+  max-width: 170px; /* restrict width so it wraps on mobile cap */
   white-space: pre-line; /* preserve JS-inserted line breaks */
   overflow-wrap: anywhere; /* break long words if needed */
   word-break: break-word;
@@ -297,20 +297,20 @@
 
 @media screen and (min-width: 750px) {
   .engraving-text-user {
-    margin-top: 8px; /* subtle extra push down on larger devices */
-    max-width: 280px; /* larger max-width on desktop cap */
+    margin-top: 8px;
+    max-width: 420px; /* much larger max-width for desktop cap image */
   }
 }
 
 .engraving-text-permanent {
   font-family: var(--font-galderglynn);
-  font-size: 13px; /* elegantly smaller signature */
-  letter-spacing: 0.25em; /* beautiful high spacing */
-  font-weight: 500;
+  font-size: 12px; /* elegantly smaller signature */
+  letter-spacing: 0.10em; /* reduced letter spacing — tighter, more premium */
+  font-weight: 400; /* normal weight */
   text-transform: uppercase;
-  opacity: 0.85;
+  opacity: 0.80;
   line-height: 1;
-  margin-top: 24px; /* shifted slightly more below on mobile */
+  margin-top: 26px; /* shifted slightly more below on mobile */
 }
 
 @media screen and (min-width: 750px) {
@@ -766,31 +766,45 @@ media-gallery.is-engraving-active .engraving-preview-wrapper {
             const userOverlay = overlay.querySelector('#engraving-overlay-user') || overlay;
             const selectedFont = document.querySelector('[data-engraving-font]:checked')?.value.toLowerCase() || 'normal';
             const isDesktop = window.innerWidth >= 750;
-            const config = selectedFont === 'arabic'
-              ? { maxFont: isDesktop ? 36 : 30, minFont: isDesktop ? 24 : 18, shrinkStart: 5, shrinkEnd: 18, lineBreakStart: 10, lineChars: isDesktop ? 12 : 8 }
-              : { maxFont: isDesktop ? 34 : 26, minFont: isDesktop ? 20 : 16, shrinkStart: 6, shrinkEnd: 18, lineBreakStart: 12, lineChars: isDesktop ? 14 : 9 };
+            /* Per-font sizing: desktop gets much bigger fonts since cap image is larger */
+            const configs = {
+              arabic:  { maxFont: isDesktop ? 48 : 28, minFont: isDesktop ? 26 : 14, shrinkStart: 3, shrinkEnd: 16, lineBreakStart: isDesktop ? 12 : 8, lineChars: isDesktop ? 16 : 7 },
+              italic:  { maxFont: isDesktop ? 60 : 38, minFont: isDesktop ? 28 : 26, shrinkStart: 3, shrinkEnd: 16, lineBreakStart: isDesktop ? 14 : 10, lineChars: isDesktop ? 18 : 8 },
+              normal:  { maxFont: isDesktop ? 56 : 34, minFont: isDesktop ? 26 : 20, shrinkStart: 3, shrinkEnd: 16, lineBreakStart: isDesktop ? 14 : 10, lineChars: isDesktop ? 18 : 8 },
+            };
+            const config = configs[selectedFont] || configs.normal;
             const normalized = input.value.replace(/\s+/g, ' ').trim();
             let previewText = normalized;
 
-            if (normalized.length > config.lineBreakStart && normalized.includes(' ')) {
-              const words = normalized.split(' ');
-              const lines = [];
-              let currentLine = '';
+            /* Break words to a new line once char count exceeds threshold */
+            if (normalized.length > config.lineBreakStart) {
+              if (normalized.includes(' ')) {
+                const words = normalized.split(' ');
+                const lines = [];
+                let currentLine = '';
 
-              words.forEach((word) => {
-                const nextLine = currentLine ? currentLine + ' ' + word : word;
+                words.forEach((word) => {
+                  const nextLine = currentLine ? currentLine + ' ' + word : word;
 
-                if (!currentLine || nextLine.length <= config.lineChars) {
-                  currentLine = nextLine;
-                  return;
+                  if (!currentLine || nextLine.length <= config.lineChars) {
+                    currentLine = nextLine;
+                    return;
+                  }
+
+                  lines.push(currentLine);
+                  currentLine = word;
+                });
+
+                if (currentLine) lines.push(currentLine);
+                previewText = lines.join('\n');
+              } else {
+                /* No spaces — force break the single long word */
+                const lines = [];
+                for (let i = 0; i < normalized.length; i += config.lineChars) {
+                  lines.push(normalized.substring(i, i + config.lineChars));
                 }
-
-                lines.push(currentLine);
-                currentLine = word;
-              });
-
-              if (currentLine) lines.push(currentLine);
-              previewText = lines.join('\n');
+                previewText = lines.join('\n');
+              }
             }
 
             let fontSize = config.maxFont;
@@ -800,6 +814,10 @@ media-gallery.is-engraving-active .engraving-preview-wrapper {
               const progress = (normalized.length - config.shrinkStart) / (config.shrinkEnd - config.shrinkStart);
               fontSize = config.maxFont - ((config.maxFont - config.minFont) * progress);
             }
+
+            /* Tighten letter-spacing as text grows longer */
+            const letterSpacing = normalized.length <= 4 ? '0.04em' : normalized.length <= 10 ? '0.01em' : '-0.01em';
+            userOverlay.style.letterSpacing = letterSpacing;
 
             userOverlay.textContent = previewText;
             userOverlay.style.fontSize = fontSize.toFixed(2) + 'px';

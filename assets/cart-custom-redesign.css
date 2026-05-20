@@ -1,4 +1,3 @@
-
 /* Custom Cart Redesign */
 
 .cart-drawer {
@@ -106,7 +105,7 @@
   margin-bottom: 4px;
 }
 
-.cart-items__variants dd, 
+.cart-items__variants dd,
 .cart-items__details p {
   color: #999;
   font-size: 0.7rem;
@@ -568,4 +567,3 @@
   padding-top: 5px;
   border-top: 1px solid #eee !important;
 }
-
