@@ -8,6 +8,17 @@
 -%}
 
 {%- style -%}
+  @font-face {
+    font-family: 'FreeScript';
+    src: local('Free Script'),
+         local('FreeScript'),
+         url('{{ "freescpt.ttf" | asset_url }}') format('truetype'),
+         url('https://cdn.shopify.com/s/files/1/0774/2894/9215/files/FREESCPT.TTF?v=1779383215') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+  }
+
   #{{ section_id }} {
     --padding-top: {{ section.settings.padding_top }}px;
     --padding-bottom: {{ section.settings.padding_bottom }}px;
@@ -86,12 +97,12 @@
   }
 
   .overlay-hero__heading {
-    font-size: clamp(12px, 5vw, 6rem);
-    line-height: 0.5; /* Aggressively tightened to remove vertical gap */
-    font-weight: 300;
-    text-transform: uppercase;
+    font-family: 'FreeScript', 'Free Script', cursive !important;
+    font-size: clamp(3.2rem, 9.5vw, 11.5rem);
+    line-height: 1.1; /* Aggressively tightened to remove vertical gap */
+    font-weight: normal;
+    text-transform: none;
     margin: 0;
-    font-family: var(--font-galderglynn);
     letter-spacing: 0.04em;
     color: #fff;
     white-space: nowrap;
@@ -154,6 +165,21 @@
       background-color: #fff !important; /* Force visibility */
       color: #000 !important;
     }
+
+    .overlay-hero__marquee {
+      padding: 0.8rem 0;
+    }
+
+    .overlay-hero__marquee-text {
+      font-size: 1rem;
+      padding: 0 0.8rem;
+    }
+
+    .overlay-hero__marquee-dot {
+      width: 4px;
+      height: 4px;
+      margin: 0 0.8rem;
+    }
   }
 
   /* Marquee */
@@ -178,7 +204,7 @@
   }
 
   .overlay-hero__marquee-text {
-    font-size: 0.875rem;
+    font-size: 0.85rem;
     font-weight: 500;
     text-transform: uppercase;
     padding: 0 1.5rem;

@@ -85,6 +85,7 @@
   .product-information--redesign .product-price-block {
     --font-size: 1rem !important;
     font-size: 1rem !important;
+    font-weight: 600 !important;
   }
 
   .product-information--redesign .price {
@@ -329,7 +330,7 @@
 /* Price Style */
 .product-information--redesign .price,
 .product-information--redesign .compare-at-price {
-  font-weight: 300 !important;
+  font-weight: 600 !important;
   letter-spacing: -0.02em;
 }
 

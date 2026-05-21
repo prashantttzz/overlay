@@ -1,0 +1,166 @@
+{%- comment -%}
+  Preloader showing the overlay logo in the center on a white background once per session.
+{%- endcomment -%}
+
+{% liquid
+  assign logo_image = settings.logo
+  if images['overlogo.webp'] != blank
+    assign logo_image = images['overlogo.webp']
+  endif
+%}
+
+<div id="site-preloader" class="site-preloader">
+  <script>
+    if (sessionStorage.getItem('preloader_shown')) {
+      document.getElementById('site-preloader').style.display = 'none';
+      document.getElementById('site-preloader').classList.add('preloader-skipped');
+    }
+  </script>
+  <style>
+    /* Immediate critical styling to prevent layout/color flash */
+    .site-preloader {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: #ffffff;
+      z-index: 9999999;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      pointer-events: all;
+      opacity: 1;
+      visibility: visible;
+      transition: opacity 1500ms cubic-bezier(0.16, 1, 0.3, 1),
+                  visibility 1500ms cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .site-preloader.preloader-skipped {
+      display: none !important;
+    }
+
+    .site-preloader.fade-out {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+    }
+
+    .preloader-content {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+    }
+
+    .preloader-logo {
+      max-width: 480px;
+      height: auto;
+      opacity: 0;
+      transform: translateY(0);
+      filter: brightness(0) blur(8px);
+      animation: preloader-entrance 2000ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    .site-preloader.fade-out .preloader-logo {
+      animation: preloader-exit 1500ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+
+
+    /* Prevent scroll while active */
+    html.preloader-locked,
+    html.preloader-locked body {
+      overflow: hidden !important;
+      height: 100% !important;
+    }
+
+    @media screen and (max-width: 749px) {
+      .preloader-logo {
+        max-width: 180px;
+      }
+    }
+
+    @keyframes preloader-entrance {
+      0% {
+        opacity: 0;
+        filter: brightness(0) blur(8px);
+      }
+      100% {
+        opacity: 1;
+        filter: brightness(0) blur(0);
+      }
+    }
+
+    @keyframes preloader-exit {
+      0% {
+        opacity: 1;
+        transform: translateY(0);
+        filter: brightness(0) blur(0);
+      }
+      100% {
+        opacity: 0;
+        transform: translateY(-80px);
+        filter: brightness(0) blur(4px);
+      }
+    }
+  </style>
+
+  <div class="preloader-content">
+    {% if logo_image != blank %}
+      {% render 'image', image: logo_image, class: 'preloader-logo' %}
+    {% else %}
+      <img src="{{ 'overlogo.webp' | asset_url }}" class="preloader-logo" alt="{{ shop.name }}" width="280" height="auto">
+    {% endif %}
+    
+  </div>
+
+  <script>
+    (function() {
+      const preloader = document.getElementById('site-preloader');
+      if (!preloader || preloader.classList.contains('preloader-skipped')) return;
+
+      // Lock scroll immediately
+      document.documentElement.classList.add('preloader-locked');
+
+      let pageLoaded = false;
+      let minTimePassed = false;
+
+      // Fade out preloader
+      function fadeOutPreloader() {
+        if (pageLoaded && minTimePassed) {
+          preloader.classList.add('fade-out');
+          document.documentElement.classList.remove('preloader-locked');
+          sessionStorage.setItem('preloader_shown', 'true');
+          
+          // Remove from DOM after transition completes
+          setTimeout(() => {
+            preloader.remove();
+          }, 1500);
+        }
+      }
+
+      // Set minimum display time (2200ms) to allow elegant load animation to show
+      setTimeout(() => {
+        minTimePassed = true;
+        fadeOutPreloader();
+      }, 2200);
+
+      // Wait for page load event
+      window.addEventListener('load', () => {
+        pageLoaded = true;
+        fadeOutPreloader();
+      });
+
+      // Fallback: fade out after 5.0 seconds in case window load takes too long
+      setTimeout(() => {
+        if (!pageLoaded) {
+          pageLoaded = true;
+          fadeOutPreloader();
+        }
+      }, 5000);
+    })();
+  </script>
+</div>

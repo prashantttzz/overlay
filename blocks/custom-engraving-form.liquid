@@ -2,8 +2,8 @@
 {% stylesheet %}
   .engraving-option {
     margin-bottom: 2rem;
-    padding: 1.5rem;
-    border: 1px solid rgba(0, 0, 0, 0.08);
+    padding: 1rem 1.2rem;
+    border: 1px solid rgba(0, 0, 0, 0.06);
     background: #fafafa;
     transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
   }
@@ -11,7 +11,7 @@
   @media screen and (min-width: 750px) {
     .engraving-option {
       margin-bottom: 1rem;
-      padding: 0.75rem;
+      padding: 0.6rem 0.8rem;
       margin-top: 1rem;
       width: 50%;
     }
@@ -25,14 +25,14 @@
   .engraving-option__header {
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: 10px;
     cursor: pointer;
     user-select: none;
   }
 
   .engraving-option__checkbox {
-    width: 20px;
-    height: 20px;
+    width: 16px;
+    height: 16px;
     border: 1px solid #000;
     display: flex;
     align-items: center;
@@ -43,8 +43,8 @@
 
   .engraving-option__checkbox::after {
     content: '';
-    width: 10px;
-    height: 10px;
+    width: 8px;
+    height: 8px;
     background: #000;
     opacity: 0;
     transition: opacity 0.3s ease;
@@ -56,16 +56,16 @@
 
   .engraving-option__label {
     font-family: var(--font-galderglynn);
-    font-size: 15px;
+    font-size: 12px;
     text-transform: uppercase;
-    letter-spacing: 0.1em;
-    font-weight: 500;
+    letter-spacing: 0.08em;
+    font-weight: 400;
   }
 
   .engraving-option__price {
-    font-size: 14px;
+    font-size: 11px;
     font-weight: 300;
-    opacity: 0.6;
+    opacity: 0.5;
     margin-left: auto;
   }
 
@@ -129,9 +129,9 @@
   }
 
   .engraving-option__hint {
-    font-size: 11px;
+    font-size: 12px;
     margin-top: 10px;
-    opacity: 0.4;
+    opacity: 0.6;
     font-style: italic;
   }
 
@@ -211,7 +211,7 @@
 
   /* Font Preview Styles */
   .preview-font-normal { font-family: 'Roboto Mono', monospace !important; font-style: normal !important; }
-  .preview-font-italic { font-family: 'Kapakana', cursive !important; font-style: italic !important; }
+  .preview-font-italic { font-family: 'Kapakana', cursive !important; font-style: italic !important; padding: 0 0.15em !important; }
   .preview-font-arabic { font-family: 'The Year of Handicraft Regular', sans-serif !important; font-style: normal !important; font-size: 1.4em !important; text-transform: none !important; letter-spacing: 0 !important; }
 {% endstylesheet %}
 
@@ -263,7 +263,7 @@
         </div>
       </div>
     </div>
-    <p class="engraving-option__hint">Engraving is permanent and adds 2-3 business days to processing.</p>
+    <p class="engraving-option__hint">This is a mockup image. Actual product may differ slightly.</p>
   </div>
 </div>
 {%- endunless -%}
@@ -295,10 +295,10 @@
         lineCharsDesktop: 18,
       },
       italic: {
-        maxFontMobile: 38,
-        minFontMobile: 26,
-        maxFontDesktop: 60,
-        minFontDesktop: 28,
+        maxFontMobile: 52,
+        minFontMobile: 30,
+        maxFontDesktop: 85,
+        minFontDesktop: 40,
         shrinkStart: 3,
         shrinkEnd: 16,
         lineBreakStartMobile: 10,
@@ -331,8 +331,12 @@
     function getPreviewFontSize(textLength, selectedFont) {
       const config = getPreviewConfig(selectedFont);
       const isDesktop = window.innerWidth >= 750;
-      const maxFont = isDesktop ? config.maxFontDesktop : config.maxFontMobile;
+      let maxFont = isDesktop ? config.maxFontDesktop : config.maxFontMobile;
       const minFont = isDesktop ? config.minFontDesktop : config.minFontMobile;
+
+      if (textLength === 2 || textLength === 3) {
+        maxFont = maxFont * 1.5;
+      }
 
       if (textLength <= config.shrinkStart) return maxFont;
       if (textLength >= config.shrinkEnd) return minFont;
@@ -436,6 +440,10 @@
       const text = input.value.trim();
       if (text) {
         setConfirmed(true);
+        /* On mobile, scroll to top so user sees the product image with engraving preview */
+        if (window.innerWidth <= 1024) {
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
       } else {
         errorEl.style.display = 'block';
         input.focus();
@@ -487,6 +495,16 @@
       
       if (input.value.trim()) {
         errorEl.style.display = 'none';
+      }
+
+      /* Dynamically increase input font-size as text grows */
+      const len = input.value.length;
+      if (len <= 3) {
+        input.style.fontSize = '18px';
+      } else if (len <= 8) {
+        input.style.fontSize = '16px';
+      } else {
+        input.style.fontSize = '14px';
       }
 
       applyPreviewState();

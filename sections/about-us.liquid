@@ -4,6 +4,7 @@
 
 <style>
   #{{ section_id }} {
+    position: relative;
     background-color: #ffffff;
     color: #000000;
     font-family: var(--font-body--family), sans-serif;
@@ -213,6 +214,7 @@
 </style>
 
 <section id="{{ section_id }}">
+  <div id="about-us" style="position: absolute; top: -100px; left: 0; width: 1px; height: 1px; visibility: hidden; pointer-events: none;"></div>
   <div class="about-split">
 
     <div class="about-split__image-column">
