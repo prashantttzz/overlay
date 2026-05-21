@@ -1374,19 +1374,19 @@
 
   .menu-drawer__animated-element {
     opacity: 0;
-    transform: translateY(10px);
-    transition: none;
+    transform: translate3d(-30px, 0, 0);
+    will-change: transform, opacity;
   }
 
-  .menu-drawer-container[open] .menu-drawer__animated-element {
-    animation: menuFadeUp 0.5s ease forwards;
-    animation-delay: calc(0.1s + (var(--menu-drawer-animation-index) - 1) * 0.05s);
+  .menu-drawer-container.menu-open .menu-drawer__animated-element {
+    animation: menuSlideIn 3.1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    animation-delay: calc(0.65s + (var(--menu-drawer-animation-index) - 1) * 0.27s);
   }
 
-  @keyframes menuFadeUp {
+  @keyframes menuSlideIn {
     to {
       opacity: 1;
-      transform: translateY(0);
+      transform: translate3d(0, 0, 0);
     }
   }
 

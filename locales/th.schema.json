@@ -536,7 +536,7 @@
       "default_property_key": "คำแนะนำพิเศษ",
       "max_length": "จำนวนอักขระสูงสุด",
       "buyers_input": "ผู้ซื้อป้อนข้อมูล",
-      "default_checkbox_label": "รวมบริการห่อของขวัญ"
+      "default_checkbox_label": "รวมบริการสลักลาย"
     },
     "blog": "บล็อก",
     "post_count": "จำนวนโพสต์"

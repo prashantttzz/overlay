@@ -32,10 +32,14 @@
   font-family: var(--font-heading--family), sans-serif;
   font-size: 2.5rem;
   text-transform: uppercase;
-  margin: 0 0 24px;
+  margin: 0 0 24px -18px; /* Shifts the brand name 15px to the left */
   font-weight: 300;
   letter-spacing: 0.1em;
   color: #fff;
+}
+
+.footer-custom__logo-link {
+  margin-left: -20px; /* Shifts the logo image wrapper 15px to the left */
 }
 
 .footer-custom__brand-desc {

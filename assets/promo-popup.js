@@ -128,7 +128,7 @@
           cardText = 'Add 1 more to unlock';
         } else {
           text = 'You have unlocked an exclusive special deal! Checkout now.';
-          cardText = 'Reward unlocked';
+          cardText = 'Discount unlocked';
         }
 
         // Dynamically query DOM on each update to ensure references aren't stale after morphing

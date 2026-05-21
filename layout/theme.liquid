@@ -86,10 +86,28 @@
       #header-component .header-logo__image {
         filter: brightness(0) invert(1) !important;
       }
+
+      /* Lenis Smooth Scroll Required CSS */
+      html.lenis, html.lenis body {
+        height: auto;
+      }
+      .lenis.lenis-smooth {
+        scroll-behavior: auto !important;
+      }
+      .lenis.lenis-smooth [data-lenis-prevent] {
+        overscroll-behavior: contain;
+      }
+      .lenis.lenis-stopped {
+        overflow: hidden;
+      }
+      .lenis.lenis-smooth iframe {
+        pointer-events: none;
+      }
     </style>
   </head>
 
   <body class="template-{{ template | replace: '.', '-' | handle }} page-width-{{ settings.page_width }} card-hover-effect-{{ settings.card_hover_effect }}">
+    {% render 'preloader' %}
     {% render 'skip-to-content-link', href: '#MainContent', text: 'accessibility.skip_to_text' %}
     <div id="header-group">
       {% sections 'header-group' %}

@@ -81,8 +81,8 @@
     gap: 2.5rem;
     max-width: 900px;
     opacity: 1; /* Instant visibility */
-    transform: translateY(0);
-    transition: all 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+    will-change: transform;
+    transition: opacity 0.6s cubic-bezier(0.22, 1, 0.36, 1);
   }
 
   .overlay-hero__heading {
@@ -154,13 +154,28 @@
       background-color: #fff !important; /* Force visibility */
       color: #000 !important;
     }
+
+    .overlay-hero__marquee {
+      padding: 0.8rem 0;
+    }
+
+    .overlay-hero__marquee-text {
+      font-size: 0.1rem;
+      padding: 0 0.8rem;
+    }
+
+    .overlay-hero__marquee-dot {
+      width: 4px;
+      height: 4px;
+      margin: 0 0.8rem;
+    }
   }
 
   /* Marquee */
   .overlay-hero__marquee {
     background-color: black;
     color: #ffffffff;
-    padding: 1.25rem 0;
+    padding: 0.7rem 0;
     border-top: 1px solid #000;
     border-bottom: 1px solid #000;
     overflow: hidden;
@@ -178,7 +193,7 @@
   }
 
   .overlay-hero__marquee-text {
-    font-size: 0.875rem;
+    font-size: 0.85rem;
     font-weight: 500;
     text-transform: uppercase;
     padding: 0 1.5rem;
@@ -296,6 +311,74 @@
     </div>
   {%- endif -%}
 </section>
+
+<script>
+(function () {
+  var heroSection = document.querySelector('[data-home-hero]');
+  if (!heroSection) return;
+
+  var heroContent = heroSection.querySelector('.overlay-hero__content');
+  if (!heroContent) return;
+
+  // ─── Config ───────────────────────────────────────────────────────────────
+  var PARALLAX_SPEED = 0.38;   // 0 = fixed, 1 = normal — content lags behind scroll
+  var LERP_FACTOR    = 0.07;   // smoothing: lower = silkier (0.05–0.12 sweet spot)
+  // ──────────────────────────────────────────────────────────────────────────
+
+  var currentY = 0;
+  var targetY  = 0;
+  var rafId    = null;
+  var isActive = true;
+
+  function lerp(a, b, t) {
+    return a + (b - a) * t;
+  }
+
+  function tick() {
+    if (!isActive) return;
+
+    var scrollY    = window.scrollY || window.pageYOffset;
+    var heroBottom = heroSection.offsetTop + heroSection.offsetHeight;
+
+    // Only drive parallax while hero is in (or near) view
+    if (scrollY <= heroBottom + 60) {
+      targetY = scrollY * PARALLAX_SPEED;
+
+      // Subtle opacity fade as hero exits (starts fading at 40% scroll through hero)
+      var fadeStart = heroBottom * 0.4;
+      var opacity   = scrollY > fadeStart
+        ? Math.max(0, 1 - (scrollY - fadeStart) / (heroBottom - fadeStart))
+        : 1;
+
+      // Lerp toward target for buttery smoothness
+      currentY = lerp(currentY, targetY, LERP_FACTOR);
+
+      // GPU-accelerated transform
+      heroContent.style.transform = 'translate3d(0,' + currentY.toFixed(2) + 'px,0)';
+      heroContent.style.opacity   = opacity.toFixed(3);
+    } else {
+      // Once hero is far past, freeze at final state — no wasted frames
+      heroContent.style.opacity = '0';
+    }
+
+    rafId = requestAnimationFrame(tick);
+  }
+
+  // Kick off the continuous loop
+  tick();
+
+  // Pause loop when tab is hidden, resume on focus — saves battery
+  document.addEventListener('visibilitychange', function () {
+    if (document.hidden) {
+      isActive = false;
+      cancelAnimationFrame(rafId);
+    } else {
+      isActive = true;
+      tick();
+    }
+  });
+})();
+</script>
 
 {% schema %}
 {

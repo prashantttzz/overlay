@@ -4,15 +4,24 @@
 <div class="template-collection-wrapper">
   <!-- 1. Small Hero Banner -->
   <div class="collection-small-banner" data-home-hero>
-    <div class="small-banner__bg">
-      <img src="https://cdn.shopify.com/s/files/1/0774/2894/9215/files/032A9936_1.jpg?v=1779255878" alt="Collection Banner">
+    <div class="small-banner__video-wrapper">
+      <video 
+        class="small-banner__video" 
+        autoplay 
+        loop 
+        muted 
+        playsinline 
+      >
+        <source src="https://cdn.shopify.com/videos/c/o/v/dcd2211b302f47169295b9baf0652208.mp4" type="video/mp4">
+      </video>
     </div>
+    <div class="collection-banner-overlay-text" data-collection-parallax-text>OUR COLLECTION</div>
   </div>
 
   <!-- 2. Collection Title & Integrated Utilities Row -->
   <div class="collection-title-header">
     <div class="title-left-side">
-      <h1 class="collection-main-title">{{ collection.title | default: "Archival Collection" }}</h1>
+      <!-- Title removed per request -->
     </div>
 
     <div class="title-center-utility">
@@ -526,6 +535,23 @@
         const offset = (scrollPos - bannerTop) * 0.3;
         parallaxBg.style.transform = `translate3d(0, ${offset}px, 0)`;
       }
+    }
+  });
+
+  // Custom Parallax for Background Video and "OUR COLLECTION" Text Overlay
+  window.addEventListener('scroll', () => {
+    const scrollPos = window.pageYOffset;
+    
+    // Move text up aggressively
+    const textOverlay = document.querySelector('[data-collection-parallax-text]');
+    if (textOverlay) {
+      textOverlay.style.transform = `translate3d(0, -${scrollPos * 0.5}px, 0)`;
+    }
+
+    // Intense opposite-direction parallax on video
+    const bgVideo = document.querySelector('.small-banner__video-wrapper');
+    if (bgVideo) {
+      bgVideo.style.transform = `translate3d(0, ${scrollPos * 0.7}px, 0)`;
     }
   });
 </script>

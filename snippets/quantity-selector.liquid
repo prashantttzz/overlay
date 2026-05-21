@@ -12,6 +12,12 @@
 
 {% liquid
   assign variant = product.selected_or_first_available_variant
+  assign min_value = 1
+  if min != null
+    assign min_value = min
+  elsif line_index != null
+    assign min_value = 0
+  endif
 %}
 
 <quantity-selector-component
@@ -40,7 +46,7 @@
     type="number"
     name="{% if line_index %}updates[]{% else %}quantity{% endif %}"
     value="{{ in_cart_quantity | default: 1 }}"
-    min="{{ min | default: 1 }}"
+    min="{{ min_value }}"
     on:blur="/setQuantity"
     on:focus="/selectInputValue"
     ref="quantityInput"
