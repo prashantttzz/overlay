@@ -10,23 +10,24 @@
 .curated-selection__header {
   display: flex;
   justify-content: space-between;
-  align-items: flex-end;
+  align-items: center;
   margin-bottom: 40px;
 }
 
 .curated-selection__title {
   display: flex;
+
   flex-direction: column;
+
 }
 
 
-
 .curated-selection__heading {
-  font-size: 1.5rem;
+  font-size: 1.6rem;
   text-transform: uppercase;
   margin: 0;
   line-height: 1;
-  font-weight: 300;
+  font-weight: 500;
   font-family: var(--font-heading--family), sans-serif;
   color: var(--color-foreground);
 }
@@ -46,7 +47,9 @@
   justify-content: center;
   cursor: pointer;
   transition: all 0.3s;
+  border: none;
   color: var(--color-foreground);
+  box-shadow: none;
   opacity: 0.5;
 }
 

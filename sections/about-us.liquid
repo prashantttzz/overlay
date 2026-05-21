@@ -6,8 +6,6 @@
   #{{ section_id }} {
     background-color: #ffffff;
     color: #000000;
-    padding-top: {{ section.settings.padding_top }}px;
-    padding-bottom: {{ section.settings.padding_bottom }}px;
     font-family: var(--font-body--family), sans-serif;
     overflow: hidden;
   }
@@ -22,6 +20,14 @@
   }
 
   @media screen and (min-width: 990px) {
+      #{{ section_id }} {
+    background-color: #ffffff;
+    color: #000000;
+    padding-top: {{ section.settings.padding_top }}px;
+    padding-bottom: {{ section.settings.padding_bottom }}px;
+    font-family: var(--font-body--family), sans-serif;
+    overflow: hidden;
+  }
     .about-split {
       flex-direction: row;
       align-items: center;
@@ -60,7 +66,7 @@
   .about-carousel__viewport {
     position: relative;
     width: 100%;
-    padding-bottom: 115%;
+    padding-bottom: 80%;
     background: #f2f2f2;
   }
 
@@ -317,6 +323,7 @@
       "id": "image",
       "label": "First Image"
     },
+
     {
       "type": "textarea",
       "id": "heading",
