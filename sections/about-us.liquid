@@ -4,411 +4,433 @@
 
 <style>
   #{{ section_id }} {
-    background-color: #ffffff;
-    color: #000000;
-    font-family: var(--font-body--family), sans-serif;
+    position: relative;
+    z-index: 1;
+    background-color: transparent;
+    padding: 140px 0;
+    color: #fff;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    font-family: var(--font-body--family), -apple-system, sans-serif;
     overflow: hidden;
   }
 
-  .about-split {
-    max-width: 1400px;
+  .about-overlay__container {
+    max-width: 1600px;
     margin: 0 auto;
-    padding: 0 5rem;
+    padding: 0 4vw;
+    width: 100%;
+    display: grid;
+    /* Adjusted grid to give the left text box more width while keeping the right side prominent */
+    grid-template-columns: 1.2fr 1.3fr;
+    gap: 4vw;
+    align-items: center;
+  }
+
+  .about-overlay__text-col {
     display: flex;
     flex-direction: column;
-    gap: 40px;
-  }
-
-  @media screen and (min-width: 990px) {
-      #{{ section_id }} {
-    background-color: #ffffff;
-    color: #000000;
-    padding-top: {{ section.settings.padding_top }}px;
-    padding-bottom: {{ section.settings.padding_bottom }}px;
-    font-family: var(--font-body--family), sans-serif;
-    overflow: hidden;
-  }
-    .about-split {
-      flex-direction: row;
-      align-items: center;
-      gap: 90px;
-    }
-    .about-split__image-column {
-      flex: 0.7;
-    }
-    .about-split__text-column {
-      flex: 1.3;
-    }
-  }
-
-  /* ── Image Column ── */
-  .about-split__image-column {
-    flex: 1.1;
-    position: relative;
-    width: 100%;
+    justify-content: center;
     opacity: 0;
     transform: translateY(30px);
-    animation: aboutFadeIn 0.8s ease 0.1s forwards;
+    transition: all 1.2s cubic-bezier(0.2, 0.8, 0.2, 1);
+    z-index: 10;
+    
+    /* Glassmorphism Panel */
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.01) 100%);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-top: 1px solid rgba(255, 255, 255, 0.35);
+    border-left: 1px solid rgba(255, 255, 255, 0.35);
+    backdrop-filter: blur(25px) saturate(120%);
+    -webkit-backdrop-filter: blur(25px) saturate(120%);
+    border-radius: 24px;
+    padding: 70px 60px;
+    box-shadow: 0 30px 60px rgba(0, 0, 0, 0.4), inset 0 0 30px rgba(255, 255, 255, 0.03);
   }
 
-  @keyframes aboutFadeIn {
-    to { opacity: 1; transform: translateY(0); }
-  }
-
-  /* ── Carousel ── */
-  .about-carousel {
-    position: relative;
-    width: 100%;
-    border-radius: 6px;
-    overflow: hidden;
-  }
-
-  .about-carousel__viewport {
-    position: relative;
-    width: 100%;
-    padding-bottom: 80%;
-    background: #f2f2f2;
-  }
-
-  /* Stacked crossfade slides */
-  .about-carousel__slide {
-    position: absolute;
-    inset: 0;
-    opacity: 0;
-    transition: opacity 0.8s ease;
-    z-index: 1;
-    overflow: hidden;
-  }
-
-  .about-carousel__slide.is-active {
+  .about-overlay__text-col.is-visible {
     opacity: 1;
-    z-index: 2;
+    transform: translateY(0);
   }
 
-  .about-carousel__slide img {
-    position: absolute;
-    top: -25%;
-    left: 0;
-    width: 100%;
-    height: 150%;
-    object-fit: cover;
-    display: block;
-    will-change: transform;
+  .about-overlay__heading {
+    font-family: var(--font-heading--family), serif;
+    font-size: clamp(3rem, 5.5vw, 5.5rem);
+    font-weight: 700;
+    line-height: 1;
+    text-transform: uppercase;
+    margin: 0 0 1.2rem;
+    letter-spacing: -0.02em;
+    color: #ffffff;
+    text-shadow: 0 8px 25px rgba(0,0,0,0.5);
   }
 
-  /* ── Arrows ── */
-  .about-carousel__arrow {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    z-index: 5;
-    width: 40px;
-    height: 40px;
-    border: none;
-    background: rgba(255,255,255,0.85);
-    backdrop-filter: blur(4px);
-    border-radius: 50%;
-    display: flex;
+  .about-overlay__subheading {
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.35em;
+    opacity: 0.9;
+    margin-bottom: 2rem;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.95);
+  }
+
+  .about-overlay__desc {
+    font-size: clamp(1rem, 1.1vw, 1.15rem);
+    line-height: 1.8;
+    font-weight: 400;
+    color: rgba(255, 255, 255, 0.9);
+    max-width: 650px;
+    margin-bottom: 3rem;
+  }
+
+  .about-overlay__glass-btn {
+    display: inline-flex;
     align-items: center;
     justify-content: center;
-    cursor: pointer;
-    opacity: 0;
-    transition: opacity 0.3s ease, background 0.2s ease;
-    color: #000;
-  }
-
-  .about-carousel:hover .about-carousel__arrow {
-    opacity: 1;
-  }
-
-  .about-carousel__arrow:hover {
-    background: #000;
+    gap: 12px;
+    padding: 16px 42px;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    border-radius: 40px;
     color: #fff;
+    text-decoration: none;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    font-size: 0.75rem;
+    font-weight: 500;
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+    align-self: flex-start;
   }
 
-  .about-carousel__arrow svg {
+  .about-overlay__glass-btn:hover {
+    background: rgba(255, 255, 255, 1);
+    color: #000;
+    transform: translateY(-2px);
+    box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+  }
+
+  .about-overlay__glass-btn svg {
     width: 14px;
     height: 14px;
+    transition: transform 0.4s ease;
   }
 
-  .about-carousel__arrow--prev { left: 14px; }
-  .about-carousel__arrow--next { right: 14px; }
+  .about-overlay__glass-btn:hover svg {
+    transform: translateX(3px);
+  }
 
-  /* ── Counter ── */
-  .about-carousel__footer {
+  .about-overlay__visual-col {
+    position: relative;
+    height: 85vh; /* Increased height for larger composition */
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 20px;
-    padding-top: 18px;
+    perspective: 1000px;
   }
 
-  .about-carousel__dots {
-    display: flex;
-    gap: 5px;
-  }
-
-  .about-carousel__dot {
-    width: 6px;
-    height: 6px;
+  /* The Extra: Ambient Glowing Orb behind the glass */
+  .about-overlay__ambient-orb {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 50vw;
+    height: 50vw;
+    background: radial-gradient(circle, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0) 65%);
     border-radius: 50%;
+    z-index: 1;
+    filter: blur(50px);
+    pointer-events: none;
+    animation: orbFloat 12s ease-in-out infinite alternate;
+    transform: translate(-50%, -50%);
+  }
+
+  @keyframes orbFloat {
+    0% { transform: translate(-50%, -50%) scale(0.9); opacity: 0.6; }
+    100% { transform: translate(-45%, -55%) scale(1.1); opacity: 1; }
+  }
+
+  .about-overlay__glass-card {
+    position: absolute;
+    background: transparent;
     border: none;
+    border-radius: 16px;
     padding: 0;
-    background: #d9d9d9;
-    cursor: pointer;
-    transition: background 0.3s ease, transform 0.3s ease;
-  }
-
-  .about-carousel__dot.is-active {
-    background: #000;
-    transform: scale(1.3);
-  }
-
-  /* ── Text Column ── */
-  .about-split__text-column {
-    flex: 0.9;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-  }
-
-  .about-split__text-column > * {
+    overflow: hidden;
+    transition: all 0.9s cubic-bezier(0.2, 0.8, 0.2, 1);
     opacity: 0;
-    transform: translateY(25px);
-    animation: aboutFadeIn 0.7s ease forwards;
   }
 
-  .about-split__text-column > *:nth-child(1) { animation-delay: 0.2s; }
-  .about-split__text-column > *:nth-child(2) { animation-delay: 0.35s; }
-  .about-split__text-column > *:nth-child(3) { animation-delay: 0.5s; }
-
-  .about-split__heading {
-    font-family: var(--font-heading--family), sans-serif;
-    font-size: clamp(2.4rem, 4vw, 3.8rem);
-    line-height: 1.05;
-    font-weight: 600;
-    color: #000;
-    margin: 0 0 28px 0;
-    letter-spacing: -0.02em;
-    text-transform: uppercase;
+  .about-overlay__glass-card.is-visible {
+    opacity: 1;
   }
 
-  .about-split__description {
-    font-size: 1.05rem;
-    line-height: 1.8;
-    color: #555;
-    font-weight: 300;
-    margin-bottom: 0px;
+  .about-overlay__glass-card img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: inherit;
+    opacity: 0.75;
+    mix-blend-mode: luminosity;
+    transition: all 0.7s ease;
   }
 
-  .about-split__description p { margin: 0 0 16px; }
-  .about-split__description p:last-child { margin-bottom: 0; }
+  .about-overlay__glass-card:hover {
+    transform: scale(1.06) translateY(-15px) translateZ(50px) !important;
+    z-index: 20 !important;
+  }
 
-  @media screen and (max-width: 749px) {
-    .about-split { padding: 0 2rem; gap: 30px; }
-    .about-carousel__arrow { opacity: 1; width: 34px; height: 34px; }
-    .about-carousel__arrow--prev { left: 10px; }
-    .about-carousel__arrow--next { right: 10px; }
+  .about-overlay__glass-card:hover img {
+    opacity: 1;
+    mix-blend-mode: normal;
+  }
+
+  /* 4-Image Editorial Composition */
+  .about-overlay__card-1 {
+    width: 52%;
+    aspect-ratio: 3/4;
+    top: 12%;
+    left: 20%;
+    z-index: 4;
+    transform: rotate(-3deg) translateY(50px);
+    transition-delay: 0.1s;
+  }
+  .about-overlay__card-1.is-visible { transform: rotate(-3deg) translateY(0); }
+
+  .about-overlay__card-2 {
+    width: 35%;
+    aspect-ratio: 4/5;
+    top: 5%;
+    right: 15%;
+    z-index: 3;
+    transform: rotate(5deg) translateY(60px);
+    transition-delay: 0.2s;
+  }
+  .about-overlay__card-2.is-visible { transform: rotate(5deg) translateY(0); }
+
+  .about-overlay__card-3 {
+    width: 42%;
+    aspect-ratio: 4/3;
+    bottom: 12%;
+    left: 8%;
+    z-index: 5;
+    transform: rotate(-6deg) translateY(70px);
+    transition-delay: 0.3s;
+  }
+  .about-overlay__card-3.is-visible { transform: rotate(-6deg) translateY(0); }
+
+  .about-overlay__card-4 {
+    width: 28%;
+    aspect-ratio: 1/1;
+    bottom: 8%;
+    right: 22%;
+    z-index: 6;
+    transform: rotate(8deg) translateY(80px);
+    transition-delay: 0.4s;
+  }
+  .about-overlay__card-4.is-visible { transform: rotate(8deg) translateY(0); }
+
+  @media (max-width: 989px) {
+    #{{ section_id }} {
+      padding: 80px 0;
+    }
+
+    .about-overlay__container {
+      grid-template-columns: 1fr;
+      text-align: center;
+      gap: 60px;
+    }
+
+    .about-overlay__text-col {
+      padding: 40px 25px;
+      backdrop-filter: blur(15px);
+      -webkit-backdrop-filter: blur(15px);
+    }
+
+    .about-overlay__desc {
+      margin: 0 auto 2.5rem;
+      max-width: 100%;
+    }
+
+    .about-overlay__glass-btn {
+      align-self: center;
+    }
+
+    .about-overlay__visual-col {
+      height: 60vh; /* slightly increased to accommodate larger cards */
+      margin-top: 20px;
+    }
+
+    .about-overlay__glass-card {
+      padding: 0;
+    }
+
+    /* Tightly packed clustered positioning for mobile with larger images */
+    .about-overlay__card-1 { width: 62%; left: 8%; top: 5%; }
+    .about-overlay__card-2 { width: 50%; right: 5%; top: 18%; }
+    .about-overlay__card-3 { width: 56%; left: 5%; bottom: 12%; }
+    .about-overlay__card-4 { width: 40%; right: 8%; bottom: 6%; }
   }
 </style>
 
 <section id="{{ section_id }}">
-  <div id="about-us" style="position: absolute; top: -100px; left: 0; width: 1px; height: 1px; visibility: hidden; pointer-events: none;"></div>
-  <div class="about-split">
+  <div id="about-us" style="position: absolute; top: -100px;"></div>
+  <div class="about-overlay__container">
+    
+    <div class="about-overlay__text-col" data-about-reveal>
+      {%- if section.settings.sub_heading != blank -%}
+        <div class="about-overlay__subheading">{{ section.settings.sub_heading | escape }}</div>
+      {%- endif -%}
+      
+      {%- if section.settings.main_heading != blank -%}
+        <h2 class="about-overlay__heading">{{ section.settings.main_heading | escape }}</h2>
+      {%- endif -%}
 
-    <div class="about-split__image-column">
-      <div class="about-carousel" id="ac-{{ section.id }}">
-        <div class="about-carousel__viewport">
-          {%- assign image_count = 0 -%}
-
-          {%- if section.settings.image != blank -%}
-            {%- assign image_count = image_count | plus: 1 -%}
-            <div class="about-carousel__slide is-active">
-              {{ section.settings.image | image_url: width: 1200 | image_tag: loading: 'lazy' }}
-            </div>
-          {%- endif -%}
-
-          {%- for block in section.blocks -%}
-            {%- if block.settings.image != blank -%}
-              {%- assign image_count = image_count | plus: 1 -%}
-              <div class="about-carousel__slide{% if image_count == 1 %} is-active{% endif %}" {{ block.shopify_attributes }}>
-                {{ block.settings.image | image_url: width: 1200 | image_tag: loading: 'lazy' }}
-              </div>
-            {%- endif -%}
-          {%- endfor -%}
-
-          {%- if image_count == 0 -%}
-            {%- assign fallback_images = "https://cdn.shopify.com/s/files/1/0774/2894/9215/files/WhatsApp_Image_2026-05-20_at_12.10.37_PM_1.jpg?v=1779303417,https://cdn.shopify.com/s/files/1/0774/2894/9215/files/WhatsApp_Image_2026-05-20_at_12.10.36_PM.jpg?v=1779303417,https://cdn.shopify.com/s/files/1/0774/2894/9215/files/WhatsApp_Image_2026-05-20_at_12.10.37_PM.jpg?v=1779303417,https://cdn.shopify.com/s/files/1/0774/2894/9215/files/WhatsApp_Image_2026-05-20_at_12.10.36_PM_1.jpg?v=1779303416" | split: "," -%}
-            {%- for img in fallback_images -%}
-              <div class="about-carousel__slide{% if forloop.first %} is-active{% endif %}">
-                <img src="{{ img }}" alt="Overlay {{ forloop.index }}" loading="lazy">
-              </div>
-            {%- endfor -%}
-            {%- assign image_count = fallback_images.size -%}
-          {%- endif -%}
-        </div>
-
-        {%- if image_count > 1 -%}
-          <button class="about-carousel__arrow about-carousel__arrow--prev" aria-label="Previous">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
-          </button>
-          <button class="about-carousel__arrow about-carousel__arrow--next" aria-label="Next">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 6 15 12 9 18"/></svg>
-          </button>
-        {%- endif -%}
+      <div class="about-overlay__desc">
+        {{ section.settings.block1_desc }}
       </div>
 
-      {%- if image_count > 1 -%}
-        <div class="about-carousel__footer">
-          <div class="about-carousel__dots" id="dots-{{ section.id }}">
-            {%- for i in (1..image_count) -%}
-              <button class="about-carousel__dot{% if forloop.first %} is-active{% endif %}" data-i="{{ forloop.index0 }}" aria-label="Slide {{ forloop.index }}"></button>
-            {%- endfor -%}
-          </div>
-        </div>
+      {%- if section.settings.insta_btn_label != blank -%}
+        <a href="{{ section.settings.insta_btn_link | default: 'https://www.instagram.com/tryoverlay' }}" class="about-overlay__glass-btn" target="_blank" rel="noopener">
+          {{ section.settings.insta_btn_label }}
+        </a>
       {%- endif -%}
     </div>
 
-    <div class="about-split__text-column">
-      {%- if section.settings.heading != blank -%}
-        <h2 class="about-split__heading">{{ section.settings.heading | newline_to_br }}</h2>
-      {%- endif -%}
-      {%- if section.settings.text != blank -%}
-        <div class="about-split__description">{{ section.settings.text }}</div>
-      {%- endif -%}
+    <div class="about-overlay__visual-col">
+      <!-- The Extra: Ambient Glowing Orb -->
+      <div class="about-overlay__ambient-orb"></div>
+
+      <!-- Card 2: Top Right -->
+      <div class="about-overlay__glass-card about-overlay__card-2" data-about-reveal>
+        {%- if section.settings.carousel_img_2 != blank -%}
+          <img src="{{ section.settings.carousel_img_2 | image_url: width: 600 }}" alt="About Image 2" loading="lazy" width="600" height="800">
+        {%- else -%}
+          <img src="https://cdn.shopify.com/s/files/1/0774/2894/9215/files/IMG_5231.png?v=1780514461" alt="About Image 2" loading="lazy" width="600" height="800">
+        {%- endif -%}
+      </div>
+
+      <!-- Card 1: Main Center/Left -->
+      <div class="about-overlay__glass-card about-overlay__card-1" data-about-reveal>
+        {%- if section.settings.carousel_img_1 != blank -%}
+          <img src="{{ section.settings.carousel_img_1 | image_url: width: 800 }}" alt="About Image 1" loading="lazy" width="800" height="1000">
+        {%- else -%}
+          <img src="https://cdn.shopify.com/s/files/1/0774/2894/9215/files/IMG_5230.png?v=1780514459" alt="About Image 1" loading="lazy" width="800" height="1000">
+        {%- endif -%}
+      </div>
+
+      <!-- Card 3: Bottom Left -->
+      <div class="about-overlay__glass-card about-overlay__card-3" data-about-reveal>
+        {%- if section.settings.carousel_img_3 != blank -%}
+          <img src="{{ section.settings.carousel_img_3 | image_url: width: 800 }}" alt="About Image 3" loading="lazy" width="800" height="600">
+        {%- else -%}
+          <img src="https://cdn.shopify.com/s/files/1/0774/2894/9215/files/IMG_5232.png?v=1780514463" alt="About Image 3" loading="lazy" width="800" height="600">
+        {%- endif -%}
+      </div>
+
+      <!-- Card 4: Bottom Right -->
+      <div class="about-overlay__glass-card about-overlay__card-4" data-about-reveal>
+        {%- if section.settings.carousel_img_4 != blank -%}
+          <img src="{{ section.settings.carousel_img_4 | image_url: width: 500 }}" alt="About Image 4" loading="lazy" width="500" height="500">
+        {%- else -%}
+          <img src="https://cdn.shopify.com/s/files/1/0774/2894/9215/files/IMG_5234.png?v=1780514459" alt="About Image 4" loading="lazy" width="500" height="500">
+        {%- endif -%}
+      </div>
     </div>
 
   </div>
 </section>
 
 <script>
-(function(){
-  function init(){
-    var root = document.getElementById('ac-{{ section.id }}');
-    if(!root) return;
+  (function() {
+    const observerOptions = {
+      root: null,
+      rootMargin: '0px',
+      threshold: 0.15
+    };
 
-    // Clean up existing event listeners if already initialized to prevent duplication during re-renders
-    if (root._handleParallax) {
-      window.removeEventListener('scroll', root._handleParallax);
-      window.removeEventListener('resize', root._handleParallax);
-    }
-
-    var parallaxImages = root.querySelectorAll('.about-carousel__slide img');
-    function handleParallax() {
-      var rect = root.getBoundingClientRect();
-      var windowHeight = window.innerHeight;
-
-      if (rect.top < windowHeight && rect.bottom > 0) {
-        // Calculate scroll progress (0 = entering at bottom, 1 = leaving at top)
-        var progress = (windowHeight - rect.top) / (windowHeight + rect.height);
-        // Translate from -15% to 15% (relative to the image height)
-        var translateY = (progress - 0.5) * 30;
-
-        for (var i = 0; i < parallaxImages.length; i++) {
-          parallaxImages[i].style.transform = 'translate3d(0, ' + translateY + '%, 0)';
+    const observer = new IntersectionObserver((entries, observer) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('is-visible');
+          observer.unobserve(entry.target);
         }
-      }
-    }
+      });
+    }, observerOptions);
 
-    root._handleParallax = handleParallax;
-    window.addEventListener('scroll', handleParallax, { passive: true });
-    window.addEventListener('resize', handleParallax);
-    handleParallax();
-
-    var slides = root.querySelectorAll('.about-carousel__slide');
-    var dots = document.querySelectorAll('#dots-{{ section.id }} .about-carousel__dot');
-    if(slides.length<2) return;
-    var cur=0, auto;
-
-    function go(i){
-      cur=((i%slides.length)+slides.length)%slides.length;
-      slides.forEach(function(s,j){s.classList.toggle('is-active',j===cur);});
-      dots.forEach(function(d,j){d.classList.toggle('is-active',j===cur);});
-      restart();
-    }
-
-    function restart(){clearInterval(auto);auto=setInterval(function(){go(cur+1);},2000);}
-
-    root.querySelector('.about-carousel__arrow--prev')?.addEventListener('click',function(){go(cur-1);});
-    root.querySelector('.about-carousel__arrow--next')?.addEventListener('click',function(){go(cur+1);});
-    dots.forEach(function(d,i){d.addEventListener('click',function(){go(i);});});
-
-    var sx=0,sw=false;
-    root.addEventListener('touchstart',function(e){sx=e.touches[0].clientX;sw=true;},{passive:true});
-    root.addEventListener('touchmove',function(e){if(!sw)return;var dx=e.touches[0].clientX-sx;if(Math.abs(dx)>40){dx>0?go(cur-1):go(cur+1);sw=false;}},{passive:true});
-    root.addEventListener('touchend',function(){sw=false;});
-
-    root.closest('.about-split__image-column')?.addEventListener('mouseenter',function(){clearInterval(auto);});
-    root.closest('.about-split__image-column')?.addEventListener('mouseleave',restart);
-
-    restart();
-  }
-  document.addEventListener('DOMContentLoaded',init);
-  if(document.readyState!=='loading') init();
-  if(window.Shopify?.designMode) document.addEventListener('shopify:section:load',function(e){if(e.detail.sectionId==='{{ section.id }}')init();});
-})();
+    const revealElements = document.querySelectorAll('#{{ section_id }} [data-about-reveal]');
+    revealElements.forEach(el => observer.observe(el));
+  })();
 </script>
 
 {% schema %}
 {
-  "name": "About Us Split",
+  "name": "About Us Cinematic",
   "settings": [
     {
-      "type": "image_picker",
-      "id": "image",
-      "label": "First Image"
-    },
-
-    {
-      "type": "textarea",
-      "id": "heading",
-      "label": "Heading",
-      "default": "about us"
+      "type": "header",
+      "content": "Text Settings"
     },
     {
-      "type": "richtext",
-      "id": "text",
+      "type": "text",
+      "id": "main_heading",
+      "label": "Main Heading",
+      "default": "About Us"
+    },
+    {
+      "type": "text",
+      "id": "sub_heading",
+      "label": "Sub Heading",
+      "default": "All over spray house"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "block1_desc",
       "label": "Description",
-      "default": "<p>OVERLAY is an all over spray house built around layering and everyday wear. Designed for skin, clothes, hair, and space, each scent is made to be worn freely, mixed naturally, and used without limits.</p><p>We don't believe in having one signature scent or wearing fragrance the same way every day. Some stay soft, others leave a trace, but all of them are made to live with you.</p>"
+      "default": "OVERLAY is an all over spray house built around layering and everyday wear. Designed for skin, clothes, hair, and space, each scent is made to be worn freely, mixed naturally, and used without limits. We don’t believe in having one signature scent or wearing fragrance the same way every day. Some stay soft, others leave a trace, but all of them are made to live with you."
     },
     {
-      "type": "range",
-      "id": "padding_top",
-      "min": 0,
-      "max": 200,
-      "step": 10,
-      "unit": "px",
-      "label": "Padding Top",
-      "default": 120
+      "type": "text",
+      "id": "insta_btn_label",
+      "label": "Button Label",
+      "default": "Follow our journey"
     },
     {
-      "type": "range",
-      "id": "padding_bottom",
-      "min": 0,
-      "max": 200,
-      "step": 10,
-      "unit": "px",
-      "label": "Padding Bottom",
-      "default": 120
-    }
-  ],
-  "blocks": [
+      "type": "url",
+      "id": "insta_btn_link",
+      "label": "Button Link"
+    },
     {
-      "type": "image",
-      "name": "Carousel Image",
-      "settings": [
-        {
-          "type": "image_picker",
-          "id": "image",
-          "label": "Image"
-        }
-      ]
+      "type": "header",
+      "content": "Imagery Settings"
+    },
+    {
+      "type": "image_picker",
+      "id": "carousel_img_1",
+      "label": "Primary Image (Center)"
+    },
+    {
+      "type": "image_picker",
+      "id": "carousel_img_2",
+      "label": "Secondary Image (Top Right)"
+    },
+    {
+      "type": "image_picker",
+      "id": "carousel_img_3",
+      "label": "Tertiary Image (Bottom Left)"
+    },
+    {
+      "type": "image_picker",
+      "id": "carousel_img_4",
+      "label": "Quaternary Image (Bottom Right)"
     }
   ],
   "presets": [
     {
-      "name": "About Us Split",
-      "blocks": []
+      "name": "About Us Cinematic"
     }
   ]
 }

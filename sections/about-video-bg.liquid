@@ -1,0 +1,87 @@
+{%- comment -%}
+  About Us Parallax Section
+  A transparent section that allows the global video to show through.
+{%- endcomment -%}
+
+{%- style -%}
+  .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+  }
+
+  @media screen and (min-width: 750px) {
+    .section-{{ section.id }}-padding {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
+{%- endstyle -%}
+
+<!-- About Content (Transparent Window) -->
+<div class="parallax-transparent-section section-{{ section.id }}-padding">
+  <div class="page-width text-center mx-auto max-w-3xl px-4">
+    {%- if section.settings.heading != blank -%}
+      <h2 class="text-3xl md:text-5xl font-bold mb-6" style="color: {{ section.settings.text_color }}">{{ section.settings.heading | escape }}</h2>
+    {%- endif -%}
+    
+    {%- if section.settings.text != blank -%}
+      <div class="text-base md:text-lg leading-relaxed" style="color: {{ section.settings.text_color }}">{{ section.settings.text }}</div>
+    {%- endif -%}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "About Parallax Text",
+  "class": "transparent-parallax-wrapper",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Our Story"
+    },
+    {
+      "type": "richtext",
+      "id": "text",
+      "label": "Text",
+      "default": "<p>This section is completely transparent. It reveals the video underneath like a window as you scroll.</p>"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text Color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "header",
+      "content": "Section Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 200,
+      "step": 10,
+      "unit": "px",
+      "label": "Top Padding",
+      "default": 100
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 200,
+      "step": 10,
+      "unit": "px",
+      "label": "Bottom Padding",
+      "default": 100
+    }
+  ],
+  "presets": [
+    {
+      "name": "About Parallax Text"
+    }
+  ]
+}
+{% endschema %}

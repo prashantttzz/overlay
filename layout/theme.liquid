@@ -167,8 +167,27 @@
           rootMargin: '0px 0px -50px 0px'
         });
 
+        // Automatically add reveal classes to typical elements, except within excluded sections
+        document.querySelectorAll('main .shopify-section:not(.curated-selection):not(.overlay-hero-section) h1, main .shopify-section:not(.curated-selection):not(.overlay-hero-section) h2, main .shopify-section:not(.curated-selection):not(.overlay-hero-section) h3, main .shopify-section:not(.curated-selection):not(.overlay-hero-section) p, main .shopify-section:not(.curated-selection):not(.overlay-hero-section) img').forEach(el => {
+          if (!el.closest('.curated-selection') && !el.closest('curated-selection') && !el.closest('[data-home-hero]') && !el.classList.contains('reveal') && !el.classList.contains('hero-animate') && !el.closest('.header-section')) {
+            el.classList.add('reveal', 'reveal--fade-up');
+          }
+        });
+
         document.querySelectorAll('.reveal').forEach(el => {
           revealObserver.observe(el);
+        });
+      });
+    </script>
+
+    <!-- Lenis Smooth Scrolling -->
+    <script src="https://unpkg.com/lenis@1.1.18/dist/lenis.min.js"></script>
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+        const lenis = new Lenis({
+          autoRaf: true,
+          duration: 1.2,
+          easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t))
         });
       });
     </script>

@@ -7,6 +7,31 @@
 {%- endif -%}
 
 <style>
+  @font-face {
+    font-family: 'Galderglynn Titling';
+    src: url('{{ "galderglynn-titling.regular.otf" | asset_url }}') format('opentype'),
+         url('{{ "Galderglynn Titling Rg.otf" | asset_url }}') format('opentype');
+    font-weight: 300;
+    font-style: normal;
+    font-display: swap;
+  }
+  @font-face {
+    font-family: 'Galderglynn Titling';
+    src: url('{{ "galderglynn-titling.regular.otf" | asset_url }}') format('opentype'),
+         url('{{ "Galderglynn Titling Rg.otf" | asset_url }}') format('opentype');
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+  }
+  @font-face {
+    font-family: 'Galderglynn Titling';
+    src: url('{{ "galderglynn-titling-bd.ttf" | asset_url }}') format('truetype'),
+         url('{{ "Galderglynn Titling Bd.otf" | asset_url }}') format('opentype');
+    font-weight: 700;
+    font-style: normal;
+    font-display: swap;
+  }
+
   .product-description-redesign {
     display: block !important;
     width: 100% !important;
@@ -14,22 +39,99 @@
   }
   
   .product-description-redesign__content {
-    font-size: 0.95rem;
-    line-height: 1.6;
-    font-weight: 300;
-    color: #444;
+    font-family: 'Galderglynn Titling', var(--font-body--family), sans-serif !important;
+    font-size: 0.78rem;
+    line-height: 1.5;
+    letter-spacing: 0 !important;
     width: 100% !important;
-  }
-  
-  @media screen and (min-width: 1025px) {
-    .product-description-redesign__content {
-      font-size: 0.85rem;
-      color: #777;
-    }
+    text-transform: uppercase !important;
   }
 
-  /* Force lowercase for redesign aesthetic if requested previously */
   .product-description-redesign__content p {
-    text-transform: lowercase;
+    font-family: 'Galderglynn Titling', var(--font-body--family), sans-serif !important;
+    margin: 0 0 1.5rem 0 !important;
+    font-weight: 300 !important;
+    color: #555 !important;
+    text-transform: uppercase !important;
+    font-size: 0.78rem !important;
+    line-height: 1.5 !important;
+    letter-spacing: 0 !important;
+  }
+
+  /* Target paragraphs that wrap headings to eliminate the bottom margin space */
+  .product-description-redesign__content p:has(strong),
+  .product-description-redesign__content p:has(b),
+  .product-description-redesign__content p:has(h1),
+  .product-description-redesign__content p:has(h2),
+  .product-description-redesign__content p:has(h3),
+  .product-description-redesign__content p:has(h4),
+  .product-description-redesign__content p:has(h5),
+  .product-description-redesign__content p:has(h6) {
+    margin-bottom: 0.25rem !important;
+  }
+
+  .product-description-redesign__content strong,
+  .product-description-redesign__content b,
+  .product-description-redesign__content h1,
+  .product-description-redesign__content h2,
+  .product-description-redesign__content h3,
+  .product-description-redesign__content h4,
+  .product-description-redesign__content h5,
+  .product-description-redesign__content h6 {
+    font-family: 'Galderglynn Titling', var(--font-body--family), sans-serif !important;
+    display: block !important;
+    font-weight: 700 !important;
+    color: #000 !important;
+    margin-top: 1.5rem !important;
+    margin-bottom: 0.25rem !important;
+    text-transform: uppercase !important;
+    font-size: 0.85rem !important;
+    letter-spacing: 0 !important;
+  }
+
+  /* First element resets */
+  .product-description-redesign__content > strong:first-child,
+  .product-description-redesign__content > b:first-child,
+  .product-description-redesign__content > p:first-child strong,
+  .product-description-redesign__content > p:first-child b,
+  .product-description-redesign__content > p:first-child,
+  .product-description-redesign__content > h1:first-child,
+  .product-description-redesign__content > h2:first-child,
+  .product-description-redesign__content > h3:first-child,
+  .product-description-redesign__content > h4:first-child,
+  .product-description-redesign__content > h5:first-child,
+  .product-description-redesign__content > h6:first-child,
+  .product-description-redesign__content > p:first-child h1,
+  .product-description-redesign__content > p:first-child h2,
+  .product-description-redesign__content > p:first-child h3,
+  .product-description-redesign__content > p:first-child h4,
+  .product-description-redesign__content > p:first-child h5,
+  .product-description-redesign__content > p:first-child h6 {
+    margin-top: 0 !important;
+  }
+
+  /* If a paragraph contains a strong/b as its first child, ensure it displays block */
+  .product-description-redesign__content p strong,
+  .product-description-redesign__content p b,
+  .product-description-redesign__content p h1,
+  .product-description-redesign__content p h2,
+  .product-description-redesign__content p h3,
+  .product-description-redesign__content p h4,
+  .product-description-redesign__content p h5,
+  .product-description-redesign__content p h6 {
+    display: block !important;
+  }
+
+  @media screen and (min-width: 1025px) {
+    .product-description-redesign__content {
+      font-size: 0.8rem !important;
+    }
+    .product-description-redesign__content p {
+      font-size: 0.8rem !important;
+    }
+    .product-description-redesign__content strong,
+    .product-description-redesign__content b {
+      font-size: 0.88rem !important;
+    }
   }
 </style>

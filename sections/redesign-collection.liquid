@@ -7,10 +7,12 @@
     <div class="small-banner__video-wrapper">
       <video 
         class="small-banner__video" 
-        autoplay 
-        loop 
-        muted 
-        playsinline 
+        autoplay="autoplay" 
+        loop="loop" 
+        muted="muted" 
+        playsinline="true"
+        webkit-playsinline="true"
+        x5-playsinline="true" 
       >
         <source src="https://cdn.shopify.com/videos/c/o/v/dcd2211b302f47169295b9baf0652208.mp4" type="video/mp4">
       </video>
@@ -86,6 +88,7 @@
               </div>
               <form class="sidebar-filters-form">
                 {%- for filter in collection.filters -%}
+                  {%- if filter.label == 'Occasion' or filter.label == 'Ocassion' %}{% continue %}{% endif -%}
                   <div class="filter-group">
                     <div class="filter-group-header">
                       <span class="filter-label">{{ filter.label }}</span>
@@ -249,6 +252,7 @@
       <div class="sidebar-clone">
         <form class="mobile-filter-form">
           {%- for filter in collection.filters -%}
+            {%- if filter.label == 'Occasion' or filter.label == 'Ocassion' %}{% continue %}{% endif -%}
             <div class="filter-group">
               <div class="filter-group-header">
                 <span class="filter-label">{{ filter.label }}</span>

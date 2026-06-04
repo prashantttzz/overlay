@@ -6,7 +6,22 @@
     z-index: 1;
   }
   
-  /* Force Global Header to White for this page */
+  /* Force Global Header to Black Glass for this page */
+  #header-component,
+  .header-wrapper,
+  sticky-header {
+    background: rgba(0, 0, 0, 0.5) !important;
+    backdrop-filter: blur(20px) saturate(180%) !important;
+    -webkit-backdrop-filter: blur(20px) saturate(180%) !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05) !important;
+  }
+
+  .header__row,
+  .header__column {
+    background: transparent !important;
+    background-color: transparent !important;
+  }
+
   .header, 
   .menu-list__link, 
   .header-actions__action svg,
@@ -31,12 +46,11 @@
   }
 {%- endstyle -%}
 
-<section id="policy-{{ section.id }}" class="noir-utility-section">
-  <div class="noir-utility-bg-text">LEGAL</div>
+<section id="policy-{{ section.id }}" class="noir-utility-section noir-utility-section--light">
   
   <div class="noir-utility-container">
     <div class="noir-utility-header">
-      <span class="noir-utility-eyebrow">{{ section.settings.eyebrow | default: "PRIVACY PROTOCOL" }}</span>
+      <span class="noir-utility-eyebrow">{{ section.settings.eyebrow }}</span>
       <h1 class="noir-utility-title">{{ section.settings.title | default: "PRIVACY POLICY" }}</h1>
     </div>
 
@@ -51,10 +65,10 @@
       {%- endfor -%}
     </div>
 
-    <div class="noir-utility-footer" style="margin-top: 100px; padding-top: 40px; border-top: 1px solid rgba(255,255,255,0.1);">
-      <p style="color: rgba(255,255,255,0.4); font-size: 0.8rem; letter-spacing: 0.1em; line-height: 1.6;">
+    <div class="noir-utility-footer" style="margin-top: 100px; padding-top: 40px; border-top: 1px solid rgba(0,0,0,0.1);">
+      <p style="color: rgba(0,0,0,0.6); font-size: 0.8rem; letter-spacing: 0.1em; line-height: 1.6;">
         LAST UPDATED: {{ "now" | date: "%B %d, %Y" | upcase }}<br>
-        IF YOU HAVE QUESTIONS REGARDING THESE TERMS, PLEASE CONTACT <a href="mailto:tryoverlay1@gmail.com" style="color: #fff;">TRYOVERLAY1@GMAIL.COM</a>
+        IF YOU HAVE QUESTIONS REGARDING THESE TERMS, PLEASE CONTACT <a href="mailto:hello@overlayae.com" style="color: #000;">HELLO@OVERLAYAE.COM</a>
       </p>
     </div>
   </div>
@@ -67,8 +81,7 @@
     {
       "type": "text",
       "id": "eyebrow",
-      "label": "Eyebrow",
-      "default": "PRIVACY PROTOCOL"
+      "label": "Eyebrow"
     },
     {
       "type": "text",

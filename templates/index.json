@@ -28,8 +28,8 @@
         "note_3"
       ],
       "settings": {
-        "heading": "ALL OVER SPRAY HOUSE",
-        "description": "Made to be mixed, find your mix.",
+        "heading": "ALL OVER\nSPRAY HOUSE",
+        "description": "MADE TO BE MIXED.",
         "button_label": "EXPLORE COLLECTION",
         "button_link": "shopify://collections/all",
         "show_marquee": true,
@@ -59,14 +59,8 @@
         "eyebrow": "THE ART OF SCENT",
         "heading": "THE ART OF LAYERING",
         "description": "Every scent we create is designed to play beautifully with the others. Spray, layer, and mix them on your skin to find your own signature trail.",
-        "feature_1_title": "YOUR PERSONAL BLEND",
-        "feature_1_text": "Create a signature scent that is entirely yours. Blend different notes together directly on your skin to match your mood.",
-        "feature_2_title": "NATURAL HARMONY",
-        "feature_2_text": "Our fragrances flow together naturally. Each note melts into the next, creating a soft, warm aura that never feels overpowering.",
-        "feature_3_title": "SENSORY DEPTH",
-        "feature_3_text": "Instead of competing, overlapping sprays enrich each other. They settle beautifully on the skin, unveiling a deeper, more intimate scent.",
-        "feature_4_title": "LONG-LASTING TRAIL",
-        "feature_4_text": "Watch the fragrance evolve from a bright, fresh morning breeze into a cozy, skin-like warmth that stays with you all day and night."
+        "feature_1_title": "CRAFT YOUR SIGNATURE",
+        "feature_1_text": "Experience a fragrance journey that adapts to you. Layer distinct notes to create an evolving, personalized scent profile that lingers beautifully all day."
       }
     },
     "about_us": {

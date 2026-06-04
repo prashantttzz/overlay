@@ -195,6 +195,11 @@
   display: inline-block;
 }
 
+.noir-utility-section--light .policy-block-title {
+  color: rgba(0, 0, 0, 0.5);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.15);
+}
+
 .policy-text {
   font-size: 0.95rem;
   line-height: 1.8;
@@ -202,13 +207,34 @@
   font-weight: 300;
 }
 
+.noir-utility-section--light .policy-text {
+  color: rgba(0, 0, 0, 0.8);
+}
+
 .policy-text p {
   margin-bottom: 30px;
+}
+
+.policy-text h3 {
+  font-size: 1.1rem;
+  margin: 40px 0 15px 0;
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  color: #fff;
+  text-transform: uppercase;
+}
+
+.noir-utility-section--light .policy-text h3 {
+  color: #000;
 }
 
 .policy-text b {
   color: #fff;
   font-weight: 500;
+}
+
+.noir-utility-section--light .policy-text b {
+  color: #000;
 }
 
 .policy-text ul {
@@ -224,6 +250,10 @@
   color: rgba(255, 255, 255, 0.7);
 }
 
+.noir-utility-section--light .policy-text ul li {
+  color: rgba(0, 0, 0, 0.7);
+}
+
 .policy-text ul li::before {
   content: '';
   position: absolute;
@@ -233,6 +263,11 @@
   height: 1px;
   background: #fff;
   opacity: 0.3;
+}
+
+.noir-utility-section--light .policy-text ul li::before {
+  background: #000;
+  opacity: 0.2;
 }
 
 /* Responsive Utility */

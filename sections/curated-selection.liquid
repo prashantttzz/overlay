@@ -2,7 +2,7 @@
 
 <curated-selection class="curated-selection page-width-normal">
   <div class="curated-selection__header">
-    <div class="curated-selection__title">
+    <div class="curated-selection__title reveal reveal--fade-up">
       <span class="curated-selection__eyebrow">{{ section.settings.eyebrow }}</span>
       <h2 class="curated-selection__heading">{{ section.settings.heading }}</h2>
     </div>
@@ -19,10 +19,26 @@
   <div class="curated-selection__carousel-container">
     <div class="curated-selection__carousel">
       {% for product in section.settings.collection.products %}
-        <div class="curated-selection__item">
-          <a href="{{ product.url }}" class="curated-selection__image-wrapper">
-            <img src="{{ product.featured_image | img_url: '600x' }}" alt="{{ product.title }}" loading="lazy" width="600" height="600">
-          </a>
+        <div class="curated-selection__item reveal reveal--fade-up reveal--stagger-{{ forloop.index | modulo: 5 | plus: 1 }}">
+          <div class="curated-selection__image-container">
+            <a href="{{ product.url }}" class="curated-selection__image-wrapper">
+              <img src="{{ product.featured_image | img_url: '600x' }}" alt="{{ product.title }}" loading="lazy" width="600" height="600">
+            </a>
+            <product-form-component
+              data-section-id="{{ section.id }}"
+              data-product-id="{{ product.id }}"
+              on:submit="/handleSubmit"
+            >
+              <div class="visually-hidden" aria-live="assertive" role="status" aria-atomic="true" ref="liveRegion"></div>
+              <form method="post" action="/cart/add" class="curated-selection__quick-add">
+                <input type="hidden" name="id" ref="variantId" value="{{ product.variants.first.id }}">
+                <input type="hidden" name="quantity" value="1">
+                <button type="submit" class="curated-selection__add-btn" aria-label="Add to cart">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 5V19M5 12H19" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </button>
+              </form>
+            </product-form-component>
+          </div>
           <div class="curated-selection__info">
             <div class="curated-selection__info-top">
               <a href="{{ product.url }}" class="curated-selection__product-title">{{ product.title }}</a>
@@ -79,6 +95,29 @@
   if (!customElements.get('curated-selection')) {
     customElements.define('curated-selection', class extends HTMLElement {
       connectedCallback() {
+        this.carousel = this.querySelector('.curated-selection__carousel');
+        this.items = this.querySelectorAll('.curated-selection__item');
+        
+        if (this.carousel) {
+          this.setupInfiniteLoop();
+          
+          this.carousel.addEventListener('scroll', () => {
+            if (!this.isTicking) {
+              window.requestAnimationFrame(() => {
+                this.updateCards();
+                this.isTicking = false;
+              });
+              this.isTicking = true;
+            }
+          });
+          
+          setTimeout(() => this.updateCards(), 100);
+          window.addEventListener('resize', () => {
+            this.setupInfiniteLoop();
+            this.updateCards();
+          });
+        }
+
         this.addEventListener('click', (event) => {
           if (event.target.closest('.carousel-control.next')) {
             this.scrollNext();
@@ -88,14 +127,123 @@
         });
       }
 
+      setupInfiniteLoop() {
+        if (!this.carousel || !this.items.length) return;
+        
+        // Only run on mobile
+        if (window.innerWidth >= 768) return;
+        
+        // Prevent duplicate cloning
+        if (this.carousel.classList.contains('is-infinite')) return;
+        this.carousel.classList.add('is-infinite');
+
+        const itemsArray = Array.from(this.items);
+        
+        // Clone for infinite scroll
+        const prependItems = itemsArray.map(item => {
+          const clone = item.cloneNode(true);
+          clone.classList.add('cloned-item', 'is-visible');
+          return clone;
+        });
+        const appendItems = itemsArray.map(item => {
+          const clone = item.cloneNode(true);
+          clone.classList.add('cloned-item', 'is-visible');
+          return clone;
+        });
+
+        prependItems.forEach(clone => this.carousel.insertBefore(clone, this.carousel.firstChild));
+        appendItems.forEach(clone => this.carousel.appendChild(clone));
+
+        // Re-query items to include clones
+        this.items = this.querySelectorAll('.curated-selection__item');
+        
+        // Initial scroll jump to the middle (original) set
+        setTimeout(() => {
+          if (window.innerWidth < 768) {
+            this.carousel.style.scrollBehavior = 'auto';
+            const originalFirst = this.items[itemsArray.length];
+            this.carousel.scrollLeft = originalFirst.offsetLeft - this.carousel.offsetLeft;
+            this.carousel.style.scrollBehavior = '';
+          }
+        }, 50);
+
+        // Track when we reach the ends to jump back seamlessly
+        this.carousel.addEventListener('scroll', () => {
+          if (window.innerWidth >= 768 || this.isJumping) return;
+          
+          const scrollLeft = this.carousel.scrollLeft;
+          const maxScroll = this.carousel.scrollWidth - this.carousel.clientWidth;
+          const itemFullWidth = this.items[0].clientWidth + 20; // width + gap
+          const originalSetWidth = itemFullWidth * itemsArray.length;
+
+          // If scrolled near the beginning (into prepend clones)
+          if (scrollLeft <= itemFullWidth) {
+            this.isJumping = true;
+            this.carousel.style.scrollBehavior = 'auto';
+            this.carousel.scrollLeft += originalSetWidth;
+            requestAnimationFrame(() => requestAnimationFrame(() => {
+              this.carousel.style.scrollBehavior = '';
+              this.isJumping = false;
+            }));
+          } 
+          // If scrolled near the end (into append clones)
+          else if (scrollLeft >= maxScroll - itemFullWidth) {
+            this.isJumping = true;
+            this.carousel.style.scrollBehavior = 'auto';
+            this.carousel.scrollLeft -= originalSetWidth;
+            requestAnimationFrame(() => requestAnimationFrame(() => {
+              this.carousel.style.scrollBehavior = '';
+              this.isJumping = false;
+            }));
+          }
+        });
+      }
+
+      updateCards() {
+        if (!this.carousel || !this.items.length) return;
+        
+        if (window.innerWidth >= 768) {
+          // Remove custom properties on desktop
+          this.items.forEach(item => {
+            item.style.removeProperty('--offset');
+            item.style.removeProperty('--abs-offset');
+            item.style.zIndex = '';
+          });
+          return;
+        }
+
+        const carouselRect = this.carousel.getBoundingClientRect();
+        const carouselCenter = carouselRect.left + carouselRect.width / 2;
+        
+        this.items.forEach(item => {
+          const itemRect = item.getBoundingClientRect();
+          const itemCenter = itemRect.left + itemRect.width / 2;
+          
+          const itemFullWidth = item.clientWidth + 20;
+          let offset = (itemCenter - carouselCenter) / itemFullWidth;
+          
+          offset = Math.max(-2.5, Math.min(2.5, offset));
+          const absOffset = Math.abs(offset);
+          
+          item.style.setProperty('--offset', offset);
+          item.style.setProperty('--abs-offset', absOffset);
+          
+          item.style.zIndex = Math.max(0, 100 - Math.round(absOffset * 10));
+        });
+      }
+
       scrollNext() {
-        const carousel = this.querySelector('.curated-selection__carousel');
-        if(carousel) carousel.scrollBy({ left: carousel.clientWidth, behavior: 'smooth' });
+        if(this.carousel && this.items.length) {
+          const scrollAmount = this.items[0].clientWidth + 20; // 20px is the gap
+          this.carousel.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+        }
       }
 
       scrollPrev() {
-        const carousel = this.querySelector('.curated-selection__carousel');
-        if(carousel) carousel.scrollBy({ left: -carousel.clientWidth, behavior: 'smooth' });
+        if(this.carousel && this.items.length) {
+          const scrollAmount = this.items[0].clientWidth + 20; // 20px is the gap
+          this.carousel.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
+        }
       }
     });
   }

@@ -2,63 +2,45 @@
   assign section_id = 'section-' | append: section.id
 -%}
 
-{%- liquid
-  # The hero always has a background (video or image)
-  assign has_bg = true
--%}
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@1,400;1,500;1,600&display=swap" rel="stylesheet">
 
 {%- style -%}
+    /* Removed FreeScript font face */
+
   #{{ section_id }} {
+    --neon: #ffffff;
     --padding-top: {{ section.settings.padding_top }}px;
     --padding-bottom: {{ section.settings.padding_bottom }}px;
-    background-color: #000;
+    background-color: transparent;
     color: #fff;
-    overflow: hidden;
     position: relative;
-    --neon-green: #d7ff00;
-    clip-path: inset(0 0 0 0);
-    z-index: 1; 
+    z-index: 1;
+    height: 100vh;
   }
 
-  .overlay-hero {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    min-height: 90vh;
-    padding-top: calc(var(--padding-top) + 80px);
-    padding-bottom: var(--padding-bottom);
-    position: relative;
-    z-index: 2;
-    text-align: center;
-    padding-inline: 2rem;
-  }
-
-  @media screen and (min-width: 990px) {
-    .overlay-hero {
-      min-height: 100vh;
-    }
-  }
-
-  /* Video Background */
+  /* ── Video Background Layer ── */
   .overlay-hero__video-wrapper {
     position: fixed;
     top: 0;
     left: 0;
     width: 100vw;
     height: 100vh;
-    z-index: -1; /* Goes behind the content but within the section's stacking context */
+    z-index: -10;
     pointer-events: none;
   }
 
   .overlay-hero__video-wrapper::after {
     content: '';
     position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.4);
+    inset: 0;
+    background: linear-gradient(
+      160deg,
+      rgba(0,0,0,0.6) 0%,
+      rgba(0,0,0,0.2) 50%,
+      rgba(0,0,0,0.75) 100%
+    );
     z-index: 2;
   }
 
@@ -66,205 +48,226 @@
     width: 100%;
     height: 100%;
     object-fit: cover;
-    animation: hero-video-zoom 15s ease-in-out infinite alternate;
+    animation: hero-video-zoom 26s ease-in-out infinite alternate;
   }
 
   @keyframes hero-video-zoom {
-    from { transform: scale(1.1); }
-    to { transform: scale(1.25); }
+    from { transform: scale(1.02); }
+    to   { transform: scale(1.12); }
   }
 
+  /* ── Layout Container ── */
+  .overlay-hero {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    height: 100vh;
+    padding-inline: clamp(1.5rem, 5vw, 5rem);
+    position: relative;
+    z-index: 2;
+    transform: translateZ(0); /* Foreground layer anchor */
+  }
+
+  /* ── Main Content Container ── */
   .overlay-hero__content {
     display: flex;
     flex-direction: column;
-    align-items: center;
-    gap: 2.5rem;
-    max-width: 900px;
-    opacity: 1; /* Instant visibility */
-    will-change: transform;
-    transition: opacity 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+    justify-content: flex-end;
+    align-items: flex-start;
+    padding-bottom: clamp(4rem, 8vh, 8rem);
+    will-change: transform, opacity;
   }
 
+  /* ── Typography ── */
   .overlay-hero__heading {
-    font-size: clamp(12px, 5vw, 6rem);
-    line-height: 0.5; /* Aggressively tightened to remove vertical gap */
-    font-weight: 300;
-    text-transform: uppercase;
-    margin: 0;
-    font-family: var(--font-galderglynn);
-    letter-spacing: 0.04em;
+    font-family: var(--font-heading--family), serif !important;
+    font-size: clamp(3rem, 6.5vw, 7rem);
+    font-weight: 500;
+    font-style: normal;
+    line-height: 1.05;
+    letter-spacing: 0.01em;
+    text-transform: none;
     color: #fff;
-    white-space: nowrap;
+    margin: 0 0 1.5rem;
+    min-height: 1.4em; 
+    text-shadow: 0 4px 24px rgba(0,0,0,0.3);
+  }
+
+  /* Typewriter cursor */
+  .overlay-hero__cursor {
+    display: inline-block;
+    width: 3px;
+    height: 0.8em;
+    background: var(--neon);
+    margin-left: 6px;
+    vertical-align: middle;
+    border-radius: 1px;
+    animation: blink-cursor 0.75s step-end infinite;
+  }
+
+  @keyframes blink-cursor {
+    0%, 100% { opacity: 1; }
+    50%       { opacity: 0; }
+  }
+
+  .overlay-hero__cursor--done {
+    animation: cursor-fade-out 0.8s ease forwards;
+  }
+
+  @keyframes cursor-fade-out {
+    to { opacity: 0; width: 0; margin: 0; }
   }
 
   .overlay-hero__description {
-    font-size: 1rem;
-    line-height: 1.6;
-    color: rgba(255, 255, 255, 0.85);
-    margin: 0;
-    font-weight: 300;
+    font-size: clamp(0.85rem, 1.2vw, 1.05rem);
+    line-height: 1.7;
+    color: rgba(255, 255, 255, 0.8);
     max-width: 600px;
-    letter-spacing: 0.05em;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    font-weight: 300;
+    margin: 0 0 2.5rem;
+    text-shadow: 0 2px 10px rgba(0,0,0,0.4);
   }
 
-  .overlay-hero__button {
+  /* ── Glassmorphism CTA Button ── */
+  .overlay-hero__cta {
+    position: relative;
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    background-color: #fff; /* Solid white background */
-    color: #000;
-    padding: 1rem 3rem;
-    font-size: 12px;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.3em;
-    text-decoration: none;
-    transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
-    border: 1px solid #fff;
-    margin-top: 1rem;
-    white-space: nowrap; /* Prevent button text wrapping */
-  }
-
-  .overlay-hero__button:hover {
-    background-color: transparent;
-    color: #fff;
-  }
-
-  @media (max-width: 768px) {
-    .overlay-hero__heading {
-      font-size: clamp(10px, 6vw, 3.5rem);
-      line-height: 1.1;
-      display: block;
-      white-space: nowrap; /* Force each line to stay whole */
-    }
-    
-    .overlay-hero__description {
-      font-size: 8px; 
-      letter-spacing: 0.3em;
-      white-space: nowrap;
-      max-width: 95vw;
-      opacity: 0.8;
-      text-transform: uppercase;
-    }
-
-    .overlay-hero__button {
-      padding: 0.8rem 2.2rem;
-      font-size: 10px;
-      letter-spacing: 0.3em;
-      background-color: #fff !important; /* Force visibility */
-      color: #000 !important;
-    }
-
-    .overlay-hero__marquee {
-      padding: 0.8rem 0;
-    }
-
-    .overlay-hero__marquee-text {
-      font-size: 0.1rem;
-      padding: 0 0.8rem;
-    }
-
-    .overlay-hero__marquee-dot {
-      width: 4px;
-      height: 4px;
-      margin: 0 0.8rem;
-    }
-  }
-
-  /* Marquee */
-  .overlay-hero__marquee {
-    background-color: black;
-    color: #ffffffff;
-    padding: 0.7rem 0;
-    border-top: 1px solid #000;
-    border-bottom: 1px solid #000;
-    overflow: hidden;
-    white-space: nowrap;
-    position: relative;
-    z-index: 3;
-    display: flex;
-  }
-
-  .overlay-hero__marquee-inner {
-    display: flex;
-    align-items: center;
-    animation: marquee-scroll 200s linear infinite;
-    flex-shrink: 0;
-  }
-
-  .overlay-hero__marquee-text {
-    font-size: 0.85rem;
+    padding: 1.15rem 3.2rem;
+    font-size: clamp(0.8rem, 1vw, 0.95rem);
     font-weight: 500;
+    letter-spacing: 0.25em;
     text-transform: uppercase;
-    padding: 0 1.5rem;
-    letter-spacing: 0.1em;
+    text-decoration: none;
+    color: #ffffff;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    border-radius: 4px;
+    overflow: hidden;
+    cursor: pointer;
+    backdrop-filter: blur(14px) saturate(160%);
+    -webkit-backdrop-filter: blur(14px) saturate(160%);
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+    transition: background 0.4s cubic-bezier(0.25, 1, 0.5, 1), 
+                border-color 0.4s cubic-bezier(0.25, 1, 0.5, 1), 
+                transform 0.3s cubic-bezier(0.25, 1, 0.5, 1),
+                box-shadow 0.4s cubic-bezier(0.25, 1, 0.5, 1);
   }
 
-  .overlay-hero__marquee-dot {
-    display: inline-block;
-    width: 6px;
-    height: 6px;
-    background: #000;
-    border-radius: 50%;
-    margin: 0 1.5rem;
+  /* Ambient Glass Highlight Shimmer */
+  .overlay-hero__cta::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgba(255, 255, 255, 0.15),
+      transparent
+    );
+    transition: none;
   }
 
-  @keyframes marquee-scroll {
-    from { transform: translateX(0); }
-    to { transform: translateX(-100%); }
+  /* Hover States */
+  .overlay-hero__cta:hover {
+    background: rgba(255, 255, 255, 0.13);
+    border-color: rgba(255, 255, 255, 0.35);
+    transform: translateY(-2px);
+    box-shadow: 0 12px 40px 0 rgba(0, 0, 0, 0.45),
+                0 0 15px 1px rgba(255, 255, 255, 0.05);
   }
 
-  /* Instant Hero Animations */
+  .overlay-hero__cta:hover::before {
+    left: 100%;
+    transition: left 0.85s cubic-bezier(0.25, 1, 0.5, 1);
+  }
+
+  .overlay-hero__cta:active {
+    transform: translateY(1px);
+  }
+
+  /* ── Entry Animations ── */
   .hero-animate {
     opacity: 0;
     animation-fill-mode: both;
-    animation-duration: 0.8s;
-    animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+    animation-duration: 1.2s;
+    animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
   }
 
-  .hero-animate--fade-up {
-    animation-name: heroFadeUp;
-  }
-
-  .hero-animate--scale {
-    animation-name: heroScale;
-  }
-
-  .hero-animate--delay-1 { animation-delay: 0.1s; }
-  .hero-animate--delay-2 { animation-delay: 0.25s; }
-  .hero-animate--delay-3 { animation-delay: 0.4s; }
+  .hero-animate--fade-up { animation-name: heroFadeUp; }
+  .hero-animate--d4 { animation-delay: 0.6s; }
+  .hero-animate--d5 { animation-delay: 0.85s; }
 
   @keyframes heroFadeUp {
-    from {
-      opacity: 0;
-      transform: translateY(30px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
+    from { opacity: 0; transform: translateY(30px); }
+    to   { opacity: 1; transform: translateY(0); }
   }
 
-  @keyframes heroScale {
-    from {
-      opacity: 0;
-      transform: scale(0.9);
+  /* ── Responsive Scaling ── */
+  @media (max-width: 768px) {
+    #{{ section_id }} {
+      height: 100svh;
     }
-    to {
-      opacity: 1;
-      transform: scale(1);
+
+    .overlay-hero__video-wrapper {
+      position: fixed;
+      top: 0;
+      height: 100svh;
+      transform: none !important;
+    }
+
+    .overlay-hero {
+      padding-inline: 1.5rem;
+      justify-content: center;
+      height: 100svh;
+    }
+
+    .overlay-hero__content {
+      padding-bottom: 0;
+      align-items: center;
+      text-align: center;
+    }
+
+    .overlay-hero__heading {
+      font-size: clamp(2.5rem, 11vw, 4.5rem);
+      line-height: 1.1;
+      margin-bottom: 1.2rem;
+      width: 100%;
+    }
+
+    .overlay-hero__description {
+      font-size: 0.8rem;
+      max-width: 100%;
+      letter-spacing: 0.14em;
+      margin-inline: auto;
+      margin-bottom: 2.2rem;
+    }
+
+    .overlay-hero__cta {
+      width: 100%;
+      max-width: 290px;
+      padding: 1.1rem 2rem;
     }
   }
 {%- endstyle -%}
 
 <section id="{{ section_id }}" data-home-hero>
+
+  <!-- Parallax Video Background Layer -->
   <div class="overlay-hero__video-wrapper">
-    <video 
-      class="overlay-hero__video" 
-      autoplay 
-      loop 
-      muted 
-      playsinline 
+    <video
+      class="overlay-hero__video"
+      autoplay
+      loop
+      muted
+      playsinline
+      webkit-playsinline
       {%- if section.settings.image != blank -%}
         poster="{{ section.settings.image | image_url: width: 2000 }}"
       {%- endif -%}
@@ -274,42 +277,30 @@
   </div>
 
   <div class="overlay-hero">
+    <!-- Foreground Content Layer -->
     <div class="overlay-hero__content">
 
       {%- if section.settings.heading != blank -%}
-        <h1 class="overlay-hero__heading">{{ section.settings.heading | newline_to_br }}</h1>
+        <h1 class="overlay-hero__heading hero-animate hero-animate--fade-up">
+          {{ section.settings.heading | newline_to_br }}
+        </h1>
       {%- endif -%}
 
-      <div class="overlay-hero__description-wrapper hero-animate hero-animate--fade-up hero-animate--delay-2">
-        {%- if section.settings.description != blank -%}
-          <p class="overlay-hero__description">{{ section.settings.description }}</p>
-        {%- endif -%}
-      </div>
+      {%- if section.settings.description != blank -%}
+        <p class="overlay-hero__description hero-animate hero-animate--fade-up hero-animate--d4">
+          {{ section.settings.description }}
+        </p>
+      {%- endif -%}
 
-      {%- if section.settings.button_label != blank -%}
-        <a href="{{ section.settings.button_link }}" class="overlay-hero__button hero-animate hero-animate--scale hero-animate--delay-3">
+      {%- if section.settings.button_label != blank and section.settings.button_link != blank -%}
+        <a href="{{ section.settings.button_link }}" class="overlay-hero__cta hero-animate hero-animate--fade-up hero-animate--d5">
           {{ section.settings.button_label }}
         </a>
       {%- endif -%}
+
     </div>
   </div>
 
-    {%- if section.settings.show_marquee -%}
-    <div class="overlay-hero__marquee">
-      <div class="overlay-hero__marquee-inner">
-        {%- for i in (1..10) -%}
-          <span class="overlay-hero__marquee-text">{{ section.settings.marquee_text }}</span>
-          <span class="overlay-hero__marquee-dot"></span>
-        {%- endfor -%}
-      </div>
-      <div class="overlay-hero__marquee-inner" aria-hidden="true">
-        {%- for i in (1..10) -%}
-          <span class="overlay-hero__marquee-text">{{ section.settings.marquee_text }}</span>
-          <span class="overlay-hero__marquee-dot"></span>
-        {%- endfor -%}
-      </div>
-    </div>
-  {%- endif -%}
 </section>
 
 <script>
@@ -318,65 +309,77 @@
   if (!heroSection) return;
 
   var heroContent = heroSection.querySelector('.overlay-hero__content');
-  if (!heroContent) return;
+  var heroVideo = heroSection.querySelector('.overlay-hero__video');
 
-  // ─── Config ───────────────────────────────────────────────────────────────
-  var PARALLAX_SPEED = 0.38;   // 0 = fixed, 1 = normal — content lags behind scroll
-  var LERP_FACTOR    = 0.07;   // smoothing: lower = silkier (0.05–0.12 sweet spot)
-  // ──────────────────────────────────────────────────────────────────────────
-
-  var currentY = 0;
-  var targetY  = 0;
-  var rafId    = null;
-  var isActive = true;
-
-  function lerp(a, b, t) {
-    return a + (b - a) * t;
+  // ── Autoplay Video Force (iOS / Safari) ─────────────────────
+  if (heroVideo) {
+    heroVideo.muted = true;
+    heroVideo.playsInline = true;
+    var playPromise = heroVideo.play();
+    if (playPromise !== undefined) {
+      playPromise.catch(function(error) {
+        var playOnInteraction = function() {
+          heroVideo.play();
+          document.removeEventListener('touchstart', playOnInteraction);
+          document.removeEventListener('click', playOnInteraction);
+          document.removeEventListener('scroll', playOnInteraction);
+        };
+        document.addEventListener('touchstart', playOnInteraction, { passive: true });
+        document.addEventListener('click', playOnInteraction, { passive: true });
+        document.addEventListener('scroll', playOnInteraction, { passive: true });
+      });
+    }
   }
 
-  function tick() {
-    if (!isActive) return;
-
-    var scrollY    = window.scrollY || window.pageYOffset;
-    var heroBottom = heroSection.offsetTop + heroSection.offsetHeight;
-
-    // Only drive parallax while hero is in (or near) view
-    if (scrollY <= heroBottom + 60) {
-      targetY = scrollY * PARALLAX_SPEED;
-
-      // Subtle opacity fade as hero exits (starts fading at 40% scroll through hero)
-      var fadeStart = heroBottom * 0.4;
-      var opacity   = scrollY > fadeStart
-        ? Math.max(0, 1 - (scrollY - fadeStart) / (heroBottom - fadeStart))
-        : 1;
-
-      // Lerp toward target for buttery smoothness
-      currentY = lerp(currentY, targetY, LERP_FACTOR);
-
-      // GPU-accelerated transform
-      heroContent.style.transform = 'translate3d(0,' + currentY.toFixed(2) + 'px,0)';
-      heroContent.style.opacity   = opacity.toFixed(3);
-    } else {
-      // Once hero is far past, freeze at final state — no wasted frames
-      heroContent.style.opacity = '0';
+  // ── Parallax & Ambient Fade ─────────────────────────────────
+  var videoWrapper = heroSection.querySelector('.overlay-hero__video-wrapper');
+  if (heroContent && window.matchMedia('(min-width: 769px)').matches) {
+    var isTicking = false;
+    
+    function onScroll() {
+      if (!isTicking) {
+        window.requestAnimationFrame(updateEffects);
+        isTicking = true;
+      }
     }
 
-    rafId = requestAnimationFrame(tick);
+    function updateEffects() {
+      var scrollY = window.scrollY;
+      var sectionTop = heroSection.offsetTop;
+      var maxScroll = heroSection.offsetHeight;
+      
+      // Relative scroll within the section
+      var relativeScrollY = scrollY - sectionTop;
+      if (relativeScrollY < 0) relativeScrollY = 0;
+      
+      // Background is now position: fixed, so no JS transform is needed
+      // to keep it completely stationary in the viewport as requested.
+
+      // Content Parallax & Alpha Fade
+      if (heroContent) {
+        // Scroll content slower than the page so the next section catches up to it
+        if (scrollY < sectionTop + maxScroll) {
+          var yPosContent = relativeScrollY * 0.4;
+          heroContent.style.transform = 'translate3d(0, ' + yPosContent + 'px, 0)';
+        }
+
+        var fadeStart = maxScroll * 0.25;
+        if (relativeScrollY > fadeStart) {
+          var opacity = Math.max(0, 1 - (relativeScrollY - fadeStart) / (maxScroll * 0.5 - fadeStart));
+          heroContent.style.opacity = opacity.toFixed(3);
+        } else {
+          heroContent.style.opacity = '1';
+        }
+      }
+      
+      isTicking = false;
+    }
+
+    window.addEventListener('scroll', onScroll, { passive: true });
+    updateEffects();
   }
 
-  // Kick off the continuous loop
-  tick();
-
-  // Pause loop when tab is hidden, resume on focus — saves battery
-  document.addEventListener('visibilitychange', function () {
-    if (document.hidden) {
-      isActive = false;
-      cancelAnimationFrame(rafId);
-    } else {
-      isActive = true;
-      tick();
-    }
-  });
+  // ── Typewriter Engine (Removed) ──────────────────────────────────────────
 })();
 </script>
 
@@ -391,16 +394,22 @@
       "default": "https://cdn.shopify.com/videos/c/o/v/dcd2211b302f47169295b9baf0652208.mp4"
     },
     {
+      "type": "text",
+      "id": "pre_heading",
+      "label": "Pre-Heading Label",
+      "default": "The Art of Layering"
+    },
+    {
       "type": "textarea",
       "id": "heading",
       "label": "Heading",
-      "default": "ALL OVER THE SPRAY HOUSE"
+      "default": "ALL OVER\nSPRAY HOUSE"
     },
     {
       "type": "textarea",
       "id": "description",
       "label": "Description",
-      "default": "overlay is a modern fragrance house exploring the art of layering, where scents meet to create endless combinations with ease"
+      "default": "MADE TO BE MIXED."
     },
     {
       "type": "text",
@@ -417,22 +426,6 @@
       "type": "image_picker",
       "id": "image",
       "label": "Fallback Background Image"
-    },
-    {
-      "type": "header",
-      "content": "Marquee"
-    },
-    {
-      "type": "checkbox",
-      "id": "show_marquee",
-      "label": "Show Marquee",
-      "default": true
-    },
-    {
-      "type": "textarea",
-      "id": "marquee_text",
-      "label": "Marquee Text",
-      "default": "DISCOVER THE ART OF LAYERING  • CRAFT YOUR SIGNATURE SCENT • MODERN FRAGRANCE HOUSE"
     },
     {
       "type": "header",

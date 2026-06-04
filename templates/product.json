@@ -144,7 +144,7 @@
                 "stacking": false,
                 "show_pickup_availability": false,
                 "gift_card_form": true,
-                "custom_add_to_cart_text": "Add to collection",
+                "custom_add_to_cart_text": "Add to Cart",
                 "padding-block-start": 0,
                 "padding-block-end": 0,
                 "padding-inline-start": 0,
@@ -166,10 +166,6 @@
               "type": "custom-engraving-form",
               "settings": {}
             },
-            "trust_carousel": {
-              "type": "trust-carousel",
-              "settings": {}
-            },
             "product_notes": {
               "type": "product-notes",
               "settings": {}
@@ -182,7 +178,6 @@
             "description_redesign",
             "custom_engraving_form",
             "buy_buttons_eYQEYi",
-            "trust_carousel",
             "variant_picker_R3rGDr",
             "vendor"
           ]
@@ -203,7 +198,7 @@
     "complete_the_set": {
       "type": "complete-the-set",
       "settings": {
-        "heading": "COLLECTOR TRILOGY"
+        "heading": "EXPLORE MORE"
       }
     }
   },

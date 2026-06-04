@@ -22,10 +22,12 @@
     %}
     {{ background_video.preview_image | image_url: width: 3840 | image_tag: width: 1100, widths: widths, sizes: sizes }}
     <video
-      playsinline
-      muted
-      autoplay
-      loop
+      playsinline="true"
+      webkit-playsinline="true"
+      x5-playsinline="true"
+      muted="muted"
+      autoplay="autoplay"
+      loop="loop"
       ref="videoElement"
     >
       {%- for sourceElement in background_video.sources -%}

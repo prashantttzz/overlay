@@ -1,25 +1,15 @@
 {%- style -%}
   #scent-layering-{{ section.id }} {
+    display: none !important;
     position: relative;
-    background-color: #fff; /* Initial White */
+    background-color: #fff;
     color: #000;
     overflow: clip;
-    transition: background-color 0.8s cubic-bezier(0.4, 0, 0.2, 1), color 0.8s ease;
-  }
-
-  @media (max-width: 768px) {
-    #scent-layering-{{ section.id }} {
-      display: none !important;
-    }
-  }
-
-  #scent-layering-{{ section.id }}.is-dark {
-    background-color: #000;
-    color: #fff;
+    z-index: 2;
   }
 
   .sl-monolith__scroll-container {
-    height: 800vh; /* Extended scroll for cinematic pacing */
+    height: 300vh; /* Extended scroll for cinematic pacing */
     position: relative;
   }
 
@@ -59,7 +49,7 @@
     font-size: 10px;
     letter-spacing: 0.8em;
     text-transform: uppercase;
-    color: rgba(255, 255, 255, 0.15); /* Increased visibility */
+    color: rgba(0, 0, 0, 0.15); /* Increased visibility */
     white-space: nowrap;
     will-change: transform;
   }
@@ -75,7 +65,7 @@
     line-height: 0.85;
     font-weight: 800;
     text-transform: uppercase;
-    color: rgba(255, 255, 255, 0.08); /* Increased visibility */
+    color: rgba(0, 0, 0, 0.08); /* Increased visibility */
     width: 600px;
     z-index: 0;
     pointer-events: none;
@@ -93,7 +83,7 @@
     font-weight: 900;
     text-transform: uppercase;
     color: transparent;
-    -webkit-text-stroke: 1px rgba(255, 255, 255, 0.2); /* Increased visibility */
+    -webkit-text-stroke: 1px rgba(0, 0, 0, 0.2); /* Increased visibility */
     pointer-events: none;
     z-index: 1;
     white-space: nowrap;
@@ -109,7 +99,7 @@
     transform: translateY(-50%);
     height: 300px;
     width: 1px;
-    background: rgba(255, 255, 255, 0.1);
+    background: rgba(0, 0, 0, 0.1);
     z-index: 15;
   }
 
@@ -119,7 +109,7 @@
     left: 0;
     width: 100%;
     height: 0%;
-    background: #fff;
+    background: #000;
     transition: height 0.3s ease;
   }
 
@@ -142,7 +132,7 @@
     font-size: 10px;
     letter-spacing: 0.4em;
     text-transform: uppercase;
-    color: rgba(255, 255, 255, 0.4);
+    color: rgba(0, 0, 0, 0.4);
     margin-bottom: 1.5rem;
     display: block;
   }
@@ -160,7 +150,7 @@
   .sl-monolith__text {
     font-size: clamp(0.9rem, 1.1vw, 1.05rem);
     line-height: 1.6;
-    color: rgba(255, 255, 255, 0.5);
+    color: rgba(0, 0, 0, 0.6);
     max-width: 400px;
     margin: 1.5rem 0 0;
     text-wrap: balance;
@@ -211,7 +201,7 @@
 
   .sl-monolith__callout-line {
     height: 1px;
-    background: rgba(255, 255, 255, 0.4);
+    background: rgba(0, 0, 0, 0.4);
     width: 0;
     will-change: width;
   }
@@ -220,10 +210,10 @@
     font-size: 8px;
     letter-spacing: 0.2em;
     text-transform: uppercase;
-    color: #fff;
+    color: #000;
     white-space: nowrap;
     font-weight: 600;
-    background: rgba(0,0,0,0.2);
+    background: rgba(255,255,255,0.8);
     padding: 2px 4px;
     border-radius: 2px;
     will-change: transform, opacity;
@@ -235,6 +225,10 @@
   .callout--bottom { bottom: 20%; right: 10%; flex-direction: row; }
 
   @media (max-width: 768px) {
+    #scent-layering-{{ section.id }} {
+      display: none !important;
+    }
+
     .sl-monolith__callouts { display: none; }
     
     .sl-monolith__title {
@@ -256,13 +250,13 @@
       top: auto !important;
       text-align: center;
       padding: 1.25rem 1.5rem;
-      background: rgba(255, 255, 255, 0.04);
+      background: rgba(255, 255, 255, 0.8);
       backdrop-filter: blur(25px);
       -webkit-backdrop-filter: blur(25px);
       border-radius: 20px;
-      border: 1px solid rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(0, 0, 0, 0.08);
       transform: translate3d(-50%, 20px, 0);
-      box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+      box-shadow: 0 20px 40px rgba(0,0,0,0.05);
     }
 
     .sl-monolith__text {
@@ -309,13 +303,13 @@
       
       <!-- Rich Background Textures -->
       <div class="sl-monolith__notes-layer">
-        <div class="sl-monolith__note" style="top: 15%; left: 10%;">MUSK</div>
-        <div class="sl-monolith__note" style="top: 65%; left: 15%;">AMBER</div>
-        <div class="sl-monolith__note" style="top: 35%; left: 5%;">CITRUS</div>
-        <div class="sl-monolith__note" style="top: 80%; left: 8%;">SANDALWOOD</div>
+        <div class="sl-monolith__note" style="top: 15%; left: 10%;">AURA</div>
+        <div class="sl-monolith__note" style="top: 65%; left: 15%;">PRESENCE</div>
+        <div class="sl-monolith__note" style="top: 35%; left: 5%;">TRACE</div>
+        <div class="sl-monolith__note" style="top: 80%; left: 8%;">IMPACT</div>
       </div>
-      <div class="sl-monolith__slogan">THE ART OF THE BLEND</div>
-      <div class="sl-monolith__watermark">THE JOURNEY</div>
+      <div class="sl-monolith__slogan">THE ART OF EXPRESSION</div>
+      <div class="sl-monolith__watermark">THE EXPERIENCE</div>
       
       <div class="sl-monolith__progress-track">
         <div class="sl-monolith__progress-bar"></div>
@@ -324,24 +318,9 @@
       <!-- Feature Callouts -->
       <div class="sl-monolith__overlay">
         <div class="sl-monolith__feature" data-index="0">
-          <span class="sl-monolith__label">CHAPTER I</span>
+          <span class="sl-monolith__label">THE ESSENCE</span>
           <h2 class="sl-monolith__title">{{ section.settings.feature_1_title }}</h2>
           <p class="sl-monolith__text">{{ section.settings.feature_1_text }}</p>
-        </div>
-        <div class="sl-monolith__feature" data-index="1">
-          <span class="sl-monolith__label">CHAPTER II</span>
-          <h2 class="sl-monolith__title">{{ section.settings.feature_2_title }}</h2>
-          <p class="sl-monolith__text">{{ section.settings.feature_2_text }}</p>
-        </div>
-        <div class="sl-monolith__feature" data-index="2">
-          <span class="sl-monolith__label">CHAPTER III</span>
-          <h2 class="sl-monolith__title">{{ section.settings.feature_3_title }}</h2>
-          <p class="sl-monolith__text">{{ section.settings.feature_3_text }}</p>
-        </div>
-        <div class="sl-monolith__feature" data-index="3">
-          <span class="sl-monolith__label">CHAPTER IV</span>
-          <h2 class="sl-monolith__title">{{ section.settings.feature_4_title }}</h2>
-          <p class="sl-monolith__text">{{ section.settings.feature_4_text }}</p>
         </div>
       </div>
 
@@ -414,10 +393,7 @@
     const lerpFactor = 0.3; // Responsive but controlled
 
     const labelSets = [
-      ["BRIGHT CITRUS", "AIRY FLOWER PETALS", "LONG-LASTING"],
-      ["WARM JASMINE", "SUNKISSED AURA", "SEAMLESS FLOW"],
-      ["RICH SANDALWOOD", "DEEP AMBER", "INTIMATE SILLAGE"],
-      ["SKIN-LIKE WARMTH", "SOFT MUSK", "ALL-DAY LINGER"]
+      ["BRIGHT CITRUS", "AIRY FLOWER PETALS", "LONG-LASTING"]
     ];
 
     // Detect user interaction with 3D model
@@ -463,11 +439,6 @@
       lastProgress = currentProgress;
 
       const isMobile = window.innerWidth <= 768;
-
-      if (currentProgress > 0.02) section.classList.add('is-dark');
-      else section.classList.remove('is-dark');
-
-      let leftPos = 50;
       let opacity = 1;
       let scale = 1;
       let exposure = 1;
@@ -539,7 +510,7 @@
           f.style.opacity = fOpacity.toFixed(3);
           f.style.transform = `translate3d(${baseTranslateX}, ${translateY.toFixed(2)}px, 0)`;
           f.style.filter = `none`;
-          f.style.color = '#ffffff';
+          f.style.color = '#000000';
           f.style.zIndex = "40"; 
           
           if (fOpacity > 0.1) {
@@ -669,61 +640,13 @@
       "type": "text",
       "id": "feature_1_title",
       "label": "Title",
-      "default": "YOUR PERSONAL BLEND"
+      "default": "CRAFT YOUR SIGNATURE"
     },
     {
       "type": "textarea",
       "id": "feature_1_text",
       "label": "Text",
-      "default": "Create a signature scent that is entirely yours. Blend different notes together directly on your skin to match your mood."
-    },
-    {
-      "type": "header",
-      "content": "Feature 2"
-    },
-    {
-      "type": "text",
-      "id": "feature_2_title",
-      "label": "Title",
-      "default": "NATURAL HARMONY"
-    },
-    {
-      "type": "textarea",
-      "id": "feature_2_text",
-      "label": "Text",
-      "default": "Our fragrances flow together naturally. Each note melts into the next, creating a soft, warm aura that never feels overpowering."
-    },
-    {
-      "type": "header",
-      "content": "Feature 3"
-    },
-    {
-      "type": "text",
-      "id": "feature_3_title",
-      "label": "Title",
-      "default": "SENSORY DEPTH"
-    },
-    {
-      "type": "textarea",
-      "id": "feature_3_text",
-      "label": "Text",
-      "default": "Instead of competing, overlapping sprays enrich each other. They settle beautifully on the skin, unveiling a deeper, more intimate scent."
-    },
-    {
-      "type": "header",
-      "content": "Feature 4"
-    },
-    {
-      "type": "text",
-      "id": "feature_4_title",
-      "label": "Title",
-      "default": "LONG-LASTING TRAIL"
-    },
-    {
-      "type": "textarea",
-      "id": "feature_4_text",
-      "label": "Text",
-      "default": "Watch the fragrance evolve from a bright, fresh morning breeze into a cozy, skin-like warmth that stays with you all day and night."
+      "default": "Experience a fragrance journey that adapts to you. Layer distinct notes to create an evolving, personalized scent profile that lingers beautifully all day."
     }
   ],
   "presets": [

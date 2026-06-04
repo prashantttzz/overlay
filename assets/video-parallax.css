@@ -1,0 +1,52 @@
+/* Global Fixed Video Container */
+.fixed-video-background {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: -10; /* Behind everything */
+  overflow: hidden;
+  pointer-events: none; /* Prevents video from intercepting clicks */
+}
+
+.fixed-video-background .video-cover {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.fixed-video-background .fixed-video-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1; /* Above video, below content */
+}
+
+/* Shopify Section Wrapper Resets for Transparent Windows */
+.transparent-parallax-wrapper {
+  background-color: transparent !important;
+  position: relative;
+  z-index: 1;
+}
+
+.parallax-transparent-section {
+  position: relative;
+  width: 100%;
+  min-height: 80vh; /* Ensures sufficient scroll depth */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+/* Global utility class to make any standard section "Solid" */
+.theme-solid-background {
+  background-color: var(--color-base-background-1, #ffffff);
+  position: relative;
+  z-index: 2; /* Slides over the fixed video */
+}
