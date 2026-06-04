@@ -2,10 +2,11 @@
   background-color: #000000;
   color: #fff;
   padding-top: 100px;
-  padding-right:30px;
-  padding-left:30px;
+  padding-right: 30px;
+  padding-left: 30px;
   font-family: var(--font-body--family), sans-serif;
-  margin-top: 80px; /* Optional, just to give some space from the content above */
+  margin-top: 80px;
+  /* Optional, just to give some space from the content above */
 }
 
 .footer-custom__top {
@@ -28,18 +29,25 @@
   }
 }
 
+.footer-custom__column--brand {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
 .footer-custom__brand-name {
   font-family: var(--font-heading--family), sans-serif;
   font-size: 2.5rem;
   text-transform: uppercase;
-  margin: 0 0 24px -15px; /* Shifts the brand name 15px to the left */
+  margin: 0 0 24px 0;
   font-weight: 300;
   letter-spacing: 0.1em;
   color: #fff;
 }
 
 .footer-custom__logo-link {
-  margin-left: -15px; /* Shifts the logo image wrapper 15px to the left */
+  margin-left: 0;
 }
 
 .footer-custom__brand-desc {
@@ -47,7 +55,7 @@
   line-height: 1.8;
   color: rgba(255, 255, 255, 0.6);
   max-width: 320px;
-  margin: 0;
+  margin: 0 auto;
   font-weight: 300;
 }
 
@@ -187,5 +195,75 @@
     flex-direction: column;
     gap: 16px;
     align-items: center;
+  }
+}
+
+.footer-credit {
+  opacity: 0.15;
+  transition: opacity 0.3s ease;
+}
+
+.footer-credit:hover {
+  opacity: 0.6;
+}
+
+/* Custom styling for Brand Column promo text */
+/* Custom styling for Brand Column sub and promo text */
+.footer-custom__brand-sub {
+  display: none;
+}
+
+.footer-custom__brand-promo {
+  font-size: 0.85rem;
+  font-weight: 300;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-top: 15px;
+  color: #a32424;
+  font-family: 'Galderglynn Titling', sans-serif !important;
+}
+
+@media (max-width: 768px) {
+
+  /* Center brand column content on mobile and use Galderglynn font */
+  .footer-custom__column--brand {
+    align-items: center !important;
+    text-align: center !important;
+  }
+
+  .footer-custom__brand-name {
+    font-family: 'Galderglynn Titling', sans-serif !important;
+    font-size: 2.2rem !important;
+    font-weight: 700 !important;
+    letter-spacing: 0.05em !important;
+    color: #fff !important;
+    margin-bottom: 2px !important;
+    line-height: 1.2 !important;
+  }
+
+  .footer-custom__brand-desc {
+    display: none !important;
+  }
+
+  .footer-custom__brand-sub {
+    display: block !important;
+    font-family: 'Galderglynn Titling', sans-serif !important;
+    font-size: 0.8rem !important;
+    font-weight: 400 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.05em !important;
+    color: #fff !important;
+    margin: 0 auto !important;
+    line-height: 1.4 !important;
+  }
+
+  .footer-custom__brand-promo {
+    font-family: 'Galderglynn Titling', sans-serif !important;
+    font-size: 1.2rem !important;
+    font-weight: 300 !important;
+    letter-spacing: 0.05em !important;
+    color: #fff !important;
+    margin-top: 24px !important;
+    line-height: 1.3 !important;
   }
 }

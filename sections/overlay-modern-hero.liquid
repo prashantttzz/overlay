@@ -323,6 +323,32 @@
   {%- endif -%}
 </section>
 
+<script>
+(function () {
+  var heroSection = document.querySelector('[data-home-hero]');
+  if (!heroSection) return;
+  var heroVideo = heroSection.querySelector('.overlay-hero__video');
+  if (heroVideo) {
+    heroVideo.muted = true;
+    heroVideo.playsInline = true;
+    var playPromise = heroVideo.play();
+    if (playPromise !== undefined) {
+      playPromise.catch(function(error) {
+        var playOnInteraction = function() {
+          heroVideo.play();
+          document.removeEventListener('touchstart', playOnInteraction);
+          document.removeEventListener('click', playOnInteraction);
+          document.removeEventListener('scroll', playOnInteraction);
+        };
+        document.addEventListener('touchstart', playOnInteraction, { passive: true });
+        document.addEventListener('click', playOnInteraction, { passive: true });
+        document.addEventListener('scroll', playOnInteraction, { passive: true });
+      });
+    }
+  }
+})();
+</script>
+
 {% schema %}
 {
   "name": "Overlay Modern Hero",

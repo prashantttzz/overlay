@@ -1,5 +1,24 @@
 {{ 'footer-custom.css' | asset_url | stylesheet_tag }}
 
+{% style %}
+  @font-face {
+    font-family: 'Galderglynn Titling';
+    src: url('{{ "galderglynn-titling.regular.otf" | asset_url }}') format('opentype'),
+         url('{{ "Galderglynn Titling Rg.otf" | asset_url }}') format('opentype');
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+  }
+  @font-face {
+    font-family: 'Galderglynn Titling';
+    src: url('{{ "galderglynn-titling-bd.ttf" | asset_url }}') format('truetype'),
+         url('{{ "Galderglynn Titling Bd.otf" | asset_url }}') format('opentype');
+    font-weight: 700;
+    font-style: normal;
+    font-display: swap;
+  }
+{% endstyle %}
+
 <footer class="footer-custom">
   <div class="footer-custom__inner page-width-normal">
     <div class="footer-custom__top">
@@ -14,6 +33,8 @@
           <h2 class="footer-custom__brand-name">{{ section.settings.brand_name }}</h2>
         {%- endif -%}
         <div class="footer-custom__brand-desc">{{ section.settings.brand_desc }}</div>
+        <div class="footer-custom__brand-sub">THE ALL OVER SPRAY HOUSE</div>
+        <div class="footer-custom__brand-promo">DID YOU FIND YOUR MIX YET?</div>
       </div>
 
       <!-- Links Column 1: Collections -->
@@ -62,12 +83,13 @@
   <div class="footer-custom__bottom">
     <div class="footer-custom__bottom-inner page-width-normal">
       <div class="footer-custom__copyright">
-     © OVERLAY 2026 | WEBSITE BY <a href="https://cityreachdigital.com/" target="_blank" rel="noopener noreferrer"><span class="shimmer-text">CITYREACH DIGITAL</span></a>
+     © OVERLAY 2026
       </div>
       <div class="footer-custom__bottom-right">
       </div>
     </div>
   </div>
+
 </footer>
 
 {% schema %}
