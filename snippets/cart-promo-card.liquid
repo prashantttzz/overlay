@@ -29,23 +29,22 @@
       </svg>
     </div>
     <div class="cart-promo-card__info">
-      <h3 class="cart-promo-card__title success-title">discount UNLOCKED</h3>
-      <p class="cart-promo-card__text success-text">Your exclusive special reward is ready! Claim at checkout.</p>
+      <h3 class="cart-promo-card__title success-title">DEAL UNLOCKED</h3>
+      <p class="cart-promo-card__text success-text">Your exclusive special discount is ready! Claim at checkout.</p>
     </div>
   </div>
 </div>
 
 <style>
   .cart-promo-card {
-    margin: 15px 0 10px;
-    background: linear-gradient(145deg, #ffffff, #fcfcfc);
+    margin: 0 0 20px;
+    background: #fff;
     border: 1px solid rgba(0,0,0,0.03);
     overflow: hidden;
     width: 100%;
     max-width: 100%;
     box-sizing: border-box;
     display: none; 
-    box-shadow: 0 10px 25px rgba(0,0,0,0.04), 0 2px 5px rgba(0,0,0,0.02);
     position: relative;
     transition: all 0.3s ease;
   }
@@ -115,8 +114,8 @@
 
   .cart-promo-card.is-unlocked .unlocked-state {
     display: flex !important;
-    background: linear-gradient(135deg, #f0fdf4, #ffffff);
-    border: 1px solid rgba(34, 197, 94, 0.15);
+    background: #fff;
+    border: 1px solid rgba(0,0,0,0.06);
   }
 
   .cart-promo-card__icon {
@@ -154,16 +153,7 @@
     font-weight: 500;
   }
 
-  .cart-promo-card::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 1px;
-    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.8), transparent);
-    z-index: 2;
-  }
+  /* No glow effect on promo card */
 
   .cart-drawer:not(.cart-drawer--empty) .cart-promo-card {
     display: block;
@@ -228,7 +218,7 @@
 
   @media screen and (max-width: 749px) {
     .cart-promo-card {
-      margin: 12px 0 12px;
+      margin: 0 0 16px;
       box-shadow: 0 6px 18px rgba(0,0,0,0.04), 0 1px 3px rgba(0,0,0,0.02);
     }
 

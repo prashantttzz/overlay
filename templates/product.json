@@ -121,8 +121,16 @@
               },
               "blocks": {}
             },
-            "description_redesign": {
+            "description_part": {
               "type": "desc-redesign",
+              "settings": {}
+            },
+            "notes_part": {
+              "type": "notes-redesign",
+              "settings": {}
+            },
+            "feels_like_part": {
+              "type": "feels-like-redesign",
               "settings": {}
             },
             "variant_picker_R3rGDr": {
@@ -144,7 +152,7 @@
                 "stacking": false,
                 "show_pickup_availability": false,
                 "gift_card_form": true,
-                "custom_add_to_cart_text": "Add to collection",
+                "custom_add_to_cart_text": "Add to Cart",
                 "padding-block-start": 0,
                 "padding-block-end": 0,
                 "padding-inline-start": 0,
@@ -179,11 +187,12 @@
             "product_title_tefwj7",
             "product_notes",
             "price_a7krng",
-            "description_redesign",
             "custom_engraving_form",
             "buy_buttons_eYQEYi",
-            "trust_carousel",
             "variant_picker_R3rGDr",
+            "description_part",
+            "notes_part",
+            "feels_like_part",
             "vendor"
           ]
         }

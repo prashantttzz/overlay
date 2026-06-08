@@ -1,0 +1,16 @@
+{%- if product.description != blank -%}
+  {% render 'product-description-part', part: 'feels-like', product: product %}
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Feels Like Accordion",
+  "tag": null,
+  "settings": [],
+  "presets": [
+    {
+      "name": "Feels Like Accordion"
+    }
+  ]
+}
+{% endschema %}
