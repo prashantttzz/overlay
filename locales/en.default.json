@@ -57,6 +57,7 @@
   "actions": {
     "add": "Add",
     "add_to_cart": "Add to cart",
+    "buy_now": "Buy Now",
     "added": "Added",
     "apply": "Apply",
     "back": "Back",

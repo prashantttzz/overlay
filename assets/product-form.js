@@ -41,6 +41,8 @@ export class AddToCartComponent extends Component {
    */
   disable() {
     this.refs.addToCartButton.disabled = true;
+    const buyNow = this.querySelector('button[name="checkout"]');
+    if (buyNow) buyNow.disabled = true;
   }
 
   /**
@@ -48,6 +50,8 @@ export class AddToCartComponent extends Component {
    */
   enable() {
     this.refs.addToCartButton.disabled = false;
+    const buyNow = this.querySelector('button[name="checkout"]');
+    if (buyNow) buyNow.disabled = false;
   }
 
   /**
@@ -164,12 +168,26 @@ class ProductFormComponent extends Component {
     // Stop default behaviour from the browser
     event.preventDefault();
 
+    const isCheckout = event.submitter && event.submitter.getAttribute('name') === 'checkout';
+    const buyNowButton = this.querySelector('button[name="checkout"]');
+
     cartPerformance.createStartingMarker('add:user-action');
 
     if (this.#timeout) clearTimeout(this.#timeout);
 
-    // Check if the add to cart button is disabled and do an early return if it is
-    if (this.refs.addToCartButtonContainer?.refs.addToCartButton?.getAttribute('disabled') === 'true') return;
+    // Check if the clicked button is disabled and do an early return if it is
+    if (isCheckout) {
+      if (buyNowButton?.getAttribute('disabled') === 'true') return;
+    } else {
+      if (this.refs.addToCartButtonContainer?.refs.addToCartButton?.getAttribute('disabled') === 'true') return;
+    }
+
+    if (isCheckout && buyNowButton) {
+      buyNowButton.disabled = true;
+      const originalText = buyNowButton.textContent.trim();
+      buyNowButton.dataset.originalText = originalText;
+      buyNowButton.textContent = 'Processing...';
+    }
 
     // ── Engraving validation ─────────────────────────────────────────────
     const engravingBlock = document.querySelector('[data-engraving-block]');
@@ -276,6 +294,11 @@ class ProductFormComponent extends Component {
             new CartErrorEvent(form.getAttribute('id') || '', response.message, response.description, response.errors)
           );
 
+          if (isCheckout && buyNowButton) {
+            buyNowButton.disabled = false;
+            buyNowButton.textContent = buyNowButton.dataset.originalText || 'Buy Now';
+          }
+
           if (!addToCartTextError) return;
           addToCartTextError.classList.remove('hidden');
 
@@ -314,6 +337,11 @@ class ProductFormComponent extends Component {
         } else {
           const id = formData.get('id');
 
+          if (isCheckout) {
+            window.location.href = Theme.routes.cart_url.replace('/cart', '/checkout');
+            return;
+          }
+
           if (addToCartTextError) {
             addToCartTextError.classList.add('hidden');
             addToCartTextError.removeAttribute('aria-live');
@@ -349,6 +377,10 @@ class ProductFormComponent extends Component {
       })
       .catch((error) => {
         console.error(error);
+        if (isCheckout && buyNowButton) {
+          buyNowButton.disabled = false;
+          buyNowButton.textContent = buyNowButton.dataset.originalText || 'Buy Now';
+        }
       })
       .finally(() => {
         cartPerformance.measureFromEvent('add:user-action', event);
