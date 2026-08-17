@@ -51,7 +51,14 @@
     endif
   -%}
 
-    <div class="cart__summary-item cart__discount custom-volume-discount" style="display: {% if cart.item_count >= 3 %}flex{% else %}none{% endif %}; justify-content: space-between; align-items: center; width: 100%; margin-top: -5px; margin-bottom: 4px; padding-bottom: 8px;">
+    {% assign eligible_count = 0 %}
+    {% assign engraving_id = 48572858400991 %}
+    {% for item in cart.items %}
+      {% if item.variant_id != engraving_id %}
+        {% assign eligible_count = eligible_count | plus: item.quantity %}
+      {% endif %}
+    {% endfor %}
+    <div class="cart__summary-item cart__discount custom-volume-discount" style="display: {% if eligible_count >= 3 %}flex{% else %}none{% endif %}; justify-content: space-between; align-items: center; width: 100%; margin-top: -5px; margin-bottom: 4px; padding-bottom: 8px;{% unless eligible_count >= 3 %} visibility: hidden; height: 0; overflow: hidden; margin: 0; padding: 0;{% endunless %}">
       <span class="cart__discount-label" style="display: flex; align-items: center; gap: 8px; font-size: 0.85rem; font-family: var(--font-galderglynn); letter-spacing: 0.05em; text-transform: uppercase;">
         <svg aria-hidden="true" focusable="false" role="presentation" class="icon icon-discount" viewBox="0 0 12 12" style="width: 16px; height: 16px;"><path fill-rule="evenodd" clip-rule="evenodd" d="M7 0h3a2 2 0 012 2v3a1 1 0 01-.3.7l-6 6a1 1 0 01-1.4 0l-4-4a1 1 0 010-1.4l6-6A1 1 0 017 0zm2 2a1 1 0 102 0 1 1 0 00-2 0z" fill="currentColor"></path></svg>
         Buy 3 get a special discount

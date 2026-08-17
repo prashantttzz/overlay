@@ -121,8 +121,16 @@
               },
               "blocks": {}
             },
-            "description_redesign": {
+            "description_part": {
               "type": "desc-redesign",
+              "settings": {}
+            },
+            "notes_part": {
+              "type": "notes-redesign",
+              "settings": {}
+            },
+            "feels_like_part": {
+              "type": "feels-like-redesign",
               "settings": {}
             },
             "variant_picker_R3rGDr": {
@@ -175,10 +183,12 @@
             "product_title_tefwj7",
             "product_notes",
             "price_a7krng",
-            "description_redesign",
             "custom_engraving_form",
             "buy_buttons_eYQEYi",
             "variant_picker_R3rGDr",
+            "description_part",
+            "notes_part",
+            "feels_like_part",
             "vendor"
           ]
         }
@@ -198,7 +208,7 @@
     "complete_the_set": {
       "type": "complete-the-set",
       "settings": {
-        "heading": "EXPLORE MORE"
+        "heading": "COLLECTOR TRILOGY"
       }
     }
   },

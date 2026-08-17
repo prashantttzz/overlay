@@ -1,5 +1,5 @@
 .footer-custom {
-  background-color: #000;
+  background-color: #000000;
   color: #fff;
   padding-top: 100px;
   padding-right: 30px;
@@ -209,6 +209,7 @@
   opacity: 0.6;
 }
 
+/* Custom styling for Brand Column promo text */
 /* Custom styling for Brand Column sub and promo text */
 .footer-custom__brand-sub {
   display: none;
@@ -248,8 +249,9 @@
 
   .footer-custom__brand-sub {
     display: block !important;
-    font-size: 0.7rem !important;
-    font-weight: 300 !important;
+    font-family: 'Galderglynn Titling', sans-serif !important;
+    font-size: 0.8rem !important;
+    font-weight: 400 !important;
     text-transform: uppercase !important;
     letter-spacing: 0.05em !important;
     color: #fff !important;
@@ -259,8 +261,8 @@
 
   .footer-custom__brand-promo {
     font-family: 'Galderglynn Titling', sans-serif !important;
-    font-size: 1rem !important;
-    font-weight: 100 !important;
+    font-size: 1.2rem !important;
+    font-weight: 300 !important;
     letter-spacing: 0.05em !important;
     color: #fff !important;
     margin-top: 24px !important;

@@ -1,0 +1,280 @@
+{%- comment -%}
+  Renders a specific part of the parsed product description (description, notes, or feels-like).
+  Parameters:
+    - part: 'description' | 'notes' | 'feels-like'
+    - product: product object
+{%- endcomment -%}
+
+<div class="product-desc-part product-desc-part--{{ part }}" id="desc-part-{{ part }}-{{ product.id }}">
+  <div class="product-desc-part__accordion hidden">
+    <div class="description-accordion-item">
+      <button class="description-accordion-trigger" aria-expanded="false">
+        <span class="description-accordion-title">
+          {%- if part == 'description' -%}
+            Description
+          {%- elsif part == 'notes' -%}
+            Notes
+          {%- elsif part == 'feels-like' -%}
+            Feels Like
+          {%- endif -%}
+        </span>
+        <span class="description-accordion-icon">
+          <svg class="chevron-icon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="6 9 12 15 18 9"></polyline>
+          </svg>
+        </span>
+      </button>
+      <div class="description-accordion-content-wrapper" style="grid-template-rows: 0fr;">
+        <div class="description-accordion-content">
+          <div class="description-accordion-text">
+            <!-- Will be populated by JS -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script type="application/json" class="raw-desc-data-{{ product.id }}">
+  {{ product.description | json }}
+</script>
+
+<style>
+  .product-desc-part {
+    display: block !important;
+    width: 100% !important;
+  }
+  
+  .product-desc-part__accordion {
+    display: block !important;
+    width: 100% !important;
+  }
+
+  /* Accordion mobile styles */
+  .description-accordion-item {
+    border-top: 1px solid rgba(0, 0, 0, 0.08);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+    width: 100%;
+  }
+  
+  /* Collapse double borders when accordions are placed adjacently */
+  .product-desc-part + .product-desc-part .description-accordion-item {
+    border-top: none;
+  }
+  
+  .description-accordion-trigger {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    padding: 1.25rem 0;
+    background: none;
+    border: none;
+    text-align: left;
+    cursor: pointer;
+    font-family: var(--font-body--family), 'Inter', sans-serif;
+    font-size: 0.82rem;
+    font-weight: 600;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: #000;
+    transition: opacity 0.25s ease;
+    -webkit-tap-highlight-color: transparent;
+  }
+  
+  .description-accordion-trigger:hover {
+    opacity: 0.8;
+  }
+  
+  .description-accordion-icon {
+    display: flex;
+    align-items: center;
+    transition: transform 0.25s ease-in-out;
+    color: #333;
+  }
+  
+  .description-accordion-trigger[aria-expanded="true"] .description-accordion-icon {
+    transform: rotate(180deg);
+  }
+  
+  .description-accordion-content-wrapper {
+    display: grid;
+    grid-template-rows: 0fr;
+    transition: grid-template-rows 0.25s ease-in-out;
+    overflow: hidden;
+  }
+  
+  .description-accordion-content {
+    min-height: 0;
+  }
+  
+  .description-accordion-text {
+    padding-top: 0.25rem;
+    padding-bottom: 1.5rem;
+    font-family: var(--font-body--family), 'Inter', sans-serif;
+    font-size: 1rem;
+    line-height: 1.6;
+    letter-spacing: 2px;
+    font-weight: 400;
+    color: #333;
+    text-transform: lowercase;
+  }
+  
+  .description-accordion-text p {
+    margin: 0 0 0.4rem 0;
+    padding: 0;
+  }
+  
+  .description-accordion-text p:last-child {
+    margin-bottom: 0;
+  }
+
+  .description-accordion-text p::first-letter {
+    text-transform: uppercase;
+  }
+
+  /* No separate desktop/mobile — accordion is used on all screen sizes */
+</style>
+
+<script>
+  (function() {
+    // 1. Event Delegation for accordion click toggles (registered once globally)
+    if (!window.hasDescriptionAccordionListener) {
+      window.hasDescriptionAccordionListener = true;
+      document.addEventListener('click', function(e) {
+        const trigger = e.target.closest('.description-accordion-trigger');
+        if (!trigger) return;
+        
+        e.preventDefault();
+        const isExpanded = trigger.getAttribute('aria-expanded') === 'true';
+        const wrapper = trigger.nextElementSibling;
+        
+        if (isExpanded) {
+          trigger.setAttribute('aria-expanded', 'false');
+          if (wrapper) wrapper.style.gridTemplateRows = '0fr';
+        } else {
+          // Close all other description accordions
+          document.querySelectorAll('.description-accordion-trigger').forEach(function(otherTrigger) {
+            if (otherTrigger !== trigger) {
+              otherTrigger.setAttribute('aria-expanded', 'false');
+              const otherWrapper = otherTrigger.nextElementSibling;
+              if (otherWrapper) otherWrapper.style.gridTemplateRows = '0fr';
+            }
+          });
+          
+          trigger.setAttribute('aria-expanded', 'true');
+          if (wrapper) wrapper.style.gridTemplateRows = '1fr';
+        }
+      });
+    }
+
+    // 2. Parser and DOM population logic
+    function initDescriptionPart() {
+      const rawDescEl = document.querySelector('.raw-desc-data-{{ product.id }}');
+      if (!rawDescEl) return;
+      const rawText = JSON.parse(rawDescEl.textContent || '""');
+      
+      const parsed = (function(descText) {
+        if (!descText) return { description: "", notes: "", feelsLike: "" };
+        
+        // Convert HTML block tags to newlines, then strip all other tags
+        const plainText = descText
+          .replace(/<\/p>/gi, "\n")
+          .replace(/<\/div>/gi, "\n")
+          .replace(/<\/h[1-6]>/gi, "\n")
+          .replace(/<br\s*\/?>/gi, "\n")
+          .replace(/<\/strong>/gi, "\n")
+          .replace(/<[^>]+>/g, "")
+          .replace(/\u00a0/g, " ");
+          
+        const normalized = plainText.replace(/\r\n/g, "\n");
+        
+        const notesMatch = normalized.match(/(?:^|\n)[ \t]*(NOTES)[ \t]*:?[ \t]*(?:\n|$)/i);
+        const feelsLikeMatch = normalized.match(/(?:^|\n)[ \t]*(FEELS[ \t]+LIKE)[ \t]*:?[ \t]*(?:\n|$)/i);
+        
+        let description = normalized;
+        let notes = "";
+        let feelsLike = "";
+        
+        const notesIndex = (notesMatch && typeof notesMatch.index === 'number') ? notesMatch.index : -1;
+        const feelsLikeIndex = (feelsLikeMatch && typeof feelsLikeMatch.index === 'number') ? feelsLikeMatch.index : -1;
+        
+        if (notesIndex !== -1 && feelsLikeIndex !== -1 && notesMatch && feelsLikeMatch) {
+          if (notesIndex < feelsLikeIndex) {
+            description = normalized.slice(0, notesIndex);
+            notes = normalized.slice(notesIndex + notesMatch[0].length, feelsLikeIndex);
+            feelsLike = normalized.slice(feelsLikeIndex + feelsLikeMatch[0].length);
+          } else {
+            description = normalized.slice(0, feelsLikeIndex);
+            feelsLike = normalized.slice(feelsLikeIndex + feelsLikeMatch[0].length, notesIndex);
+            notes = normalized.slice(notesIndex + notesMatch[0].length);
+          }
+        } else if (notesIndex !== -1 && notesMatch) {
+          description = normalized.slice(0, notesIndex);
+          notes = normalized.slice(notesIndex + notesMatch[0].length);
+        } else if (feelsLikeIndex !== -1 && feelsLikeMatch) {
+          description = normalized.slice(0, feelsLikeIndex);
+          feelsLike = normalized.slice(feelsLikeIndex + feelsLikeMatch[0].length);
+        }
+        
+        return {
+          description: description.trim(),
+          notes: notes.trim(),
+          feelsLike: feelsLike.trim()
+        };
+      })(rawText);
+
+      const parts = ['description', 'notes', 'feels-like'];
+      parts.forEach(function(partKey) {
+        const container = document.getElementById(`desc-part-${partKey}-{{ product.id }}`);
+        if (!container) return;
+        if (container.dataset.partInitialized === 'true') return;
+        container.dataset.partInitialized = 'true';
+
+        const contentText = partKey === 'description' ? parsed.description : 
+                           partKey === 'notes' ? parsed.notes : parsed.feelsLike;
+
+        if (!contentText) {
+          container.style.display = 'none';
+          return;
+        }
+
+        const accordionText = container.querySelector('.description-accordion-text');
+        if (accordionText) {
+          const lines = contentText.split('\n').map(line => line.trim()).filter(line => line.length > 0);
+          accordionText.innerHTML = lines.map(line => `<p>${line}</p>`).join('');
+        }
+
+        const accordion = container.querySelector('.product-desc-part__accordion');
+        if (accordion) {
+          accordion.classList.remove('hidden');
+        }
+      });
+    }
+
+    // 3. Trigger initialization and observe dynamic updates
+    if (document.readyState !== 'loading') {
+      initDescriptionPart();
+    } else {
+      document.addEventListener('DOMContentLoaded', initDescriptionPart);
+    }
+
+    document.addEventListener('shopify:section:load', initDescriptionPart);
+
+    // Watch for dynamic DOM modifications (e.g. variant switches replacing blocks)
+    if (!window.hasDescriptionMutationObserver) {
+      window.hasDescriptionMutationObserver = true;
+      const observer = new MutationObserver(function() {
+        const parts = ['description', 'notes', 'feels-like'];
+        parts.forEach(function(partKey) {
+          const container = document.getElementById(`desc-part-${partKey}-{{ product.id }}`);
+          if (container && container.querySelector('.description-accordion-text') && !container.querySelector('.description-accordion-text').innerHTML.trim()) {
+            container.dataset.partInitialized = 'false';
+          }
+        });
+        initDescriptionPart();
+      });
+      observer.observe(document.body, { childList: true, subtree: true });
+    }
+  })();
+</script>

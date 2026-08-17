@@ -1,0 +1,16 @@
+{%- if product.description != blank -%}
+  {% render 'product-description-part', part: 'notes', product: product %}
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Notes Accordion",
+  "tag": null,
+  "settings": [],
+  "presets": [
+    {
+      "name": "Notes Accordion"
+    }
+  ]
+}
+{% endschema %}

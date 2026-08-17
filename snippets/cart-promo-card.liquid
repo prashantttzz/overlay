@@ -38,7 +38,7 @@
 <style>
   .cart-promo-card {
     margin: 0 0 20px;
-    background: linear-gradient(145deg, #ffffff, #fcfcfc);
+    background: #fff;
     border: 1px solid rgba(0,0,0,0.03);
     overflow: hidden;
     width: 100%;
@@ -114,8 +114,8 @@
 
   .cart-promo-card.is-unlocked .unlocked-state {
     display: flex !important;
-    background: x
-    border: 1px solid rgba(34, 197, 94, 0.15);
+    background: #fff;
+    border: 1px solid rgba(0,0,0,0.06);
   }
 
   .cart-promo-card__icon {
@@ -153,16 +153,7 @@
     font-weight: 500;
   }
 
-  .cart-promo-card::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 1px;
-    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.8), transparent);
-    z-index: 2;
-  }
+  /* No glow effect on promo card */
 
   .cart-drawer:not(.cart-drawer--empty) .cart-promo-card {
     display: block;

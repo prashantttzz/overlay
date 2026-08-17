@@ -196,6 +196,10 @@
 
 .cart-items-component {
   min-height: 0;
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
 }
 
 .cart-drawer__items,
@@ -533,6 +537,14 @@
   font-size: 0.9rem;
   font-weight: 500;
   color: #000;
+}
+
+.cart__original-total-label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #000;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
 }
 
 .cart__summary-discounts {
